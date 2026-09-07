@@ -318,6 +318,16 @@ const CASE_HEADER_CONFIGS: Record<
   },
 };
 
+// Full-bleed hero photo overrides for specific case cards (replaces the abstract
+// icon-cluster diagram for that card only). Add an entry here per case as its
+// photo treatment is finalized.
+const CASE_HEADER_PHOTOS: Record<string, { src: string; alt: string }> = {
+  "02": {
+    src: "/images/ai-coach-hero.jpg",
+    alt: "AI Coach live workout dashboard overlaying real-time heart rate, steps, body composition and nutrition data",
+  },
+};
+
 function getCaseDiagram(studyNumber: string) {
   switch (studyNumber) {
     case "01":
@@ -686,6 +696,42 @@ export default function HomePage({
 
                     {/* Hover cue: bottom-left "View case study" pill */}
                     <div className="absolute bottom-4 left-5 sm:bottom-6 sm:left-8 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-[250ms] ease-out pointer-events-none">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-[#042718] font-inter text-xs font-semibold shadow-md">
+                        <span>View case study</span>
+                        <ArrowRight size={13} className="text-[#188E39]" />
+                      </span>
+                    </div>
+                  </div>
+                ) : CASE_HEADER_PHOTOS[study.number] ? (
+                  <div className="relative w-full h-[260px] sm:h-[300px] overflow-hidden bg-[#0F3D2E]/10 select-none">
+                    {/* Full-bleed Photo with subtle zoom on hover */}
+                    <img
+                      src={CASE_HEADER_PHOTOS[study.number].src}
+                      alt={CASE_HEADER_PHOTOS[study.number].alt}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover object-center transition-transform duration-[250ms] ease-out group-hover:scale-[1.04]"
+                    />
+
+                    {/* Soft dark overlay across bottom third only, for numeral legibility */}
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(4, 39, 24, 0.55) 0%, rgba(4, 39, 24, 0) 100%)",
+                      }}
+                      aria-hidden="true"
+                    />
+
+                    {/* Case-number badge: solid chip so it stays legible over a busy photo */}
+                    <span
+                      className="absolute top-3 right-3 sm:top-4 sm:right-4 font-onest font-bold text-xs sm:text-sm text-white select-none pointer-events-none tracking-wider bg-[#042718]/60 backdrop-blur-sm rounded-full px-2.5 py-1"
+                      aria-hidden="true"
+                    >
+                      {study.number}
+                    </span>
+
+                    {/* Hover cue: bottom-left "View case study" pill */}
+                    <div className="absolute bottom-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-[250ms] ease-out pointer-events-none">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-[#042718] font-inter text-xs font-semibold shadow-md">
                         <span>View case study</span>
                         <ArrowRight size={13} className="text-[#188E39]" />
