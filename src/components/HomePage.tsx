@@ -326,6 +326,10 @@ const CASE_HEADER_PHOTOS: Record<string, { src: string; alt: string }> = {
     src: "/images/ai-coach-hero.jpg",
     alt: "AI Coach live workout dashboard overlaying real-time heart rate, steps, body composition and nutrition data",
   },
+  "03": {
+    src: "/images/subscription-hero.jpg",
+    alt: "Subscription upgrade paywall screen shown on a phone, held mid-workout, listing premium plan benefits and pricing",
+  },
 };
 
 function getCaseDiagram(studyNumber: string) {
