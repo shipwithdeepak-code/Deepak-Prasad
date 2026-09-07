@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Menu, X, FileText } from "lucide-react";
 
-import { NAV_AVATAR_DATA_URI } from "../data/avatarDataUri";
 import { CALENDLY_URL } from "../utils/calendly";
 
 interface NavigationProps {
@@ -112,7 +111,7 @@ export default function Navigation({
           <div className="relative shrink-0">
             <div className="w-10 h-10 rounded-full overflow-hidden border border-[#042718]/15 shadow-xs group-hover:scale-105 transition-transform bg-[#042718] flex items-center justify-center relative">
               <img
-                src={NAV_AVATAR_DATA_URI}
+                src="/images/deepak-prasad.jpg"
                 alt="Deepak Prasad"
                 referrerPolicy="no-referrer"
                 loading="eager"
