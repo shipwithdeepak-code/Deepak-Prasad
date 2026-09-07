@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Linkedin, Github, Mail, Sparkles, ArrowUpRight, FileText, Calendar, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { downloadResumePDF } from "@/utils/downloadResume";
+import { CALENDLY_URL } from "@/utils/calendly";
 
 interface CTAProps {
   className?: string;
@@ -139,15 +140,16 @@ export default function CtaWithFooter01Finsyc({
                 viewport={{ once: true }}
                 className="flex flex-col sm:flex-row items-center gap-4"
               >
-                <button
-                  type="button"
-                  onClick={() => onOpenContact && onOpenContact()}
+                <a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noopener"
                   className="h-14 px-8 rounded-full bg-[#042718] text-white font-inter font-semibold text-base shadow-lg hover:bg-[#042718]/90 transition-all flex items-center gap-3 group cursor-pointer"
                 >
                   <Calendar size={18} className="text-[#34D399]" />
                   <span>Book Strategy Chat</span>
                   <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </button>
+                </a>
 
                 {onOpenResume && (
                   <button

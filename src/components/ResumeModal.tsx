@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   X,
@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { EXPERIENCE_ROLES } from "@/data/caseStudies";
 import { downloadResumePDF } from "@/utils/downloadResume";
+import { CALENDLY_URL } from "@/utils/calendly";
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -91,6 +92,22 @@ export default function ResumeModal({
   const [downloadStatus, setDownloadStatus] = useState<
     "idle" | "downloading" | "done"
   >("idle");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Esc") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown, true);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, true);
+      window.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -173,13 +190,17 @@ export default function ResumeModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md cursor-pointer"
+    >
       <motion.div
+        onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.96, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-4xl h-[92vh] bg-white rounded-[32px] border border-[#042718]/10 shadow-2xl overflow-hidden flex flex-col text-left"
+        className="w-full max-w-4xl h-[92vh] bg-white rounded-[32px] border border-[#042718]/10 shadow-2xl overflow-hidden flex flex-col text-left cursor-default"
       >
         {/* Top Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#042718]/10 bg-[#FAFDFB] shrink-0">
@@ -244,17 +265,15 @@ export default function ResumeModal({
               </span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onOpenContact();
-              }}
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener"
               className="px-4 py-1.5 rounded-full bg-[#042718] text-white font-inter text-xs font-semibold hover:bg-[#042718]/90 transition-all cursor-pointer hidden lg:flex items-center gap-1.5"
             >
               <span>Book Chat</span>
               <ArrowRight size={13} />
-            </button>
+            </a>
 
             <button
               type="button"
@@ -525,17 +544,15 @@ export default function ResumeModal({
               </span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onOpenContact();
-              }}
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener"
               className="px-5 py-2 rounded-full bg-[#042718] hover:bg-[#042718]/90 text-white font-inter text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
             >
               <span>Discuss Role / Interview</span>
               <ArrowRight size={14} />
-            </button>
+            </a>
           </div>
         </div>
       </motion.div>

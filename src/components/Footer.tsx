@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, Mail, Linkedin, FileDown, ArrowUp } from "lucide-react";
+import { ArrowUpRight, Mail, Linkedin, FileDown, ArrowUp, Calendar } from "lucide-react";
+import { CALENDLY_URL } from "../utils/calendly";
 
 interface FooterProps {
   onNavigate: (path: string) => void;
@@ -59,9 +60,21 @@ export default function Footer({ onNavigate, onOpenResumeModal }: FooterProps) {
             className="flex flex-wrap items-center justify-center gap-3.5 pt-2"
           >
             <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener"
+              id="footer-book-chat-cta"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#188E39] hover:bg-[#15803D] text-white font-inter text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+            >
+              <Calendar size={16} />
+              <span>Book a Chat</span>
+              <ArrowUpRight size={15} />
+            </a>
+
+            <a
               href="mailto:shipwithdeepak@gmail.com"
               id="footer-email-cta"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#188E39] hover:bg-[#15803D] text-white font-inter text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-inter text-sm font-semibold transition-all duration-300 cursor-pointer"
             >
               <Mail size={16} />
               <span>Email me</span>

@@ -4,6 +4,17 @@ export interface CaseStudyStat {
   detail?: string;
 }
 
+export interface EvaluationRow {
+  id: number;
+  query: string;
+  category: string;
+  groundTruthSource: string;
+  retrievalHitTop3: boolean;
+  similarity: number;
+  status: 'Pass' | 'Fallback (Pass)' | 'Fail';
+  notes: string;
+}
+
 export interface CaseStudySection {
   id: string;
   number: string;
@@ -13,12 +24,13 @@ export interface CaseStudySection {
   highlights?: { title: string; desc: string }[];
   quote?: string;
   tag?: string;
-  diagramType?: 'workflow' | 'comparison' | 'bidding' | 'funnel' | 'architecture' | 'safety';
+  diagramType?: 'workflow' | 'comparison' | 'bidding' | 'funnel' | 'architecture' | 'safety' | 'evaluation';
   workflowSteps?: { label: string; desc?: string }[];
   comparison?: {
     before: { title: string; steps: string[] };
     after: { title: string; steps: string[] };
   };
+  evaluationTable?: EvaluationRow[];
 }
 
 export interface CaseStudyDetail {

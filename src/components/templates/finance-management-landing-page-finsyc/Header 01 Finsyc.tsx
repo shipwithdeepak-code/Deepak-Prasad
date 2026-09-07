@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Sparkles, Menu, X, FileText, Calendar, Mail, Linkedin, Github } from "lucide-react";
+import { CALENDLY_URL } from "../../../utils/calendly";
 
 interface HeaderProps {
   className?: string;
@@ -153,9 +154,10 @@ export default function Header01Finsyc({
                 </button>
               )}
 
-              <motion.button
-                type="button"
-                onClick={() => onOpenContact && onOpenContact()}
+              <motion.a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener"
                 onMouseEnter={() => setIsNavHovered(true)}
                 onMouseLeave={() => setIsNavHovered(false)}
                 layout
@@ -185,7 +187,7 @@ export default function Header01Finsyc({
                     <ArrowUpRight className="w-3.5 h-3.5 text-white" />
                   </motion.div>
                 </motion.div>
-              </motion.button>
+              </motion.a>
 
               {/* Mobile Menu Toggle */}
               <button
@@ -274,16 +276,15 @@ export default function Header01Finsyc({
                   >
                     Explore ReshaMandi Deep Dive
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      if (onOpenContact) onOpenContact();
-                    }}
-                    className="w-full py-3.5 rounded-full bg-[#042718] text-white font-inter font-semibold text-base cursor-pointer"
+                  <a
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full py-3.5 rounded-full bg-[#042718] text-white font-inter font-semibold text-base cursor-pointer text-center block"
                   >
                     Book Strategy Chat
-                  </button>
+                  </a>
                 </div>
               </motion.div>
             )}
@@ -374,14 +375,15 @@ export default function Header01Finsyc({
                 </motion.div>
               </button>
 
-              <button
-                type="button"
-                onClick={() => onOpenContact && onOpenContact()}
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener"
                 className="flex items-center gap-2 px-6 h-14 rounded-full bg-white/70 backdrop-blur-md border border-[#042718]/15 text-[#042718] font-inter font-semibold text-base hover:bg-white transition-all shadow-xs cursor-pointer active:scale-98"
               >
                 <Calendar size={17} className="text-[#188E39]" />
                 <span>Book Strategy Chat</span>
-              </button>
+              </a>
             </motion.div>
 
             {/* Bottom Marquee / Domain Ticker */}

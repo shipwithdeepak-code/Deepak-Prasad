@@ -95,11 +95,15 @@ export default function HomePage({
             transition={{ duration: 0.45, delay: 0.05 }}
             className="font-onest text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#042718] leading-[1.1] mb-6 max-w-4xl mx-auto text-center"
           >
-            I build complex products from{" "}
+            I&apos;m mostly just someone who stays{" "}
             <span className="font-playfair italic font-medium text-[#042718]/70">
-              ambiguous problems
+              curious
+            </span>
+            .{" "}
+            <span className="font-playfair italic font-medium text-[#042718]/70">
+              Stubborn
             </span>{" "}
-            — using data, AI and technology.
+            enough not to stop asking &apos;why.&apos;
           </motion.h1>
 
           {/* Supporting Copy */}
@@ -107,9 +111,13 @@ export default function HomePage({
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.1 }}
-            className="font-inter text-lg sm:text-xl text-[#042718]/80 leading-relaxed mb-8 max-w-2xl mx-auto text-center font-normal"
+            className="font-inter text-lg sm:text-xl text-[#042718]/80 leading-relaxed mb-8 max-w-3xl mx-auto text-center font-normal"
           >
-            I turn complex customer, business and operational problems into products people use — from AI-powered experiences and subscription businesses to B2B marketplaces and connected ecosystems.
+            I&apos;m{" "}
+            <span className="font-playfair italic font-medium text-[#042718]">
+              Deepak
+            </span>
+            , a Senior Product Manager, though most days it just feels like staying curious long enough to build things that actually work. 7+ years across marketplaces, AI features, and subscription products. Not because I had all the answers. Because I kept asking questions until the product matched reality.
           </motion.p>
 
           {/* CTAs */}
@@ -122,14 +130,10 @@ export default function HomePage({
             <button
               type="button"
               id="hero-view-work-cta"
-              onClick={() => {
-                const el = document.getElementById("selected-work");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-                else onNavigate("/work");
-              }}
+              onClick={() => onNavigate("/work")}
               className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#042718] hover:bg-[#063b25] text-white font-inter text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow cursor-pointer"
             >
-              <span>View selected work</span>
+              <span>View Selected Work</span>
               <ArrowRight size={16} />
             </button>
 
@@ -139,21 +143,8 @@ export default function HomePage({
               onClick={() => onNavigate("/about")}
               className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-white/90 hover:bg-white border border-[#042718]/15 text-[#042718] font-inter text-sm font-semibold transition-all duration-200 cursor-pointer shadow-2xs backdrop-blur-xs"
             >
-              <span>About me</span>
+              <span>About Me</span>
               <ArrowUpRight size={15} className="text-[#042718]/60" />
-            </button>
-
-            <button
-              type="button"
-              id="hero-resume-cta"
-              onClick={() => {
-                if (onOpenResumeModal) onOpenResumeModal();
-                else onNavigate("/resume");
-              }}
-              className="inline-flex items-center gap-2 px-4 py-3.5 text-xs text-[#042718]/70 hover:text-[#042718] font-inter font-medium transition-colors cursor-pointer"
-            >
-              <FileText size={15} className="text-[#188E39]" />
-              <span>Resume PDF</span>
             </button>
           </motion.div>
 
@@ -191,7 +182,7 @@ export default function HomePage({
       {/* =========================================================================
           2. HOMEPAGE PROOF STRIP (RESTRAINED, ELEGANT, NOT DASHBOARD-Y)
           ========================================================================= */}
-      <section className="py-10 bg-white border-b border-[#042718]/8">
+      <section id="methodology" className="py-10 bg-white border-b border-[#042718]/8 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 divide-y md:divide-y-0 md:divide-x divide-[#042718]/8">
             {proofStripMetrics.map((item, idx) => (
@@ -332,7 +323,7 @@ export default function HomePage({
       {/* =========================================================================
           4. HOW I WORK (5 PRINCIPLES)
           ========================================================================= */}
-      <section className="py-20 bg-[#F4FAFA] border-y border-[#042718]/8">
+      <section id="principles" className="py-20 bg-[#F4FAFA] border-y border-[#042718]/8 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-12">
             <div className="inline-flex items-center gap-2 text-xs font-inter font-semibold uppercase tracking-wider text-[#188E39] mb-2">

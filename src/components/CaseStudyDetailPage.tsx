@@ -236,6 +236,92 @@ export default function CaseStudyDetailPage({
                   </div>
                 )}
 
+                {/* Evaluation Table if present */}
+                {sec.evaluationTable && sec.evaluationTable.length > 0 && (
+                  <div className="my-8 rounded-[20px] bg-white border border-[#042718]/10 shadow-2xs overflow-hidden">
+                    <div className="p-5 sm:p-6 border-b border-[#042718]/8 flex flex-wrap items-center justify-between gap-3 bg-[#FAFDFB]">
+                      <div>
+                        <div className="flex items-center gap-2 text-xs font-inter font-semibold uppercase tracking-wider text-[#188E39]">
+                          <Sparkles size={14} />
+                          <span>Evaluation Benchmark Matrix</span>
+                        </div>
+                        <h3 className="font-onest text-lg sm:text-xl font-bold text-[#042718] mt-1">
+                          Golden Test Set ({sec.evaluationTable.length} Questions)
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-inter font-medium text-[#042718]/70">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECFDF5] text-[#065F46] font-semibold">
+                          <CheckCircle2 size={13} />
+                          <span>95% Pass Rate (19/20)</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#042718]/5 text-[#042718]/80 font-semibold">
+                          <span>0% Hallucinations</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="border-b border-[#042718]/8 bg-[#042718]/[0.02] text-[#042718]/60 font-inter font-semibold">
+                            <th className="py-3 px-4 w-12 text-center">#</th>
+                            <th className="py-3 px-4 min-w-[220px]">Test Query</th>
+                            <th className="py-3 px-4 min-w-[130px]">Category</th>
+                            <th className="py-3 px-4 min-w-[180px]">Target Ground Source</th>
+                            <th className="py-3 px-4 text-center w-24">Cosine Sim</th>
+                            <th className="py-3 px-4 text-center w-28">Status</th>
+                            <th className="py-3 px-4 min-w-[240px]">Verification Notes</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#042718]/6 font-inter">
+                          {sec.evaluationTable.map((row) => (
+                            <tr key={row.id} className="hover:bg-[#FAFDFB] transition-colors">
+                              <td className="py-3 px-4 text-center font-mono text-xs text-[#042718]/50">
+                                {String(row.id).padStart(2, "0")}
+                              </td>
+                              <td className="py-3 px-4 font-medium text-[#042718]">
+                                "{row.query}"
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#042718]/5 text-[#042718]/80">
+                                  {row.category}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 text-xs text-[#042718]/70">
+                                {row.groundTruthSource}
+                              </td>
+                              <td className="py-3 px-4 text-center font-mono text-xs font-semibold text-[#042718]">
+                                {row.similarity.toFixed(2)}
+                              </td>
+                              <td className="py-3 px-4 text-center">
+                                <span
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
+                                    row.status === "Pass"
+                                      ? "bg-[#ECFDF5] text-[#065F46]"
+                                      : row.status.includes("Fallback")
+                                      ? "bg-[#FEF3C7] text-[#92400E]"
+                                      : "bg-[#FEF2F2] text-[#991B1B]"
+                                  }`}
+                                >
+                                  {row.status === "Pass" ? (
+                                    <CheckCircle2 size={12} />
+                                  ) : (
+                                    <AlertTriangle size={12} />
+                                  )}
+                                  <span>{row.status}</span>
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 text-xs text-[#042718]/70 leading-relaxed">
+                                {row.notes}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
                 {/* Highlights Grid */}
                 {sec.highlights && sec.highlights.length > 0 && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">

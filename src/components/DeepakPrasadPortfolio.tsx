@@ -38,6 +38,7 @@ import {
 } from '../data/caseStudies';
 import { CaseStudyDetail } from '../types';
 import CaseStudyModal from './CaseStudyModal';
+import { CALENDLY_URL } from '../utils/calendly';
 
 export const ALL_CASE_STUDIES: CaseStudyDetail[] = [
   RESHAMANDI_CASE_STUDY,
@@ -195,15 +196,16 @@ export default function DeepakPrasadPortfolio() {
               <FileText size={14} className="text-[#01bc7c]" />
               <span>Resume</span>
             </button>
-            <button
+            <a
               id="deepak-get-in-touch-btn"
-              type="button"
-              onClick={() => setIsContactOpen(true)}
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener"
               className="bg-white text-black px-4 sm:px-5 py-2 rounded-full text-[13px] font-bold hover:bg-[#01bc7c] hover:text-white transition-all duration-300 shadow-lg shadow-black/30 cursor-pointer active:scale-95 flex items-center gap-1.5"
             >
               <Calendar size={13} />
               <span>Book Chat</span>
-            </button>
+            </a>
           </div>
         </nav>
       </header>
@@ -823,12 +825,14 @@ export default function DeepakPrasadPortfolio() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setIsContactOpen(true)}
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener"
               className="text-white/80 hover:text-[#01bc7c] transition-colors cursor-pointer font-medium"
             >
               Book Chat
-            </button>
+            </a>
             <span>•</span>
             <button
               onClick={() => setIsResumeOpen(true)}

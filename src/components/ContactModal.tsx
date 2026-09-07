@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Mail, Linkedin, Github, Send, CheckCircle2, Sparkles, ArrowRight } from "lucide-react";
 
@@ -15,6 +15,22 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Esc") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown, true);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, true);
+      window.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -38,13 +54,17 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   ];
 
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[300] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md cursor-pointer"
+    >
       <motion.div
+        onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-xl bg-white rounded-[32px] p-6 sm:p-8 shadow-2xl border border-[#042718]/10 relative overflow-hidden text-left"
+        className="w-full max-w-xl bg-white rounded-[32px] p-6 sm:p-8 shadow-2xl border border-[#042718]/10 relative overflow-hidden text-left cursor-default"
       >
         {/* Top Header */}
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#042718]/10">

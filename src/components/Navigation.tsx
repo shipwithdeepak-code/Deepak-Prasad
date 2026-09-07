@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Menu, X, FileText } from "lucide-react";
 
+import { NAV_AVATAR_DATA_URI } from "../data/avatarDataUri";
+import { CALENDLY_URL } from "../utils/calendly";
+
 interface NavigationProps {
   currentPath: string;
   onNavigate: (path: string) => void;
@@ -40,21 +43,25 @@ export default function Navigation({
 
   const navLinks = [
     { label: "Work", path: "/work", targetId: "selected-work" },
-    { label: "ReshaMandi Deep Dive", path: "/work/reshamandi-b2b" },
     { label: "Process", path: "/#methodology", targetId: "methodology" },
     { label: "Principles", path: "/#principles", targetId: "principles" },
     { label: "Track Record", path: "/about#experience", targetId: "experience" },
-    { label: "Advisory", path: "/contact", targetId: "advisory" },
   ];
 
   const handleLinkClick = (link: { label: string; path: string; targetId?: string }, e: React.MouseEvent) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
 
-    if (link.targetId && (currentPath === "/" || currentPath === "")) {
-      const el = document.getElementById(link.targetId);
+    const [targetPath, targetHash] = link.path.split("#");
+    const normalizedTargetPath = targetPath === "" ? "/" : targetPath;
+    const currentBase = currentPath.split("#")[0] || "/";
+    const hash = targetHash || link.targetId;
+
+    if (normalizedTargetPath === currentBase && hash) {
+      const el = document.getElementById(hash);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState(null, "", link.path);
         return;
       }
     }
@@ -72,8 +79,26 @@ export default function Navigation({
           : "bg-[#FAFDFB]/85 backdrop-blur-md border-b border-[#042718]/10 shadow-xs"
       }`}
     >
+      <style>{`
+        @media (max-width: 1023px) {
+          .nav-desktop-only {
+            display: none !important;
+          }
+          .nav-mobile-toggle {
+            display: flex !important;
+          }
+        }
+        @media (min-width: 1024px) {
+          .nav-desktop-only {
+            display: flex !important;
+          }
+          .nav-mobile-toggle {
+            display: none !important;
+          }
+        }
+      `}</style>
       <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
-        {/* Monogram Logo */}
+        {/* Avatar Photo Logo */}
         <a
           href="/"
           onClick={(e) => {
@@ -84,8 +109,31 @@ export default function Navigation({
           className="flex items-center gap-3 hover:opacity-85 transition-opacity group"
           id="nav-logo"
         >
-          <div className="w-9.5 h-9.5 rounded-full bg-[#042718] flex items-center justify-center font-onest font-bold text-white text-sm shadow-xs group-hover:scale-105 transition-transform shrink-0">
-            DP
+          <div className="relative shrink-0">
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-[#042718]/15 shadow-xs group-hover:scale-105 transition-transform bg-[#042718] flex items-center justify-center relative">
+              <img
+                src={NAV_AVATAR_DATA_URI}
+                alt="Deepak Prasad"
+                referrerPolicy="no-referrer"
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover object-center block"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = "none";
+                  const fallback = target.parentElement?.querySelector(".nav-dp-fallback");
+                  if (fallback) (fallback as HTMLElement).style.display = "flex";
+                }}
+              />
+              <div className="nav-dp-fallback hidden w-full h-full items-center justify-center font-onest font-bold text-white text-sm bg-[#042718]">
+                DP
+              </div>
+            </div>
+            {/* Green available status dot on corner */}
+            <span
+              className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#188E39] border-2 border-[#FAFDFB]"
+              title="Available"
+            />
           </div>
           <div className="text-left">
             <div className="flex items-center gap-2">
@@ -100,12 +148,17 @@ export default function Navigation({
           </div>
         </a>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-7 xl:gap-8">
+        {/* Desktop Navigation Links (Strictly hidden below 1024px) */}
+        <nav id="desktop-nav-links" className="nav-desktop-only hidden lg:flex items-center gap-7 xl:gap-8">
           {navLinks.map((link) => {
+            const [linkPath] = link.path.split("#");
+            const currentBase = currentPath.split("#")[0] || "/";
             const isActive =
-              currentPath === link.path ||
-              (link.path === "/work" && currentPath.startsWith("/work/"));
+              link.path === "/work"
+                ? currentBase.startsWith("/work")
+                : link.path.includes("#")
+                ? false
+                : currentBase === linkPath;
 
             return (
               <a
@@ -125,50 +178,51 @@ export default function Navigation({
           })}
         </nav>
 
-        {/* Action CTAs */}
+        {/* Action CTAs & Mobile Toggle */}
         <div className="flex items-center gap-3.5">
-          <button
-            type="button"
-            id="nav-resume-button"
-            onClick={() => {
-              if (onOpenResumeModal) onOpenResumeModal();
-              else onNavigate("/resume");
-            }}
-            className="inline-flex items-center gap-2 text-[#042718] text-[14px] font-medium px-3.5 py-1.5 rounded-full hover:bg-white/60 transition-colors border border-transparent hover:border-[#042718]/10 cursor-pointer"
-          >
-            <FileText size={16} className="text-[#188E39]" />
-            <span>Resume</span>
-          </button>
+          {/* Desktop CTAs (Strictly hidden below 1024px) */}
+          <div id="desktop-nav-ctas" className="nav-desktop-only hidden lg:flex items-center gap-3.5">
+            <button
+              type="button"
+              id="nav-resume-button"
+              onClick={() => {
+                if (onOpenResumeModal) onOpenResumeModal();
+                else onNavigate("/resume");
+              }}
+              className="inline-flex items-center gap-2 text-[#042718] text-[14px] font-medium px-3.5 py-1.5 rounded-full hover:bg-white/60 transition-colors border border-transparent hover:border-[#042718]/10 cursor-pointer"
+            >
+              <FileText size={16} className="text-[#188E39]" />
+              <span>Resume</span>
+            </button>
 
-          {/* Book Chat Pill Button */}
-          <button
-            type="button"
-            id="nav-contact-cta"
-            onClick={() => {
-              if (onOpenContactModal) onOpenContactModal();
-              else onNavigate("/contact");
-            }}
-            onMouseEnter={() => setIsNavHovered(true)}
-            onMouseLeave={() => setIsNavHovered(false)}
-            className={
-              "hidden sm:flex items-center gap-2.5 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-[#042718]/15 group cursor-pointer relative h-10 transition-all duration-300 shadow-2xs " +
-              (isNavHovered ? "flex-row-reverse pl-1.5 pr-4" : "flex-row pl-4 pr-1.5")
-            }
-          >
-            <span className="font-inter text-xs lg:text-[13px] font-semibold leading-5 text-[#042718]">
-              Book Chat
-            </span>
-            <div className="w-7 h-7 rounded-full bg-[#042718] flex items-center justify-center shrink-0">
-              <ArrowUpRight className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
-            </div>
-          </button>
+            {/* Book Chat Pill Link */}
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener"
+              id="nav-contact-cta"
+              onMouseEnter={() => setIsNavHovered(true)}
+              onMouseLeave={() => setIsNavHovered(false)}
+              className={
+                "flex items-center gap-2.5 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-[#042718]/15 group cursor-pointer relative h-10 transition-all duration-300 shadow-2xs " +
+                (isNavHovered ? "flex-row-reverse pl-1.5 pr-4" : "flex-row pl-4 pr-1.5")
+              }
+            >
+              <span className="font-inter text-xs lg:text-[13px] font-semibold leading-5 text-[#042718]">
+                Book Chat
+              </span>
+              <div className="w-7 h-7 rounded-full bg-[#042718] flex items-center justify-center shrink-0">
+                <ArrowUpRight className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
+              </div>
+            </a>
+          </div>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Toggle (Strictly hidden on 1024px and above; visible on mobile/tablet) */}
           <button
             type="button"
             id="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-[#042718] bg-white/80 backdrop-blur-sm rounded-full border border-[#042718]/10 cursor-pointer shadow-2xs"
+            className="nav-mobile-toggle flex lg:hidden p-2 text-[#042718] bg-white/80 backdrop-blur-sm rounded-full border border-[#042718]/10 cursor-pointer shadow-2xs"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -215,18 +269,16 @@ export default function Navigation({
                 <span>View Full Resume</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  if (onOpenContactModal) onOpenContactModal();
-                  else onNavigate("/contact");
-                }}
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener"
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="w-full py-2.5 rounded-full bg-[#042718] text-white font-inter font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-xs"
               >
                 <span>Book Chat</span>
                 <ArrowUpRight size={16} />
-              </button>
+              </a>
             </div>
           </motion.div>
         )}

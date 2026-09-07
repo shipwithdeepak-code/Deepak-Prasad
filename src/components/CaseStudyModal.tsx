@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
@@ -33,6 +33,22 @@ export default function CaseStudyModal({
 }: CaseStudyModalProps) {
   const [activeSectionId, setActiveSectionId] = useState<string>(caseStudy.sections[0]?.id || '');
   const [activeSystemNode, setActiveSystemNode] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown, true);
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true);
+      window.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -71,13 +87,17 @@ export default function CaseStudyModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl cursor-pointer"
+    >
       <motion.div
+        onClick={(e) => e.stopPropagation()}
         initial={{ opacity: 0, scale: 0.96, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-5xl h-[92vh] flex flex-col bg-[#0c0f14] border border-white/20 rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.8)] overflow-hidden text-left select-text relative"
+        className="w-full max-w-5xl h-[92vh] flex flex-col bg-[#0c0f14] border border-white/20 rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.8)] overflow-hidden text-left select-text relative cursor-default"
       >
         {/* Top Header Bar */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.03] backdrop-blur-md shrink-0">
@@ -230,6 +250,64 @@ export default function CaseStudyModal({
                   <p className="text-sm sm:text-base text-white/90 font-medium italic">
                     “{activeSection.quote}”
                   </p>
+                </div>
+              )}
+
+              {/* Evaluation Table if present */}
+              {activeSection.evaluationTable && activeSection.evaluationTable.length > 0 && (
+                <div className="my-4 rounded-2xl bg-white/[0.04] border border-white/10 overflow-hidden">
+                  <div className="p-4 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 bg-white/[0.02]">
+                    <div className="text-xs font-bold text-[#01bc7c] uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles size={14} /> Golden Evaluation Test Benchmark (20 Queries)
+                    </div>
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#01bc7c]/20 text-[#01bc7c] border border-[#01bc7c]/30">
+                      95% Accuracy (19/20 Pass)
+                    </span>
+                  </div>
+                  <div className="overflow-x-auto max-h-80">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead className="sticky top-0 bg-[#042718] text-white/60 border-b border-white/10">
+                        <tr>
+                          <th className="py-2.5 px-3">#</th>
+                          <th className="py-2.5 px-3 min-w-[200px]">Query</th>
+                          <th className="py-2.5 px-3">Category</th>
+                          <th className="py-2.5 px-3 min-w-[150px]">Ground Source</th>
+                          <th className="py-2.5 px-3 text-center">Score</th>
+                          <th className="py-2.5 px-3 text-center">Status</th>
+                          <th className="py-2.5 px-3 min-w-[200px]">Notes</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {activeSection.evaluationTable.map((row) => (
+                          <tr key={row.id} className="hover:bg-white/[0.02]">
+                            <td className="py-2.5 px-3 font-mono text-white/50">{row.id}</td>
+                            <td className="py-2.5 px-3 text-white/90 font-medium">"{row.query}"</td>
+                            <td className="py-2.5 px-3">
+                              <span className="px-2 py-0.5 rounded bg-white/5 text-white/70 text-[10px]">
+                                {row.category}
+                              </span>
+                            </td>
+                            <td className="py-2.5 px-3 text-white/70 text-[11px]">{row.groundTruthSource}</td>
+                            <td className="py-2.5 px-3 text-center font-mono text-[#01bc7c]">
+                              {row.similarity.toFixed(2)}
+                            </td>
+                            <td className="py-2.5 px-3 text-center">
+                              <span
+                                className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                  row.status === "Pass"
+                                    ? "bg-[#01bc7c]/20 text-[#01bc7c]"
+                                    : "bg-amber-500/20 text-amber-300"
+                                }`}
+                              >
+                                {row.status}
+                              </span>
+                            </td>
+                            <td className="py-2.5 px-3 text-white/60 text-[11px]">{row.notes}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
 

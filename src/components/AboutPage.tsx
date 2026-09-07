@@ -29,6 +29,22 @@ export default function AboutPage({
   onNavigate,
   onOpenResumeModal,
 }: AboutPageProps) {
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#experience") {
+      const scrollToSection = (retries = 0) => {
+        const el = document.getElementById("experience");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else if (retries < 15) {
+          setTimeout(() => scrollToSection(retries + 1), 60);
+        }
+      };
+      requestAnimationFrame(() => {
+        setTimeout(scrollToSection, 50);
+      });
+    }
+  }, []);
+
   const careerEvolutionSteps = [
     { title: "Hardware / IoT", context: "LionCircuits APM" },
     { title: "B2B Marketplace", context: "ReshaMandi 80K+ farmers" },
@@ -40,21 +56,54 @@ export default function AboutPage({
 
   return (
     <div className="w-full bg-[#FAFDFB] text-[#042718] py-12 md:py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#042718]/5 text-xs font-inter font-semibold text-[#042718]/80 mb-4">
-            <span>About Deepak Prasad</span>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Hero with Portrait */}
+        <div className="mb-16 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="md:col-span-7 flex flex-col justify-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#042718]/5 text-xs font-inter font-semibold text-[#042718]/80 mb-4 w-fit">
+              <span>About Deepak Prasad</span>
+            </div>
+            <h1 className="font-onest text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#042718] leading-[1.15] mb-6">
+              I like solving problems where the answer isn’t obvious.
+            </h1>
+            <p className="font-inter text-base sm:text-lg text-[#042718]/75 leading-relaxed font-normal mb-4">
+              I turn complex customer, business and operational problems into products people use — from AI-powered experiences and subscription businesses to B2B marketplaces and connected ecosystems.
+            </p>
+            <p className="font-inter text-sm sm:text-base text-[#042718]/70 leading-relaxed font-normal">
+              Over the past 7+ years, I’ve operated across both India and European markets, building 0→1 products from concept to scale, managing cross-border pods, and designing systems that connect hardware, software, and human operations.
+            </p>
           </div>
-          <h1 className="font-onest text-4xl sm:text-5xl font-bold tracking-tight text-[#042718] leading-[1.15] mb-6">
-            I like solving problems where the answer isn’t obvious.
-          </h1>
-          <p className="font-inter text-lg sm:text-xl text-[#042718]/75 leading-relaxed font-normal mb-4">
-            I turn complex customer, business and operational problems into products people use — from AI-powered experiences and subscription businesses to B2B marketplaces and connected ecosystems.
-          </p>
-          <p className="font-inter text-base text-[#042718]/70 leading-relaxed font-normal">
-            Over the past 7+ years, I’ve operated across both India and European markets, building 0→1 products from concept to scale, managing cross-border pods, and designing systems that connect hardware, software, and human operations.
-          </p>
+
+          <div className="md:col-span-5 flex justify-center md:justify-end">
+            <div className="relative w-full max-w-[340px] sm:max-w-[380px] md:max-w-full aspect-[4/5] rounded-[24px] overflow-hidden border border-[#042718]/15 shadow-xl bg-[#042718]/5 group">
+              <img
+                src="/deepak_portrait_4x5.jpg"
+                alt="Deepak Prasad - Senior Product Manager"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = "none";
+                  const fallback = target.parentElement?.querySelector(".about-portrait-fallback");
+                  if (fallback) (fallback as HTMLElement).style.display = "flex";
+                }}
+              />
+              <div className="about-portrait-fallback hidden w-full h-full flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#042718] to-[#0A3D24] text-white">
+                <div className="w-16 h-16 rounded-full bg-[#188E39]/20 border-2 border-[#01bc7c]/40 flex items-center justify-center font-onest font-bold text-2xl text-white mb-3">
+                  DP
+                </div>
+                <p className="font-onest font-bold text-base text-white">Deepak Prasad</p>
+                <p className="font-inter text-xs text-white/70 mt-1">Senior Product Manager</p>
+              </div>
+              <div className="absolute bottom-3 left-3 right-3 px-3.5 py-2.5 rounded-xl bg-[#042718]/85 backdrop-blur-md text-white flex items-center justify-between text-xs font-inter border border-white/10 shadow-xs">
+                <span className="font-semibold tracking-tight">Deepak Prasad</span>
+                <span className="flex items-center gap-1.5 text-[#01bc7c] font-medium text-[11px]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#01bc7c] animate-pulse" />
+                  Available for PM roles
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* =========================================================================
@@ -91,7 +140,7 @@ export default function AboutPage({
         {/* =========================================================================
             EXPERIENCE TIMELINE (STRICTLY ACCURATE, NO MUDRA)
             ========================================================================= */}
-        <section className="mb-20">
+        <section id="experience" className="mb-20 scroll-mt-28">
           <div className="flex items-center gap-3 mb-2">
             <Briefcase size={20} className="text-[#188E39]" />
             <h2 className="font-onest text-2xl sm:text-3xl font-bold text-[#042718]">
