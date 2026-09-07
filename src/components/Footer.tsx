@@ -1,167 +1,463 @@
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Mail, Linkedin, FileDown, ArrowUp, Calendar } from "lucide-react";
+import {
+  ArrowRight,
+  Linkedin,
+  Github,
+  Mail,
+  Sparkles,
+  ArrowUpRight,
+  FileText,
+  Calendar,
+  Download,
+} from "lucide-react";
 import { CALENDLY_URL } from "../utils/calendly";
+import { downloadResumePDF } from "../utils/downloadResume";
 
 interface FooterProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
+  onOpenContactModal?: () => void;
+  onSelectCaseStudy?: (id?: string) => void;
 }
 
-export default function Footer({ onNavigate, onOpenResumeModal }: FooterProps) {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+export default function Footer({
+  onNavigate,
+  onOpenResumeModal,
+  onOpenContactModal,
+  onSelectCaseStudy,
+}: FooterProps) {
+  const [isMounted, setIsMounted] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (emailInput.trim()) {
+      setSubscribed(true);
+      setTimeout(() => setSubscribed(false), 4000);
+      setEmailInput("");
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.21, 0.45, 0.32, 0.9] as const,
+      },
+    },
+  };
+
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("#")) {
+      const elementId = href.replace("#", "");
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      } else {
+        onNavigate("/" + href);
+      }
+    } else {
+      onNavigate(href);
+    }
   };
 
   return (
-    <footer className="w-full bg-[#042718] text-white pt-20 pb-12 overflow-hidden relative">
-      {/* Background subtle glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-72 bg-[#188E39]/10 blur-[120px] pointer-events-none rounded-full" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Main CTA Section */}
-        <div className="max-w-3xl mx-auto text-center flex flex-col items-center gap-6 mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-inter font-medium text-[#E0F3FE]"
+    <footer className="relative w-full overflow-hidden flex flex-col items-center">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {isMounted && (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-20"
           >
-            <span className="w-2 h-2 rounded-full bg-[#188E39] animate-pulse" />
-            <span>Available for Senior Product Opportunities</span>
-          </motion.div>
+            <source
+              src="https://cdn.jiro.build/Amox/All%20Images/P01-Header-01-BG.mp4"
+              type="video/mp4"
+            />
+          </video>
+        )}
+        <div className="absolute inset-0 bg-[#FAFDFB]/70" />
+        <div className="absolute bottom-0 left-0 right-0 h-[400px] bg-white/5 backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_40%,transparent)]" />
+      </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="font-onest text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15]"
-          >
-            Have a product problem worth unpacking?
-          </motion.h2>
+      {/* CTA SECTION */}
+      <section className="w-full relative pt-20 lg:pt-32 pb-0 overflow-hidden flex flex-col items-center">
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAFDFB] via-[#FAFDFB]/60 to-transparent pointer-events-none" />
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="font-inter text-base sm:text-lg text-white/75 leading-relaxed max-w-2xl"
-          >
-            I’m open to Senior Product Management opportunities, product strategy conversations, and interesting 0→1 problems across B2B, AI and consumer platforms.
-          </motion.p>
-
-          {/* Action CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-wrap items-center justify-center gap-3.5 pt-2"
-          >
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener"
-              id="footer-book-chat-cta"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#188E39] hover:bg-[#15803D] text-white font-inter text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+        <div className="max-w-[1440px] w-full mx-auto px-6 lg:px-[96px] relative z-10 flex flex-col items-center">
+          <div className="max-w-[1248px] w-full flex flex-col items-center">
+            {/* Tag */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E4F2EB] border border-[#188E39]/15 mb-6"
             >
-              <Calendar size={16} />
-              <span>Book a Chat</span>
-              <ArrowUpRight size={15} />
-            </a>
+              <Sparkles className="w-3.5 h-3.5 text-[#188E39]" />
+              <span className="text-[#188E39] text-xs font-inter font-bold uppercase tracking-wider">
+                Open for High-Impact Roles
+              </span>
+            </motion.div>
 
-            <a
-              href="mailto:shipwithdeepak@gmail.com"
-              id="footer-email-cta"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-inter text-sm font-semibold transition-all duration-300 cursor-pointer"
+            {/* Heading */}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="w-full max-w-[820px] text-center text-[#042718] font-semibold text-[38px] md:text-[60px] leading-[1.1] tracking-tight md:tracking-[-2px] mb-4 font-onest"
             >
-              <Mail size={16} />
-              <span>Email me</span>
-              <ArrowUpRight size={15} />
-            </a>
+              Let’s build something{" "}
+              <span className="font-playfair italic font-medium text-black/40">
+                extraordinary
+              </span>{" "}
+              together
+            </motion.h2>
 
-            <a
-              href="https://www.linkedin.com/in/prasad-deepak/"
-              target="_blank"
-              rel="noopener noreferrer"
-              id="footer-linkedin-cta"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-inter text-sm font-semibold transition-all duration-300 cursor-pointer"
+            {/* Subheading */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="w-full max-w-[660px] text-center text-[#042718]/80 font-inter text-base md:text-lg leading-relaxed mb-10"
             >
-              <Linkedin size={16} />
-              <span>LinkedIn</span>
-              <ArrowUpRight size={15} />
-            </a>
+              Looking for a Senior Product Manager who thrives in ambiguity,
+              talks to real users, and builds resilient physical-digital
+              systems? Let’s connect.
+            </motion.p>
 
-            <button
-              type="button"
-              id="footer-resume-download"
-              onClick={() => {
-                if (onOpenResumeModal) onOpenResumeModal();
-                else onNavigate("/resume");
-              }}
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white font-inter text-sm font-semibold transition-all duration-300 cursor-pointer"
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="flex flex-col sm:flex-row items-center gap-4"
             >
-              <FileDown size={16} />
-              <span>Download resume</span>
-            </button>
-          </motion.div>
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                id="footer-book-strategy-chat-cta"
+                className="h-14 px-8 rounded-full bg-[#042718] text-white font-inter font-semibold text-base shadow-lg hover:bg-[#042718]/90 transition-all flex items-center gap-3 group cursor-pointer"
+              >
+                <Calendar size={18} className="text-[#34D399]" />
+                <span>Book Strategy Chat</span>
+                <ArrowUpRight
+                  size={16}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
+              </a>
+
+              {onOpenResumeModal && (
+                <button
+                  type="button"
+                  id="footer-view-resume-cta"
+                  onClick={onOpenResumeModal}
+                  className="h-14 px-8 rounded-full bg-white/70 backdrop-blur-md border border-[#042718]/15 text-[#042718] font-inter font-semibold text-base hover:bg-white transition-all flex items-center gap-2.5 cursor-pointer shadow-xs"
+                >
+                  <FileText size={18} className="text-[#188E39]" />
+                  <span>View Full Resume</span>
+                </button>
+              )}
+            </motion.div>
+          </div>
         </div>
+      </section>
 
-        {/* Divider */}
-        <div className="w-full h-px bg-white/10 my-10" />
+      {/* FOOTER LINKS SECTION */}
+      <div className="relative w-full flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-[1440px] px-6 lg:px-[96px] pt-16 pb-8 flex flex-col items-start bg-transparent">
+          {/* Content Row */}
+          <motion.div
+            className="w-full lg:w-[1248px] pt-16 lg:pt-24 pb-16 flex flex-col lg:flex-row items-start gap-12 lg:gap-24 border-t border-[#042718]/10 mt-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={containerVariants}
+          >
+            {/* Left Column: Direct Contact Form */}
+            <div className="w-full lg:w-[460px] flex flex-col gap-5">
+              <motion.div
+                variants={itemVariants}
+                className="flex items-center gap-3"
+              >
+                <div className="w-9 h-9 rounded-full bg-[#042718] text-white font-onest font-bold flex items-center justify-center text-sm">
+                  DP
+                </div>
+                <div>
+                  <h3 className="text-[#042718] font-onest text-xl font-bold tracking-tight">
+                    Deepak Prasad
+                  </h3>
+                  <p className="text-xs text-[#042718]/60 font-inter">
+                    Senior Product Manager
+                  </p>
+                </div>
+              </motion.div>
 
-        {/* Bottom Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-sm font-inter text-white/60">
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center font-onest font-bold text-white text-xs">
-              DP
+              <motion.p
+                variants={itemVariants}
+                className="text-[#042718]/75 font-inter text-sm leading-relaxed"
+              >
+                Specializing in complex B2B marketplaces, 0→1 discovery,
+                physical-digital workflow digitisation, and AI model productization.
+              </motion.p>
+
+              {/* Direct quick message input */}
+              <motion.form
+                variants={itemVariants}
+                onSubmit={handleSubscribe}
+                className="mt-2 relative w-full flex flex-col sm:flex-row items-stretch sm:items-center p-1.5 rounded-[24px] sm:rounded-full border border-[#042718]/15 bg-white/70 backdrop-blur-md shadow-xs"
+              >
+                <input
+                  type="email"
+                  required
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  placeholder="Enter your email for notes & updates"
+                  className="flex-1 bg-transparent border-none outline-none px-4 py-2 font-inter text-sm text-[#042718] placeholder:text-[#042718]/50"
+                />
+                <button
+                  type="submit"
+                  className="flex items-center justify-center gap-2 bg-[#042718] px-5 py-2.5 rounded-full text-white font-inter text-xs font-semibold shadow-xs hover:bg-[#042718]/90 transition-all shrink-0 cursor-pointer"
+                >
+                  <span>{subscribed ? "Subscribed!" : "Subscribe"}</span>
+                  <ArrowRight size={14} />
+                </button>
+              </motion.form>
             </div>
+
+            {/* Right Columns (Navigation Links) */}
+            <div className="lg:ml-auto grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto">
+              {/* Column 1: Portfolio */}
+              <div className="flex flex-col gap-4">
+                <motion.div variants={itemVariants} className="flex flex-col">
+                  <div
+                    className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                    aria-hidden="true"
+                  />
+                  <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                    Portfolio
+                  </h4>
+                </motion.div>
+                <ul className="flex flex-col gap-2.5">
+                  {[
+                    {
+                      name: "ReshaMandi Deep Dive",
+                      href: "#flagship-case-study",
+                      onClick: () => {
+                        if (onSelectCaseStudy) {
+                          onSelectCaseStudy("01");
+                        } else {
+                          handleNavClick("#flagship-case-study");
+                        }
+                      },
+                    },
+                    {
+                      name: "Download Resume (PDF)",
+                      onClick: () => {
+                        downloadResumePDF();
+                      },
+                      icon: Download,
+                    },
+                    { name: "Product Methodology", href: "#methodology" },
+                    { name: "Operating Principles", href: "#principles" },
+                    { name: "Key Metrics", href: "#metrics" },
+                  ].map((link) => (
+                    <motion.li key={link.name} variants={itemVariants}>
+                      {link.onClick ? (
+                        <button
+                          type="button"
+                          onClick={link.onClick}
+                          className="text-[#042718]/70 font-inter text-sm hover:text-[#188E39] hover:font-medium transition-all text-left cursor-pointer flex items-center gap-1.5"
+                        >
+                          {link.icon && (
+                            <link.icon size={13} className="text-[#188E39]" />
+                          )}
+                          <span>{link.name}</span>
+                        </button>
+                      ) : (
+                        <a
+                          href={link.href}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleNavClick(link.href);
+                          }}
+                          className="text-[#042718]/70 font-inter text-sm hover:text-[#042718] hover:font-medium transition-all"
+                        >
+                          {link.name}
+                        </a>
+                      )}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Column 2: Engage */}
+              <div className="flex flex-col gap-4">
+                <motion.div variants={itemVariants} className="flex flex-col">
+                  <div
+                    className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                    aria-hidden="true"
+                  />
+                  <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                    Engage
+                  </h4>
+                </motion.div>
+                <ul className="flex flex-col gap-2.5">
+                  {[
+                    {
+                      name: "Full-Time Roles",
+                      onClick: () => {
+                        if (onOpenContactModal) onOpenContactModal();
+                        else window.open(CALENDLY_URL, "_blank");
+                      },
+                    },
+                    {
+                      name: "0→1 Discovery Sprint",
+                      onClick: () => {
+                        if (onOpenContactModal) onOpenContactModal();
+                        else window.open(CALENDLY_URL, "_blank");
+                      },
+                    },
+                    {
+                      name: "Advisory Retainer",
+                      onClick: () => {
+                        if (onOpenContactModal) onOpenContactModal();
+                        else window.open(CALENDLY_URL, "_blank");
+                      },
+                    },
+                    { name: "Read PM Essays", href: "#principles" },
+                  ].map((item, idx) => (
+                    <motion.li key={idx} variants={itemVariants}>
+                      {item.onClick ? (
+                        <button
+                          type="button"
+                          onClick={item.onClick}
+                          className="text-[#042718]/70 font-inter text-sm hover:text-[#042718] hover:font-medium transition-all text-left cursor-pointer"
+                        >
+                          {item.name}
+                        </button>
+                      ) : (
+                        <a
+                          href={item.href}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleNavClick(item.href!);
+                          }}
+                          className="text-[#042718]/70 font-inter text-sm hover:text-[#042718] hover:font-medium transition-all"
+                        >
+                          {item.name}
+                        </a>
+                      )}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Column 3: Connect */}
+              <div className="flex flex-col gap-4 col-span-2 sm:col-span-1">
+                <motion.div variants={itemVariants} className="flex flex-col">
+                  <div
+                    className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                    aria-hidden="true"
+                  />
+                  <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                    Connect
+                  </h4>
+                </motion.div>
+                <ul className="flex flex-col gap-2.5">
+                  {[
+                    {
+                      name: "LinkedIn",
+                      icon: Linkedin,
+                      href: "https://www.linkedin.com/in/prasad-deepak/",
+                    },
+                    {
+                      name: "GitHub",
+                      icon: Github,
+                      href: "https://github.com/shipwithdeepak-code",
+                    },
+                    {
+                      name: "shipwithdeepak@gmail.com",
+                      icon: Mail,
+                      href: "mailto:shipwithdeepak@gmail.com",
+                    },
+                  ].map((social, idx) => (
+                    <motion.li key={idx} variants={itemVariants}>
+                      <a
+                        href={social.href}
+                        target={social.href.startsWith("mailto:") ? undefined : "_blank"}
+                        rel={social.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                        className="flex items-center gap-2 text-[#042718]/70 font-inter text-sm hover:text-[#042718] transition-all"
+                      >
+                        <social.icon size={15} className="text-[#188E39]" />
+                        <span>{social.name}</span>
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Big Watermark: DEEPAK PRASAD */}
+          <div className="w-full max-w-full flex justify-center items-center select-none py-4 sm:py-6 px-4 overflow-hidden">
+            <motion.h1
+              initial={{ y: "60%", opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 1,
+                ease: [0.21, 0.45, 0.32, 0.9] as const,
+              }}
+              className="w-full text-center text-[#042718]/12 font-onest text-[clamp(38px,10vw,150px)] font-bold leading-none tracking-tighter whitespace-nowrap select-none"
+            >
+              Deepak Prasad
+            </motion.h1>
+          </div>
+
+          {/* Bottom Copyright Row */}
+          <motion.div
+            className="w-full lg:w-[1248px] pt-6 pb-4 border-t border-[#042718]/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#042718]/60 font-inter"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
             <div>
-              <span className="text-white font-medium">Deepak Prasad</span>
-              <span className="mx-2 text-white/30">·</span>
-              <span>Senior Product Manager</span>
+              &copy; {new Date().getFullYear()} Deepak Prasad. All rights reserved.
             </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <button
-              type="button"
-              onClick={() => onNavigate("/work")}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Work
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate("/about")}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              About
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate("/resume")}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Resume
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate("/contact")}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Contact
-            </button>
-            <button
-              type="button"
-              onClick={scrollToTop}
-              className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors cursor-pointer ml-2"
-              aria-label="Back to top"
-            >
-              <ArrowUp size={16} />
-            </button>
-          </div>
+            <div className="flex items-center gap-4">
+              <span>Senior Product Manager</span>
+              <span>•</span>
+              <span>Bengaluru / Remote</span>
+            </div>
+          </motion.div>
         </div>
       </div>
     </footer>

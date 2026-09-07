@@ -78,7 +78,7 @@ export default function CtaWithFooter01Finsyc({
               loop
               muted
               playsInline
-              className="w-full h-full object-cover opacity-25"
+              className="w-full h-full object-cover opacity-20"
             >
               <source
                 src="https://cdn.jiro.build/Amox/All%20Images/P01-Header-01-BG.mp4"
@@ -87,7 +87,7 @@ export default function CtaWithFooter01Finsyc({
             </video>
           )}
           <div className="absolute inset-0 bg-[#FAFDFB]/70" />
-          <div className="absolute bottom-0 left-0 right-0 h-[400px] bg-white/2 backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_40%,transparent)]" />
+          <div className="absolute bottom-0 left-0 right-0 h-[400px] bg-white/5 backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_40%,transparent)] pointer-events-none" />
         </div>
 
         {/* CTA SECTION */}
@@ -226,12 +226,15 @@ export default function CtaWithFooter01Finsyc({
               <div className="lg:ml-auto grid grid-cols-2 sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto">
                 {/* Navigation */}
                 <div className="flex flex-col gap-4">
-                  <motion.h4
-                    variants={itemVariants}
-                    className="text-[#042718] font-onest text-base font-bold uppercase tracking-wider text-xs"
-                  >
-                    Portfolio
-                  </motion.h4>
+                  <motion.div variants={itemVariants} className="flex flex-col">
+                    <div
+                      className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                      aria-hidden="true"
+                    />
+                    <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                      Portfolio
+                    </h4>
+                  </motion.div>
                   <ul className="flex flex-col gap-2.5">
                     {[
                       { name: "ReshaMandi Deep Dive", href: "#flagship-case-study" },
@@ -280,12 +283,15 @@ export default function CtaWithFooter01Finsyc({
 
                 {/* Collaboration */}
                 <div className="flex flex-col gap-4">
-                  <motion.h4
-                    variants={itemVariants}
-                    className="text-[#042718] font-onest text-base font-bold uppercase tracking-wider text-xs"
-                  >
-                    Engage
-                  </motion.h4>
+                  <motion.div variants={itemVariants} className="flex flex-col">
+                    <div
+                      className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                      aria-hidden="true"
+                    />
+                    <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                      Engage
+                    </h4>
+                  </motion.div>
                   <ul className="flex flex-col gap-2.5">
                     {[
                       { name: "Full-Time Roles", onClick: onOpenContact },
@@ -317,12 +323,15 @@ export default function CtaWithFooter01Finsyc({
 
                 {/* Social & Contact */}
                 <div className="flex flex-col gap-4 col-span-2 sm:col-span-1">
-                  <motion.h4
-                    variants={itemVariants}
-                    className="text-[#042718] font-onest text-base font-bold uppercase tracking-wider text-xs"
-                  >
-                    Connect
-                  </motion.h4>
+                  <motion.div variants={itemVariants} className="flex flex-col">
+                    <div
+                      className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                      aria-hidden="true"
+                    />
+                    <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                      Connect
+                    </h4>
+                  </motion.div>
                   <ul className="flex flex-col gap-2.5">
                     {[
                       {

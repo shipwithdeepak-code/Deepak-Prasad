@@ -201,6 +201,15 @@ export default function App() {
       <Footer
         onNavigate={navigate}
         onOpenResumeModal={() => setIsResumeModalOpen(true)}
+        onOpenContactModal={() => setIsContactModalOpen(true)}
+        onSelectCaseStudy={(id) => {
+          const found =
+            ALL_FLAGSHIP_CASE_STUDIES.find(
+              (c) => c.id === id || c.slug === id
+            ) || RESHAMANDI_CASE_STUDY;
+          setSelectedModalCaseStudy(found);
+          setIsCaseStudyModalOpen(true);
+        }}
       />
 
       {/* Interactive Modals */}
