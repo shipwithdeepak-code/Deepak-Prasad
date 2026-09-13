@@ -158,6 +158,8 @@ export default function HeroFullFace({
         <img
           src="/deepak_portrait_4x5.jpg"
           alt="Deepak Prasad"
+          fetchPriority="high"
+          decoding="async"
           className="dp-figure-mask block w-full h-full object-cover"
           style={{
             objectPosition: "50% 14%",

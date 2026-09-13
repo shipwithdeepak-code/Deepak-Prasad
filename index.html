@@ -27,6 +27,11 @@
     <meta name="twitter:description" content="Senior Product Manager building AI, B2B and B2C products across marketplaces, subscription platforms, connected products and workflow automation." />
     <meta name="twitter:image" content="https://deepakprasad.ai.studio/images/og-image.png" />
 
+    <!-- the hero portrait is the largest paint on every first view, and
+         React renders it, so the browser would not find it until the bundle
+         ran. Naming it here starts the fetch with the document. -->
+    <link rel="preload" as="image" href="/deepak_portrait_4x5.jpg" fetchpriority="high" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <!-- the only faces the site uses, now that every page is on v2 -->
