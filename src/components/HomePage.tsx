@@ -4,6 +4,7 @@ import KineticStrip from "./site/KineticStrip";
 import WorkFan from "./site/WorkFan";
 import PrinciplesFloat from "./site/PrinciplesFloat";
 import SiteFooter from "./site/SiteFooter";
+import { openCopilot } from "./CopilotWidget";
 import { ALL_FLAGSHIP_CASE_STUDIES } from "../data/caseStudies";
 import { CaseStudyDetail } from "../types";
 
@@ -33,6 +34,7 @@ export default function HomePage({
         onNavigate={onNavigate}
         onOpenResumeModal={onOpenResumeModal}
         onOpenContact={onOpenContact}
+        onAskDipa={(initialText) => openCopilot(initialText)}
       />
       <KineticStrip />
       <WorkFan
@@ -43,7 +45,7 @@ export default function HomePage({
       <PrinciplesFloat />
       <SiteFooter
         onOpenContact={onOpenContact}
-        onAskDipa={() => document.getElementById("copilot-launcher-btn")?.click()}
+        onAskDipa={() => openCopilot()}
       />
     </div>
   );

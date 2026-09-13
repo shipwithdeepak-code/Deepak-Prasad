@@ -201,6 +201,19 @@
 /* the crosshair belongs to the ground, not to the controls on it */
 .dp-hero button, .dp-hero a { cursor: pointer; }
 
+/* the hero assistant control: cursor text, hover border tint, and focus ring */
+.dp-hero-assistant {
+  cursor: text !important;
+  transition: border-color .2s var(--ease-out-soft);
+}
+.dp-hero-assistant:hover {
+  border-color: rgba(240, 151, 122, .6) !important;
+}
+.dp-hero-assistant:focus-visible {
+  outline: 2px solid var(--color-coral) !important;
+  outline-offset: 3px !important;
+}
+
 /* a real target, not a text-height hairline: keyed on width as well as
    pointer type, so a small window without touch gets it too */
 @media (max-width: 700px), (pointer: coarse) {

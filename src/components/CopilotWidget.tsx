@@ -41,6 +41,19 @@ interface CopilotWidgetProps {
   onNavigate: (path: string) => void;
 }
 
+type OpenCopilotHandler = (initialText?: string) => void;
+let globalOpenCopilotHandler: OpenCopilotHandler | null = null;
+
+export function openCopilot(initialText?: string) {
+  if (globalOpenCopilotHandler) {
+    globalOpenCopilotHandler(initialText);
+  } else if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent("open-copilot", { detail: { text: initialText } })
+    );
+  }
+}
+
 const STARTER_PROMPTS = [
   "What was Deepak's impact at ReshaMandi?",
   "Why choose RAG over fine-tuning for this site?",
@@ -87,6 +100,51 @@ export default function CopilotWidget({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+
+  // Wire external openCopilot handler & custom event
+  useEffect(() => {
+    globalOpenCopilotHandler = (initialText?: string) => {
+      setIsOpen(true);
+      if (initialText !== undefined) {
+        setInput(initialText);
+      }
+    };
+    const handleCustomEvent = (e: Event) => {
+      const custom = e as CustomEvent<{ text?: string }>;
+      setIsOpen(true);
+      if (custom.detail?.text !== undefined) {
+        setInput(custom.detail.text);
+      }
+    };
+    window.addEventListener("open-copilot", handleCustomEvent);
+    return () => {
+      globalOpenCopilotHandler = null;
+      window.removeEventListener("open-copilot", handleCustomEvent);
+    };
+  }, []);
+
+  // Click outside to close drawer
+  useEffect(() => {
+    if (!isOpen) return;
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (drawerRef.current && drawerRef.current.contains(target)) {
+        return;
+      }
+      if (launcherRef.current && launcherRef.current.contains(target)) {
+        return;
+      }
+      setIsOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -111,7 +169,11 @@ export default function CopilotWidget({
     if (isOpen) {
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        inputRef.current?.focus();
+        if (inputRef.current) {
+          inputRef.current.focus();
+          const len = inputRef.current.value.length;
+          inputRef.current.setSelectionRange(len, len);
+        }
       }, 100);
     }
   }, [isOpen, messages]);
@@ -205,7 +267,7 @@ export default function CopilotWidget({
               isUser ? "text-ivory font-medium" : "text-ivory/90 font-body"
             }`}
           >
-            {renderBold(bulletText, isUser)}
+            {renderBold(bulletText)}
           </li>
         );
       }
@@ -219,13 +281,13 @@ export default function CopilotWidget({
             isUser ? "text-ivory font-medium" : "text-ivory/90 font-body"
           }`}
         >
-          {renderBold(line, isUser)}
+          {renderBold(line)}
         </p>
       );
     });
   };
 
-  const renderBold = (str: string, isUser: boolean = false) => {
+  const renderBold = (str: string) => {
     const parts = str.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith("**") && part.endsWith("**")) {
@@ -272,89 +334,123 @@ export default function CopilotWidget({
       `}</style>
 
       {/* Floating Circular Photo Trigger Button */}
-      {!isOpen && (
-        <button
-          id="copilot-launcher-btn"
-          onClick={() => setIsOpen(true)}
-          className={`fixed bottom-5 right-5 z-40 group flex items-center justify-center w-14 h-14 rounded-full bg-void text-ivory active:scale-[.97] border-2 border-coral/40 hover:border-coral cursor-pointer ${shouldReduceMotion ? "" : "animate-copilot-breathe"} overflow-visible transition-opacity duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${launcherVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-          aria-label="Open Deepak's AI Copilot"
-          title="Open Deepak's AI Copilot"
-        >
-          {/* Avatar container */}
-          <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-void">
-            <div className="w-full h-full flex items-center justify-center font-mono font-bold text-sm text-ivory select-none group-hover:scale-105 transition-transform bg-void">
-              DP
-            </div>
-          </div>
-
-          {/* AI Sparkles Badge */}
-          <span className="absolute -bottom-0.5 -right-0.5 z-20 w-4.5 h-4.5 rounded-full bg-void border border-coral/50 flex items-center justify-center shadow-xs">
-            <Sparkles size={10} className={`text-coral ${shouldReduceMotion ? "" : "animate-pulse"}`} />
-          </span>
-        </button>
-      )}
-
-      {/* Main Copilot Drawer / Modal */}
-      {isOpen && (
-        <div
-          id="copilot-window"
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[460px] h-[620px] max-h-[calc(100vh-48px)] flex flex-col rounded-[20px] bg-void border border-[var(--rule-strong)] shadow-2xl overflow-hidden font-body transition-all duration-300 text-ivory"
-        >
-          {/* Header */}
-          <div className="p-4 bg-ghost border-b border-[var(--rule)] text-ivory flex items-center justify-between shrink-0 select-none">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-void border border-[var(--rule)] flex items-center justify-center text-coral">
-                <Sparkles size={18} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3
-                    className="font-display text-sm sm:text-base font-bold text-ivory tracking-tight"
-                    style={{ fontVariationSettings: '"wdth" 92' }}
-                  >
-                    Deepak's AI Copilot
-                  </h3>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-void text-coral border border-[var(--rule)]">
-                    RAG
-                  </span>
-                </div>
-                <p className="text-[11px] text-mute font-mono uppercase tracking-[0.08em] truncate max-w-[240px]">
-                  Grounded in 45+ case study chunks / gemini-3.1-flash-lite
-                </p>
+      <button
+        ref={launcherRef}
+        id="copilot-launcher-btn"
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group flex items-center justify-center w-14 h-14 rounded-full bg-void text-ivory active:scale-[.97] border-2 ${
+          isOpen ? "border-coral" : "border-coral/40 hover:border-coral"
+        } cursor-pointer ${
+          shouldReduceMotion || isOpen ? "" : "animate-copilot-breathe"
+        } overflow-visible transition-opacity duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
+          isOpen || launcherVisible
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+        aria-label={isOpen ? "Close Deepak's AI Copilot" : "Open Deepak's AI Copilot"}
+        title={isOpen ? "Close Deepak's AI Copilot" : "Open Deepak's AI Copilot"}
+        aria-expanded={isOpen}
+        aria-controls="copilot-window"
+      >
+        {isOpen ? (
+          <X size={20} className="text-ivory group-hover:text-coral transition-colors" />
+        ) : (
+          <>
+            {/* Avatar container */}
+            <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-void">
+              <div className="w-full h-full flex items-center justify-center font-mono font-bold text-sm text-ivory select-none group-hover:scale-105 transition-transform bg-void">
+                DP
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setIsHowItWorksOpen(!isHowItWorksOpen)}
-                title="How this works"
-                className={`p-1.5 rounded-lg text-xs font-mono uppercase tracking-[0.1em] flex items-center gap-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
-                  isHowItWorksOpen
-                    ? "bg-coral text-void font-bold"
-                    : "text-mute hover:text-ivory hover:bg-ghost-active"
-                }`}
-              >
-                <Info size={16} />
-                <span className="hidden sm:inline text-[11px]">Architecture</span>
-              </button>
+            {/* AI Sparkles Badge */}
+            <span className="absolute -bottom-0.5 -right-0.5 z-20 w-4.5 h-4.5 rounded-full bg-void border border-coral/50 flex items-center justify-center shadow-xs">
+              <Sparkles
+                size={10}
+                className={`text-coral ${shouldReduceMotion ? "" : "animate-pulse"}`}
+              />
+            </span>
+          </>
+        )}
+      </button>
 
-              <button
-                onClick={handleResetChat}
-                title="Reset conversation"
-                className="p-1.5 rounded-lg text-mute hover:text-ivory hover:bg-ghost-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
-              >
-                <RotateCcw size={15} />
-              </button>
-
-              <button
-                onClick={() => setIsOpen(false)}
-                title="Close Copilot"
-                className="p-1.5 rounded-lg text-mute hover:text-ivory hover:bg-ghost-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
-              >
-                <X size={18} />
-              </button>
+      {/* Main Copilot Drawer */}
+      <div
+        ref={drawerRef}
+        id="copilot-window"
+        className={`fixed bottom-[76px] right-4 sm:bottom-[88px] sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[460px] h-[600px] max-h-[calc(100vh-96px)] flex flex-col rounded-[20px] bg-void border border-[var(--rule-strong)] shadow-2xl overflow-hidden font-body text-ivory transition-[transform,opacity] duration-300 ease-[var(--ease-out-soft)] ${
+          isOpen
+            ? "opacity-100 scale-100 pointer-events-auto"
+            : "opacity-0 scale-90 pointer-events-none"
+        }`}
+        style={{
+          transformOrigin: "bottom right",
+          ...(shouldReduceMotion ? { transition: "none" } : {}),
+        }}
+        aria-hidden={!isOpen}
+      >
+        {/* Header */}
+        <div className="p-4 bg-ghost border-b border-[var(--rule)] text-ivory flex items-center justify-between shrink-0 select-none">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-void border border-[var(--rule)] flex items-center justify-center text-coral">
+              <Sparkles size={18} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3
+                  className="font-display text-sm sm:text-base font-bold text-ivory tracking-tight"
+                  style={{ fontVariationSettings: '"wdth" 92' }}
+                >
+                  Deepak's AI Copilot
+                </h3>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-void text-coral border border-[var(--rule)]">
+                  RAG
+                </span>
+              </div>
+              <p className="text-[11px] text-mute font-mono uppercase tracking-[0.08em] truncate max-w-[240px]">
+                Grounded in 45+ case study chunks / gemini-3.1-flash-lite
+              </p>
             </div>
           </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setIsHowItWorksOpen(!isHowItWorksOpen)}
+              title="How this works"
+              aria-label="How this works"
+              className={`min-w-[44px] min-h-[44px] px-2.5 rounded-lg text-xs font-mono uppercase tracking-[0.1em] flex items-center justify-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral cursor-pointer ${
+                isHowItWorksOpen
+                  ? "bg-coral text-void font-bold"
+                  : "text-mute hover:text-ivory hover:bg-ghost-active"
+              }`}
+            >
+              <Info size={16} />
+              <span className="hidden sm:inline text-[11px]">Architecture</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleResetChat}
+              title="Reset conversation"
+              aria-label="Reset conversation"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-mute hover:text-ivory hover:bg-ghost-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral cursor-pointer"
+            >
+              <RotateCcw size={15} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              title="Close Copilot"
+              aria-label="Close Copilot"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-ivory hover:text-coral hover:bg-ghost-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </div>
 
           {/* "How This Works" Collapsible Transparent Architecture Panel */}
           {isHowItWorksOpen && (
@@ -520,6 +616,7 @@ export default function CopilotWidget({
                           rel="noopener"
                           onClick={() => {
                             setIsOpen(false);
+                            onOpenBookChat?.();
                           }}
                           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-coral hover:bg-[#F6AE96] text-void font-mono uppercase tracking-[0.12em] font-semibold text-xs transition-colors shadow-xs active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                         >
@@ -641,7 +738,6 @@ export default function CopilotWidget({
             </button>
           </div>
         </div>
-      )}
     </>
   );
 }

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { NAV_LINKS } from "../../data/nav";
+import { openCopilot } from "../CopilotWidget";
 
 interface HeroFullFaceProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
   onOpenContact?: () => void;
+  onAskDipa?: (initialText?: string) => void;
 }
-
-
 
 const ASSISTANT_LINES = [
   "ask me anything about how I work",
@@ -25,10 +25,17 @@ export default function HeroFullFace({
   onNavigate,
   onOpenResumeModal,
   onOpenContact,
+  onAskDipa,
 }: HeroFullFaceProps) {
   const shouldReduceMotion = useReducedMotion();
   const heroRef = useRef<HTMLElement | null>(null);
   const [typed, setTyped] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const isEngaged = isHovered || isFocused;
+  const qiRef = useRef(0);
+  const ciRef = useRef(0);
+  const deletingRef = useRef(false);
 
   /* the carried light: a spring-followed glow, so it lags and settles
      rather than snapping to the pointer */
@@ -63,13 +70,16 @@ export default function HeroFullFace({
     };
   }, [shouldReduceMotion]);
 
-  /* the assistant line, typing and deleting */
+  /* the assistant line, typing and deleting: pauses when engaged (hover or focus) */
   useEffect(() => {
     if (shouldReduceMotion) {
       setTyped(ASSISTANT_LINES[0]);
       return;
     }
-    let qi = 0, ci = 0, deleting = false;
+    if (isEngaged) {
+      return;
+    }
+    let qi = qiRef.current, ci = ciRef.current, deleting = deletingRef.current;
     let timer: ReturnType<typeof setTimeout>;
 
     const loop = () => {
@@ -77,17 +87,22 @@ export default function HeroFullFace({
       if (!deleting) {
         ci++;
         setTyped(q.slice(0, ci));
+        ciRef.current = ci;
         if (ci >= q.length) {
           deleting = true;
+          deletingRef.current = true;
           timer = setTimeout(loop, 2100);
           return;
         }
       } else {
         ci--;
         setTyped(q.slice(0, ci));
+        ciRef.current = ci;
         if (ci <= 0) {
           deleting = false;
+          deletingRef.current = false;
           qi++;
+          qiRef.current = qi;
           timer = setTimeout(loop, 250);
           return;
         }
@@ -96,7 +111,33 @@ export default function HeroFullFace({
     };
     timer = setTimeout(loop, 400);
     return () => clearTimeout(timer);
-  }, [shouldReduceMotion]);
+  }, [shouldReduceMotion, isEngaged]);
+
+  const handleAssistantClick = () => {
+    if (onAskDipa) {
+      onAskDipa();
+    } else {
+      openCopilot();
+    }
+  };
+
+  const handleAssistantKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (onAskDipa) {
+        onAskDipa();
+      } else {
+        openCopilot();
+      }
+    } else if (e.key.length === 1 && !e.altKey && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      if (onAskDipa) {
+        onAskDipa(e.key);
+      } else {
+        openCopilot(e.key);
+      }
+    }
+  };
 
   return (
     <section
@@ -106,7 +147,7 @@ export default function HeroFullFace({
                  flex flex-col justify-end cursor-crosshair"
       style={{
         containerType: "inline-size",
-        minHeight: "clamp(620px, 64cqw, 760px)",
+        minHeight: "clamp(600px, 94svh, 880px)",
         paddingBottom: "calc(clamp(30px,3.9cqw,46px) + clamp(14px,1.8cqw,22px))",
       }}
     >
@@ -366,8 +407,16 @@ export default function HeroFullFace({
             </button>
           </div>
 
-          <div
-            className="flex items-center gap-2 font-mono text-ivory"
+          <button
+            type="button"
+            aria-label="Ask Dipa about Deepak's work"
+            onClick={handleAssistantClick}
+            onKeyDown={handleAssistantKeyDown}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="dp-hero-assistant flex items-center w-full text-left font-mono text-ivory select-none"
             style={{
               border: "1px solid rgba(240,151,122,.3)",
               background: "rgba(10,10,11,.6)",
@@ -377,19 +426,25 @@ export default function HeroFullFace({
               marginTop: "clamp(11px,1.7cqw,16px)",
             }}
           >
-            <b className="text-coral">&gt;</b>
-            <span className="whitespace-nowrap overflow-hidden" style={{ minHeight: "1.3em" }}>
+            <b className="text-coral mr-2">&gt;</b>
+            <span className="whitespace-nowrap overflow-hidden text-ivory/90" style={{ minHeight: "1.3em" }}>
               {typed}
             </span>
             <span
-              className="inline-block bg-coral align-[-2px]"
+              className="inline-block bg-coral align-[-2px] ml-0.5"
               style={{
                 width: 6,
                 height: "1.02em",
                 animation: shouldReduceMotion ? "none" : "dp-caret .9s steps(1) infinite",
               }}
             />
-          </div>
+            <span
+              aria-hidden="true"
+              className="font-mono text-[10px] uppercase text-mute select-none ml-auto shrink-0 tracking-[0.14em] pl-3"
+            >
+              ASK
+            </span>
+          </button>
         </div>
       </div>
 
