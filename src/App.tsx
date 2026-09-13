@@ -180,24 +180,38 @@ export default function App() {
         onNavigate={navigate}
         onSelectCaseStudy={handleSelectCaseStudy}
         onOpenResumeModal={() => setIsResumeModalOpen(true)}
+        onOpenContact={() => openCalendly()}
       />
     );
   };
 
+  /* the v2 homepage carries its own nav and footer, so the shared chrome
+     stands down there rather than framing a page it was not designed for */
+  const isHome = currentPath === "/";
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFDFB] text-[#042718] selection:bg-[#188E39]/20 selection:text-[#042718]">
+    <div
+      className={
+        isHome
+          ? "min-h-screen flex flex-col bg-void text-ivory selection:bg-coral selection:text-void"
+          : "min-h-screen flex flex-col bg-[#FAFDFB] text-[#042718] selection:bg-[#188E39]/20 selection:text-[#042718]"
+      }
+    >
       {/* Persistent Navigation */}
+      {!isHome && (
       <Navigation
         currentPath={currentPath}
         onNavigate={navigate}
         onOpenResumeModal={() => setIsResumeModalOpen(true)}
         onOpenContactModal={() => openCalendly()}
       />
+      )}
 
       {/* Main Page View */}
       <main className="flex-1 w-full">{renderCurrentView()}</main>
 
       {/* Persistent Footer */}
+      {!isHome && (
       <Footer
         onNavigate={navigate}
         onOpenResumeModal={() => setIsResumeModalOpen(true)}
@@ -211,6 +225,7 @@ export default function App() {
           setIsCaseStudyModalOpen(true);
         }}
       />
+      )}
 
       {/* Interactive Modals */}
       <CaseStudyModal

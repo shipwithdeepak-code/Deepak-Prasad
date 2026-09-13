@@ -57,6 +57,24 @@ export default function CopilotWidget({
   onNavigate,
 }: CopilotWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  /* The hero carries the assistant as its front door, so the floating
+     launcher stands down while the hero is on screen and fades up once the
+     reader is past it. On pages with no hero it is always available. */
+  const [launcherVisible, setLauncherVisible] = useState(false);
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero || typeof IntersectionObserver === "undefined") {
+      setLauncherVisible(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => setLauncherVisible(!entry.isIntersecting),
+      { threshold: 0.12 }
+    );
+    io.observe(hero);
+    return () => io.disconnect();
+  }, []);
   const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
   const [selectedChunk, setSelectedChunk] = useState<RetrievedChunk | null>(null);
   const [input, setInput] = useState("");
@@ -235,11 +253,11 @@ export default function CopilotWidget({
         @keyframes copilot-breathe {
           0%, 100% {
             transform: scale(1);
-            box-shadow: 0 10px 25px -5px rgba(4, 39, 24, 0.4), 0 0 0 0 rgba(1, 188, 124, 0.25);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.55), 0 0 0 0 rgba(240, 151, 122, 0.25);
           }
           50% {
             transform: scale(1.04);
-            box-shadow: 0 14px 28px -5px rgba(4, 39, 24, 0.5), 0 0 0 6px rgba(1, 188, 124, 0);
+            box-shadow: 0 14px 28px -5px rgba(0, 0, 0, 0.65), 0 0 0 6px rgba(240, 151, 122, 0);
           }
         }
         .animate-copilot-breathe {
@@ -252,26 +270,26 @@ export default function CopilotWidget({
         <button
           id="copilot-launcher-btn"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-40 group flex items-center justify-center w-14 h-14 rounded-full bg-[#042718] text-white shadow-xl hover:shadow-2xl active:scale-95 transition-all duration-300 border-2 border-[#188E39]/40 hover:border-[#188E39]/80 cursor-pointer animate-copilot-breathe overflow-visible"
+          className={`fixed bottom-5 right-5 z-40 group flex items-center justify-center w-14 h-14 rounded-full bg-[#0A0A0B] text-[#F2F2F0] active:scale-95 border-2 border-[#F0977A]/40 hover:border-[#F0977A]/85 cursor-pointer animate-copilot-breathe overflow-visible transition-opacity duration-500 ${launcherVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
           aria-label="Open Deepak's AI Copilot"
           title="Open Deepak's AI Copilot"
         >
           {/* Subtle online status indicator dot */}
           <span className="absolute -top-0.5 -right-0.5 z-20 flex h-3.5 w-3.5 pointer-events-none">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#01bc7c] opacity-75" />
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#01bc7c] border-2 border-[#FAFDFB]" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#57D98A] opacity-75" />
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#57D98A] border-2 border-[#0A0A0B]" />
           </span>
 
           {/* Avatar container - awaiting user-provided data URI in next prompt */}
-          <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-[#042718]">
-            <div className="w-full h-full flex items-center justify-center font-onest font-bold text-base text-white tracking-[-0.2px] select-none group-hover:scale-105 transition-transform bg-[#042718]">
+          <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-[#0A0A0B]">
+            <div className="w-full h-full flex items-center justify-center font-onest font-bold text-base text-white tracking-[-0.2px] select-none group-hover:scale-105 transition-transform bg-[#0A0A0B]">
               DP
             </div>
           </div>
 
           {/* Subtle AI Sparkles Badge */}
-          <span className="absolute -bottom-0.5 -right-0.5 z-20 w-4.5 h-4.5 rounded-full bg-[#042718] border border-[#01bc7c]/50 flex items-center justify-center shadow-xs">
-            <Sparkles size={10} className="text-[#01bc7c] animate-pulse" />
+          <span className="absolute -bottom-0.5 -right-0.5 z-20 w-4.5 h-4.5 rounded-full bg-[#0A0A0B] border border-[#F0977A]/50 flex items-center justify-center shadow-xs">
+            <Sparkles size={10} className="text-[#F0977A] animate-pulse" />
           </span>
         </button>
       )}
