@@ -8,3 +8,10 @@ coverage/
 !.env.example
 __pycache__/
 *.pyc
+
+# throwaway browser-probe scripts written during design audits
+probe*.mjs
+shot*.mjs
+_*.mjs
+# impeccable critique snapshots: local design records, not app code
+.impeccable/
