@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import {
   Mail,
   Linkedin,
@@ -8,7 +7,6 @@ import {
   CheckCircle2,
   Clock,
   MapPin,
-  Sparkles,
 } from "lucide-react";
 
 interface ContactPageProps {

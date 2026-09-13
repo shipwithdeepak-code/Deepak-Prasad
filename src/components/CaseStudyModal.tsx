@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   X,
   Sparkles,
   ChevronRight,
-  ShieldCheck,
   CheckCircle2,
-  TrendingUp,
   Layers,
   ArrowRight,
-  Cpu,
   Users,
   Compass,
-  FileCheck,
   Wallet,
   Zap,
 } from 'lucide-react';

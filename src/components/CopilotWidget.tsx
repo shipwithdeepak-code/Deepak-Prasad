@@ -3,10 +3,7 @@ import {
   Sparkles,
   Send,
   X,
-  ChevronDown,
-  ChevronUp,
   Cpu,
-  Database,
   CheckCircle2,
   AlertTriangle,
   ArrowRight,
@@ -14,8 +11,6 @@ import {
   Calendar,
   RotateCcw,
   BookOpen,
-  Layers,
-  Terminal,
 } from "lucide-react";
 import { CALENDLY_URL } from "../utils/calendly";
 

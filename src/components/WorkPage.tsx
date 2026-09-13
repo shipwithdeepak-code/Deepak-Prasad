@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  ArrowUpRight,
   CheckCircle2,
-  Sparkles,
   Layers,
-  FileText,
-  Filter,
   Terminal,
   Activity,
   Cpu,

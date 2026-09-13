@@ -1,17 +1,12 @@
 import React from "react";
-import { motion } from "framer-motion";
 import {
   ArrowRight,
-  ArrowUpRight,
   CheckCircle2,
   FileDown,
-  Mail,
-  Linkedin,
   Compass,
   Users2,
   Briefcase,
   Layers,
-  Sparkles,
 } from "lucide-react";
 import {
   EXPERIENCE_ROLES,

@@ -1,18 +1,10 @@
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
   AlertTriangle,
   Sparkles,
-  Layers,
-  ArrowUpRight,
-  ShieldCheck,
-  Cpu,
-  Clock,
-  Zap,
-  HelpCircle,
   Quote,
 } from "lucide-react";
 import { CaseStudyDetail } from "../types";
