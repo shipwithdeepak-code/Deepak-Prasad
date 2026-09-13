@@ -9,9 +9,9 @@ coverage/
 __pycache__/
 *.pyc
 
-# throwaway browser-probe scripts written during design audits
-probe*.mjs
-shot*.mjs
-_*.mjs
+# throwaway browser-probe scripts written during design audits. The project
+# keeps none of its own .mjs at the root, so ignoring them all is safe and
+# saves naming each new probe after a pattern.
+/*.mjs
 # impeccable critique snapshots: local design records, not app code
 .impeccable/
