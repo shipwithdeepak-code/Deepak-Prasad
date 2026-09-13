@@ -106,7 +106,7 @@ export default function CaseStudyModal({
                 <span className="text-xs font-mono font-bold uppercase tracking-[0.16em] text-coral">
                   {caseStudy.category}
                 </span>
-                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-mute">/</span>
                 <span className="text-xs font-mono uppercase tracking-[0.12em] text-mute">{caseStudy.timeline}</span>
               </div>
               <h2

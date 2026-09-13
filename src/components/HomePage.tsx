@@ -41,7 +41,10 @@ export default function HomePage({
         onNavigate={onNavigate}
       />
       <PrinciplesFloat />
-      <SiteFooter onOpenContact={onOpenContact} />
+      <SiteFooter
+        onOpenContact={onOpenContact}
+        onAskDipa={() => document.getElementById("copilot-launcher-btn")?.click()}
+      />
     </div>
   );
 }

@@ -9,6 +9,15 @@ interface WorkFanProps {
   onNavigate: (path: string) => void;
 }
 
+/** The number a card leads with: its first key stat, or its timeline when a
+ *  study has none. */
+function headline(cs: CaseStudyDetail): { value: string; label: string } {
+  const first = (cs.keyStats || [])[0];
+  return first
+    ? { value: first.value, label: first.label }
+    : { value: cs.timeline, label: cs.category };
+}
+
 /** Cards on an arc: the active one upright and centred, its neighbours
  *  rotated, pushed out, dropped and dimmed. Offsets wrap, so the deck is
  *  endless and there are always cards on both sides. */
@@ -27,6 +36,16 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
     [n]
   );
 
+  /* every route into a case study runs through here: the card, Enter on the
+     deck, and the hidden list a screen reader reads */
+  const open = useCallback(
+    (cs: CaseStudyDetail) => {
+      onSelectCaseStudy(cs);
+      onNavigate(`/work/${cs.slug}`);
+    },
+    [onNavigate, onSelectCaseStudy]
+  );
+
   const layout = useCallback(() => {
     const fan = fanRef.current;
     if (!fan) return;
@@ -34,8 +53,8 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
       fan.querySelectorAll<HTMLElement>(".dp-fcard")
     );
     const narrow = fan.clientWidth < 560;
-    const ang = narrow ? 9 : 7;
-    const gap = narrow ? 30 : 74;
+    const ang = narrow ? 6 : 7;
+    const gap = narrow ? 46 : 118;
     const lift = narrow ? 16 : 13;
     const shrink = 0.055;
     const lean = leanRef.current;
@@ -48,7 +67,8 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
         `rotate(${o * ang + lean * 0.6}deg) ` +
         `translateX(${o * gap + lean * 9}px) ` +
         `translateY(${a * lift}px) scale(${1 - a * shrink})`;
-      c.style.opacity = String(a > 2 ? 0 : 1 - a * 0.3);
+      c.style.opacity = String(a > 1 ? 0 : 1 - a * 0.72);
+      c.style.pointerEvents = o === 0 ? "auto" : "none";
       c.style.zIndex = String(50 - a);
       c.setAttribute("aria-hidden", o === 0 ? "false" : "true");
       c.classList.toggle("dp-fcard-on", o === 0);
@@ -66,9 +86,9 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
      burst to end rather than stepping once per event.
 
      The deck is endless, so consuming the wheel forever would trap the
-     page. Once a run of steps in one direction has been round the whole
-     deck, the wheel goes back to the page until the reader changes
-     direction or comes back to the section. */
+     page. Two steps prove the deck is interactive; after that the wheel
+     goes back to the page until the reader changes direction or comes
+     back to the section. The arrows and the index below carry the rest. */
   useEffect(() => {
     const fan = fanRef.current;
     if (!fan || shouldReduceMotion) return;
@@ -88,7 +108,7 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
         runLength = 0;
       }
       /* every card has been past the middle: the page takes the wheel back */
-      if (runLength >= n) return;
+      if (runLength >= 2) return;
 
       e.preventDefault();
       if (idleTimer) clearTimeout(idleTimer);
@@ -171,7 +191,7 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
           style={{ gap: 11, fontSize: "clamp(8px,.85cqw,10.5px)", letterSpacing: ".18em", color: "rgba(242,242,240,.7)" }}
         >
           <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
-          Flagship Case Studies
+          {n.toString().padStart(2, "0")} Projects
         </div>
         <h2
           className="font-display text-ivory"
@@ -184,7 +204,7 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
             margin: "12px 0 0",
           }}
         >
-          Selected work
+          The Work
         </h2>
         <p
           className="text-mute"
@@ -199,31 +219,28 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
             ref={fanRef}
             tabIndex={0}
             role="group"
-            aria-label="Selected work, use the arrow keys"
-            className="relative select-none cursor-grab active:cursor-grabbing focus:outline-none"
-            style={{ height: "clamp(370px,45cqw,480px)", perspective: "1400px", touchAction: "pan-y" }}
+            aria-label={`The Work, ${n} projects. Arrow keys to browse, Enter to open.`}
+            className="dp-fan relative select-none cursor-grab active:cursor-grabbing"
+            style={{ height: "clamp(420px,50cqw,540px)", perspective: "1400px", touchAction: "pan-y" }}
             onKeyDown={(e) => {
               if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
               if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                open(caseStudies[active]);
+              }
             }}
           >
             {caseStudies.map((cs, i) => (
               <article
                 key={cs.id}
                 className="dp-fcard absolute left-1/2 top-1/2 flex flex-col gap-[9px] rounded-[20px] cursor-pointer"
-                onClick={() => {
-                  if (i !== active) {
-                    setActive(i);
-                    return;
-                  }
-                  onSelectCaseStudy(cs);
-                  onNavigate(`/work/${cs.slug}`);
-                }}
+                onClick={() => open(cs)}
                 style={{
                   width: "clamp(205px,24cqw,290px)",
-                  height: "clamp(280px,33cqw,385px)",
+                  height: "clamp(330px,38cqw,442px)",
                   marginLeft: "calc(clamp(205px,24cqw,290px) / -2)",
-                  marginTop: "calc(clamp(280px,33cqw,385px) / -2)",
+                  marginTop: "calc(clamp(330px,38cqw,442px) / -2)",
                   border: "1px solid var(--rule)",
                   background: "#0E0F11",
                   padding: "clamp(13px,1.7cqw,20px)",
@@ -235,20 +252,37 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                 }}
               >
                 <div
-                  className="flex-none rounded-[12px] overflow-hidden"
-                  style={{ aspectRatio: "16/10", border: "1px solid var(--rule)" }}
+                  className="flex-none rounded-[12px] overflow-hidden relative"
+                  style={{ aspectRatio: "16/10", border: "1px solid var(--rule)", background: "#0B0C0E" }}
                 >
-                  <div
-                    className="w-full h-full flex items-center justify-center font-mono uppercase"
-                    style={{
-                      fontSize: 9,
-                      letterSpacing: ".14em",
-                      color: "rgba(242,242,240,.32)",
-                      background:
-                        "repeating-linear-gradient(135deg,rgba(242,242,240,.05) 0 10px,transparent 10px 20px)",
-                    }}
-                  >
-                    {cs.timeline}
+                  {/* a real number carries further than a placeholder. The
+                      screenshot takes over the moment one exists on disk. */}
+                  <img
+                    src={`/work/${cs.slug}.jpg`}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                  />
+                  <div className="absolute inset-0 flex flex-col justify-center" style={{ padding: "0 clamp(11px,1.4cqw,16px)" }}>
+                    <b
+                      className="block font-display text-coral"
+                      style={{
+                        fontWeight: 800,
+                        fontSize: "clamp(32px,4cqw,48px)",
+                        letterSpacing: "-.035em",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {headline(cs).value}
+                    </b>
+                    <span
+                      className="font-mono uppercase text-mute"
+                      style={{ fontSize: 10, letterSpacing: ".14em", marginTop: 7 }}
+                    >
+                      {headline(cs).label}
+                    </span>
                   </div>
                 </div>
                 <span
@@ -272,16 +306,24 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                 <p className="m-0 text-mute" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
                   {cs.role}
                 </p>
+                {i === active && (
+                  <span
+                    className="font-mono uppercase text-coral flex items-center gap-[6px]"
+                    style={{ fontSize: 10, letterSpacing: ".14em" }}
+                  >
+                    Read the case study <ArrowRight size={11} />
+                  </span>
+                )}
                 <div
                   className="mt-auto grid rounded-[2px] overflow-hidden"
-                  style={{ gridTemplateColumns: "repeat(3,1fr)", gap: 1, background: "var(--rule)", border: "1px solid var(--rule)" }}
+                  style={{ gridTemplateColumns: "repeat(2,1fr)", gap: 1, background: "var(--rule)", border: "1px solid var(--rule)" }}
                 >
-                  {(cs.keyStats || []).slice(0, 3).map((s, k) => (
-                    <div key={k} className="bg-void" style={{ padding: "7px 8px" }}>
+                  {(cs.keyStats || []).slice(1, 4).map((s, k) => (
+                    <div key={k} className="bg-void" style={{ padding: "7px 8px 8px" }}>
                       <b className="block font-display text-coral" style={{ fontWeight: 700, fontSize: 13, letterSpacing: "-.02em" }}>
                         {s.value}
                       </b>
-                      <span className="font-mono uppercase text-mute" style={{ fontSize: 7.5, letterSpacing: ".1em" }}>
+                      <span className="font-mono uppercase text-mute" style={{ fontSize: 9, letterSpacing: ".1em" }}>
                         {s.label}
                       </span>
                     </div>
@@ -291,9 +333,24 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
             ))}
           </div>
 
+          {/* the visual deck hides five of six cards, so the whole set is
+              also present as plain links for assistive technology */}
+          <ul className="dp-visually-hidden">
+            {caseStudies.map((cs) => (
+              <li key={cs.id}>
+                <a
+                  href={`/work/${cs.slug}`}
+                  onClick={(e) => { e.preventDefault(); open(cs); }}
+                >
+                  {cs.title}. {cs.category}. {cs.role}.
+                </a>
+              </li>
+            ))}
+          </ul>
+
           <div
             className="flex items-center justify-between gap-4 flex-wrap"
-            style={{ paddingInline: "clamp(2px,1cqw,8px)", marginTop: "clamp(10px,1.6cqw,18px)" }}
+            style={{ paddingInline: "clamp(2px,1cqw,8px)", paddingRight: 78, marginTop: "clamp(10px,1.6cqw,18px)" }}
           >
             <div className="flex items-center gap-[9px]">
               <button type="button" aria-label="Previous" onClick={() => go(-1)} className="dp-farrow">
@@ -305,8 +362,12 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
               <span
                 className="font-mono text-mute tabular-nums"
                 style={{ fontSize: 11, letterSpacing: ".14em", minWidth: "5ch" }}
+                aria-live="polite"
               >
                 {String(active + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+                <i className="dp-visually-hidden">
+                  , {caseStudies[active].title}
+                </i>
               </span>
             </div>
             <button type="button" onClick={() => onNavigate("/work")} className="dp-fall">

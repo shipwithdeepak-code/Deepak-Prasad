@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
 import { HOW_I_WORK_PRINCIPLES } from "../../data/caseStudies";
 
@@ -6,24 +6,39 @@ import { HOW_I_WORK_PRINCIPLES } from "../../data/caseStudies";
  *  drifts on its own cycle, so the section never reads as rows and columns.
  *  Below the scatter breakpoint they fall back to a readable stack. */
 const SPOTS = [
-  { left: "1%",  top: "2%",  w: "30%" },
-  { left: "36%", top: "19%", w: "31%" },
-  { left: "70%", top: "0%",  w: "29%" },
-  { left: "11%", top: "57%", w: "31%" },
-  { left: "52%", top: "64%", w: "30%" },
+  { left: "0%",  top: "1%",  w: "31%" },
+  { left: "35%", top: "14%", w: "30%" },
+  { left: "69%", top: "4%",  w: "30%" },
+  { left: "13%", top: "51%", w: "31%" },
+  { left: "51%", top: "60%", w: "32%" },
 ];
 
-/* deliberately unequal, so no two cards ever move together */
-const DRIFT = [
-  { dur: "8.6s", del: "0s",    y0: -4, y1: 9,   r0: -0.4, r1: 0.5 },
-  { dur: "11.2s", del: "-2.4s", y0: 6,  y1: -8,  r0: 0.5,  r1: -0.35 },
-  { dur: "9.8s",  del: "-4.1s", y0: -7, y1: 6,   r0: -0.25, r1: 0.45 },
-  { dur: "12.4s", del: "-1.3s", y0: 8,  y1: -7,  r0: 0.4,  r1: -0.5 },
-  { dur: "10.4s", del: "-5.6s", y0: -6, y1: 10,  r0: -0.5, r1: 0.3 },
-];
+/* the brief's stagger: one reveal on entry, then the field holds still so
+   the cards can be read */
+const STAGGER_MS = 55;
 
 export default function PrinciplesFloat() {
   const shouldReduceMotion = useReducedMotion();
+  const fieldRef = React.useRef<HTMLDivElement | null>(null);
+  const [revealed, setRevealed] = React.useState(false);
+
+  useEffect(() => {
+    const el = fieldRef.current;
+    if (!el || shouldReduceMotion || typeof IntersectionObserver === "undefined") {
+      setRevealed(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setRevealed(true);
+        io.disconnect();
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [shouldReduceMotion]);
 
   return (
     <section
@@ -52,18 +67,10 @@ export default function PrinciplesFloat() {
         >
           How I approach product problems
         </h2>
-        <p
-          className="text-mute"
-          style={{ fontSize: "clamp(12.5px,1.2cqw,15px)", lineHeight: 1.65, maxWidth: "58ch", margin: "12px 0 0" }}
-        >
-          Five consistent product principles refined over seven years of building
-          across complex B2B ecosystems and high growth consumer apps.
-        </p>
 
-        <div className="dp-scatter" style={{ marginTop: "clamp(26px,3.6cqw,44px)" }}>
+        <div ref={fieldRef} className="dp-scatter" style={{ marginTop: "clamp(26px,3.6cqw,44px)" }}>
           {HOW_I_WORK_PRINCIPLES.map((p, i) => {
             const spot = SPOTS[i % SPOTS.length];
-            const d = DRIFT[i % DRIFT.length];
             return (
               <article
                 key={p.title}
@@ -73,18 +80,21 @@ export default function PrinciplesFloat() {
                     "--l": spot.left,
                     "--t": spot.top,
                     "--w": spot.w,
-                    "--dur": d.dur,
-                    "--del": d.del,
-                    "--y0": `${d.y0}px`,
-                    "--y1": `${d.y1}px`,
-                    "--r0": `${d.r0}deg`,
-                    "--r1": `${d.r1}deg`,
-                    animation: shouldReduceMotion
+                    opacity: revealed || shouldReduceMotion ? 1 : 0,
+                    transform:
+                      revealed || shouldReduceMotion ? "none" : "translate3d(0,16px,0)",
+                    transition: shouldReduceMotion
                       ? "none"
-                      : "dp-drift var(--dur) ease-in-out var(--del) infinite alternate",
+                      : `opacity .62s var(--ease-out-soft) ${i * STAGGER_MS}ms, transform .62s var(--ease-out-soft) ${i * STAGGER_MS}ms`,
                   } as React.CSSProperties
                 }
               >
+                <span
+                  className="font-mono uppercase text-mute"
+                  style={{ fontSize: 10, letterSpacing: ".14em", display: "block", marginBottom: 10 }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <h3
                   className="font-display text-ivory"
                   style={{
@@ -98,7 +108,7 @@ export default function PrinciplesFloat() {
                 >
                   {p.title}
                 </h3>
-                <p className="m-0 text-mute" style={{ fontSize: 12.5, lineHeight: 1.6 }}>
+                <p className="m-0 text-mute" style={{ fontSize: "clamp(12.5px,1.15cqw,14.5px)", lineHeight: 1.6 }}>
                   {p.description}
                 </p>
                 {p.detail && (
@@ -107,7 +117,7 @@ export default function PrinciplesFloat() {
                     style={{
                       paddingTop: 12,
                       borderTop: "1px solid var(--rule)",
-                      fontSize: 11.5,
+                      fontSize: "clamp(11.5px,1.05cqw,13px)",
                       lineHeight: 1.6,
                       color: "rgba(242,242,240,.5)",
                     }}

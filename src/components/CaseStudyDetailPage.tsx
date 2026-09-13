@@ -83,7 +83,7 @@ export default function CaseStudyDetailPage({
               <span className="font-semibold text-ivory">Role: </span>
               <span>{caseStudy.role}</span>
             </div>
-            <div className="hidden sm:block text-[var(--rule-strong)]">/</div>
+            <div className="hidden sm:block text-mute">/</div>
             <div>
               <span className="font-semibold text-ivory">Timeline: </span>
               <span>{caseStudy.timeline}</span>
@@ -153,10 +153,6 @@ export default function CaseStudyDetailPage({
                 {/* Section header */}
                 <div className="mb-6">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-xs uppercase tracking-[0.18em] font-bold text-coral">
-                      {sec.number}
-                    </span>
-                    <span className="text-[var(--rule-strong)]">/</span>
                     <span className="font-mono text-xs uppercase tracking-[0.18em] text-mute font-semibold">
                       {sec.title.split(":")[0]}
                     </span>
@@ -338,13 +334,13 @@ export default function CaseStudyDetailPage({
                         key={hIdx}
                         className="p-5 rounded-[18px] bg-ghost border border-[var(--rule)] shadow-2xs"
                       >
-                        <h4
+                        <h3
                           className="font-display text-base font-bold text-ivory mb-1.5 flex items-center gap-2"
                           style={{ fontVariationSettings: '"wdth" 92' }}
                         >
                           <CheckCircle2 size={16} className="text-coral shrink-0" />
                           <span>{h.title}</span>
-                        </h4>
+                        </h3>
                         <p className="font-body text-xs sm:text-sm text-mute leading-relaxed">
                           {h.desc}
                         </p>

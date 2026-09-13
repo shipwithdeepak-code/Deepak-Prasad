@@ -52,7 +52,7 @@
 /* the name: one metallic sweep in the single accent */
 .dp-chrome-text {
   background-image: linear-gradient(104deg,
-    #3B2B25 0%, #5E3428 16%, #F0977A 34%, #FFE6DB 46%,
+    #3B2B25 0%, #5E3428 16%, #F0977A 34%, #F6C4AF 46%,
     #F0977A 58%, #6B3A2B 76%, #3B2B25 100%);
   background-size: 260% 100%;
   background-repeat: no-repeat;
@@ -76,7 +76,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dp-chrome-text { animation: none; background-position: 50% 0; }
-  [class*="dp-"] { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+  [class*="dp-"], .animate-copilot-breathe, .animate-pulse, .animate-bounce {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+  }
 }
 
 /* ============================================================
@@ -152,6 +154,22 @@
   transition: transform .16s var(--ease-out-soft), background-color .25s ease, border-color .25s ease;
 }
 .dp-talk:active { transform: scale(.97); }
+.dp-ghost {
+  display: inline-flex; align-items: center; gap: 10px; background: none;
+  border: 1px solid var(--rule-strong); border-radius: 999px; padding: 13px 22px;
+  color: var(--color-ivory); font-family: var(--font-mono); font-weight: 500;
+  font-size: clamp(9px,.95cqw,11.5px); letter-spacing: .14em; text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .16s var(--ease-out-soft), border-color .25s ease, color .25s ease;
+}
+.dp-ghost:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) {
+  .dp-ghost:hover { border-color: var(--color-coral); color: var(--color-coral); }
+}
+.dp-ghost:focus-visible {
+  outline: 2px solid var(--color-coral); outline-offset: 3px;
+}
+
 .dp-icb {
   width: 46px; height: 46px; border-radius: 50%; background: none;
   border: 1px solid rgba(242,242,240,.28); color: var(--color-ivory);
@@ -164,8 +182,53 @@
   .dp-icb:hover { border-color: var(--color-coral); color: var(--color-coral); }
 }
 
+/* content for assistive technology only: present in the tree, off screen */
+.dp-visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* the skip link: the first stop on every page, seen only when focused */
+.dp-skip {
+  position: absolute; left: 12px; top: -60px; z-index: 100;
+  background: var(--color-coral); color: var(--color-void);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em;
+  text-transform: uppercase; padding: 11px 16px; border-radius: 999px;
+  transition: top .18s var(--ease-out-soft);
+}
+.dp-skip:focus-visible { top: 12px; }
+
+/* the crosshair belongs to the ground, not to the controls on it */
+.dp-hero button, .dp-hero a { cursor: pointer; }
+
+/* a real target, not a text-height hairline: keyed on width as well as
+   pointer type, so a small window without touch gets it too */
+@media (max-width: 700px), (pointer: coarse) {
+  .dp-link {
+    min-height: 44px; display: inline-flex; align-items: center;
+    padding: 12px 18px;
+  }
+  .dp-hero nav button {
+    min-height: 44px;
+  }
+  .dp-link-primary {
+    background: var(--color-coral); color: var(--color-void);
+    border-radius: 999px;
+  }
+}
+
+/* the hero stacks before the copy can reach the portrait */
+@container (max-width: 700px) {
+  .dp-hero-floor { grid-template-columns: 1fr !important; }
+  .dp-hero-portrait {
+    width: 72cqw !important; right: -12% !important;
+    height: 58% !important; opacity: .55;
+  }
+}
+
 /* focus stays visible everywhere on the dark ground */
 .dp-hero :focus-visible, .dp-farrow:focus-visible, .dp-fall:focus-visible,
-.dp-talk:focus-visible, .dp-icb:focus-visible, .dp-pcard:focus-visible {
+.dp-talk:focus-visible, .dp-icb:focus-visible, .dp-pcard:focus-visible,
+.dp-fan:focus-visible, #copilot-launcher-btn:focus-visible {
   outline: 2px solid var(--color-coral); outline-offset: 3px; border-radius: 2px;
 }

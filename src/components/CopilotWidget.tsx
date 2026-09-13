@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 import {
   Sparkles,
   Send,
@@ -51,6 +52,7 @@ export default function CopilotWidget({
   onOpenBookChat,
   onNavigate,
 }: CopilotWidgetProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
 
   /* The hero carries the assistant as its front door, so the floating
@@ -246,15 +248,26 @@ export default function CopilotWidget({
         @keyframes copilot-breathe {
           0%, 100% {
             transform: scale(1);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.55), 0 0 0 0 rgba(240, 151, 122, 0.25);
+            opacity: .55;
           }
           50% {
-            transform: scale(1.04);
-            box-shadow: 0 14px 28px -5px rgba(0, 0, 0, 0.65), 0 0 0 6px rgba(240, 151, 122, 0);
+            transform: scale(1.5);
+            opacity: 0;
           }
         }
-        .animate-copilot-breathe {
+        /* the ring is a pseudo-element, so the breath animates transform and
+           opacity only, never box-shadow */
+        .animate-copilot-breathe::after {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          border-radius: 9999px;
+          border: 2px solid rgba(240, 151, 122, .5);
           animation: copilot-breathe 3.2s ease-in-out infinite;
+          pointer-events: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-copilot-breathe::after { animation: none; opacity: .4; transform: none; }
         }
       `}</style>
 
@@ -263,7 +276,7 @@ export default function CopilotWidget({
         <button
           id="copilot-launcher-btn"
           onClick={() => setIsOpen(true)}
-          className={`fixed bottom-5 right-5 z-40 group flex items-center justify-center w-14 h-14 rounded-full bg-void text-ivory active:scale-[.97] border-2 border-coral/40 hover:border-coral cursor-pointer animate-copilot-breathe overflow-visible transition-opacity duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${launcherVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+          className={`fixed bottom-5 right-5 z-40 group flex items-center justify-center w-14 h-14 rounded-full bg-void text-ivory active:scale-[.97] border-2 border-coral/40 hover:border-coral cursor-pointer ${shouldReduceMotion ? "" : "animate-copilot-breathe"} overflow-visible transition-opacity duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${launcherVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
           aria-label="Open Deepak's AI Copilot"
           title="Open Deepak's AI Copilot"
         >
@@ -276,7 +289,7 @@ export default function CopilotWidget({
 
           {/* AI Sparkles Badge */}
           <span className="absolute -bottom-0.5 -right-0.5 z-20 w-4.5 h-4.5 rounded-full bg-void border border-coral/50 flex items-center justify-center shadow-xs">
-            <Sparkles size={10} className="text-coral animate-pulse" />
+            <Sparkles size={10} className={`text-coral ${shouldReduceMotion ? "" : "animate-pulse"}`} />
           </span>
         </button>
       )}

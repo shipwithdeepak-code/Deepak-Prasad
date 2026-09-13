@@ -29,6 +29,16 @@ const ROWS: { kind: "solid" | "out" | "num"; speed: number; items: React.ReactNo
   },
 ];
 
+/** The four claims worth keeping still. The marquee carries all six terms;
+ *  these four are the ones a reader should never miss because they were
+ *  mid-slide. */
+const HEADLINE_METRICS = [
+  { value: "80K+", label: "Farmers onboarded" },
+  { value: "12K+", label: "Paid subscribers" },
+  { value: "2 hrs", label: "Payout, was 15 days" },
+  { value: "3,200+", label: "Daily actives" },
+];
+
 export default function KineticStrip() {
   const shouldReduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -123,7 +133,33 @@ export default function KineticStrip() {
         padding: "clamp(26px,3.8cqw,48px) 0 clamp(28px,4cqw,54px)",
       }}
     >
-      {ROWS.map((row, ri) => (
+      {shouldReduceMotion && (
+        <div
+          className="flex flex-wrap items-baseline"
+          style={{ gap: "18px 34px", padding: "0 clamp(18px,4cqw,52px)" }}
+        >
+          {ROWS.flatMap((row) =>
+            row.items.map((item, i) => (
+              <span
+                key={`${row.kind}-${i}`}
+                className={`font-display dp-word-${row.kind}`}
+                style={{
+                  fontWeight: 800,
+                  fontVariationSettings: '"wdth" 86',
+                  letterSpacing: "-.03em",
+                  fontSize: "clamp(18px,2.4cqw,30px)",
+                  lineHeight: 1.1,
+                  ...(row.kind === "num" ? { fontVariantNumeric: "tabular-nums" } : null),
+                }}
+              >
+                {item}
+              </span>
+            ))
+          )}
+        </div>
+      )}
+
+      {!shouldReduceMotion && ROWS.map((row, ri) => (
         <React.Fragment key={ri}>
           {ri > 0 && (
             <div
@@ -163,6 +199,36 @@ export default function KineticStrip() {
           </div>
         </React.Fragment>
       ))}
+      {/* the marquee is atmosphere; these are the claims, and they hold
+          still long enough to be read */}
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))",
+          gap: "1px",
+          background: "var(--rule)",
+          borderTop: "1px solid var(--rule)",
+          borderBottom: "1px solid var(--rule)",
+          marginTop: "clamp(18px,2.6cqw,32px)",
+        }}
+      >
+        {HEADLINE_METRICS.map((m) => (
+          <div key={m.label} className="bg-void" style={{ padding: "clamp(14px,2cqw,22px) clamp(16px,2.4cqw,26px)" }}>
+            <b
+              className="block font-display text-coral"
+              style={{ fontWeight: 800, fontSize: 28, letterSpacing: "-.03em", lineHeight: 1 }}
+            >
+              {m.value}
+            </b>
+            <span
+              className="font-mono uppercase text-mute"
+              style={{ fontSize: 10, letterSpacing: ".16em", display: "block", marginTop: 8 }}
+            >
+              {m.label}
+            </span>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
