@@ -65,7 +65,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-xl bg-void rounded-[32px] p-6 sm:p-8 shadow-2xl border border-[var(--rule-strong)] relative overflow-hidden text-left cursor-default text-ivory"
+        className="w-full max-w-xl bg-void rounded-[20px] p-6 sm:p-8 shadow-2xl border border-[var(--rule-strong)] relative overflow-hidden text-left cursor-default text-ivory"
       >
         {/* Top Header */}
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-[var(--rule)]">

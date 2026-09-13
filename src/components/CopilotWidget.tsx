@@ -298,7 +298,7 @@ export default function CopilotWidget({
       {isOpen && (
         <div
           id="copilot-window"
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[460px] h-[620px] max-h-[calc(100vh-48px)] flex flex-col rounded-[24px] bg-void border border-[var(--rule-strong)] shadow-2xl overflow-hidden font-body transition-all duration-300 text-ivory"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[460px] h-[620px] max-h-[calc(100vh-48px)] flex flex-col rounded-[20px] bg-void border border-[var(--rule-strong)] shadow-2xl overflow-hidden font-body transition-all duration-300 text-ivory"
         >
           {/* Header */}
           <div className="p-4 bg-ghost border-b border-[var(--rule)] text-ivory flex items-center justify-between shrink-0 select-none">
@@ -498,7 +498,7 @@ export default function CopilotWidget({
               >
                 {/* Chat Bubble */}
                 <div
-                  className={`max-w-[88%] p-3.5 rounded-[18px] text-sm leading-relaxed ${
+                  className={`max-w-[88%] p-3.5 rounded-[20px] text-sm leading-relaxed ${
                     msg.sender === "user"
                       ? "bg-ghost border border-[var(--rule-strong)] text-ivory rounded-br-xs shadow-xs"
                       : "bg-ghost/70 text-ivory border border-[var(--rule)] rounded-bl-xs shadow-2xs"
@@ -583,7 +583,7 @@ export default function CopilotWidget({
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex items-start gap-2">
-                <div className="p-3.5 rounded-[18px] bg-ghost border border-[var(--rule)] shadow-2xs rounded-bl-xs flex items-center gap-2">
+                <div className="p-3.5 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs rounded-bl-xs flex items-center gap-2">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-coral rounded-full animate-bounce [animation-delay:-0.3s]" />
                     <div className="w-2 h-2 bg-coral rounded-full animate-bounce [animation-delay:-0.15s]" />

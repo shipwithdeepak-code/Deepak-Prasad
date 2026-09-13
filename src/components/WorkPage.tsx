@@ -50,20 +50,13 @@ export default function WorkPage({
     return <Cpu size={16} className="text-coral" />;
   };
 
-  const getTagBadgeClass = (tag: string) => {
-    const t = tag.toLowerCase();
-    if (t.includes("ai") || t.includes("strategy")) {
-      return "bg-ghost border border-[var(--rule-strong)] text-coral";
-    }
-    return "bg-ghost border border-[var(--rule)] text-mute";
-  };
-
   return (
     <div className="w-full bg-void text-ivory py-12 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="max-w-3xl mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.18em] text-coral mb-4">
+          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.18em] text-mute mb-4">
+            <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
             <span>Portfolio & Product Case Studies</span>
           </div>
           <h1
@@ -78,17 +71,16 @@ export default function WorkPage({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 mb-12 border-b border-[var(--rule)] pb-6">
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 mb-12 border-b border-[var(--rule)] pb-6">
           {categories.map((cat) => (
             <button
               key={cat.id}
               type="button"
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-[0.14em] font-medium transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral active:scale-[.97] ${
-                selectedCategory === cat.id
-                  ? "bg-coral text-void font-semibold shadow-xs"
-                  : "bg-ghost text-mute hover:text-ivory border border-[var(--rule)] hover:border-[var(--rule-strong)]"
+              className={`relative bg-transparent border-0 px-0 text-xs font-mono uppercase tracking-[0.16em] cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-coral focus-visible:outline-offset-4 active:scale-[.97] ${
+                selectedCategory === cat.id ? "text-coral" : "text-mute hover:text-ivory"
               }`}
+              style={{ minHeight: 44, borderBottom: selectedCategory === cat.id ? "1px solid var(--color-coral)" : "1px solid transparent" }}
             >
               {cat.label}
             </button>
@@ -108,23 +100,19 @@ export default function WorkPage({
                 onSelectCaseStudy(study);
                 onNavigate(`/work/${study.slug}`);
               }}
-              className="group cursor-pointer rounded-[24px] bg-ghost border border-[var(--rule)] p-6 sm:p-10 transition-all duration-300 hover:border-coral/40 hover:bg-ghost-active flex flex-col justify-between relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="group cursor-pointer rounded-[20px] bg-ghost border border-[var(--rule)] p-6 sm:p-10 transition-all duration-300 hover:border-coral/40 hover:bg-ghost-active flex flex-col justify-between relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <div>
                 {/* Header row */}
                 <div className="flex items-center justify-between gap-4 mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs uppercase tracking-[0.18em] text-coral font-medium">
-                      CASE {study.number}
-                    </span>
-                    <span className="text-mute">/</span>
-                    <span className="font-mono text-xs text-mute uppercase tracking-[0.14em]">
+                    <span className="font-mono text-xs uppercase tracking-[0.16em] text-coral font-medium">
                       {study.category}
                     </span>
                   </div>
 
                   {study.isStrategyOnly ? (
-                    <span className="px-2.5 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-coral text-xs font-mono uppercase tracking-[0.14em]">
+                    <span className="text-coral text-xs font-mono uppercase tracking-[0.14em]">
                       Development-Ready Strategy
                     </span>
                   ) : (
@@ -151,16 +139,12 @@ export default function WorkPage({
                 </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div
+                  className="flex flex-wrap items-center font-mono uppercase text-mute mb-6"
+                  style={{ gap: "6px 18px", fontSize: 11, letterSpacing: ".14em" }}
+                >
                   {study.tags.map((tag, tIdx) => (
-                    <span
-                      key={tIdx}
-                      className={`px-2.5 py-1 rounded-md text-xs font-mono uppercase tracking-[0.12em] ${getTagBadgeClass(
-                        tag
-                      )}`}
-                    >
-                      {tag}
-                    </span>
+                    <span key={tIdx}>{tag}</span>
                   ))}
                 </div>
               </div>
@@ -207,7 +191,7 @@ export default function WorkPage({
 
           <div className="flex flex-col gap-12">
             {MORE_WORK_CATEGORIES.map((cat, cIdx) => (
-              <div key={cIdx} className="bg-ghost rounded-[24px] border border-[var(--rule)] p-6 sm:p-8 shadow-2xs">
+              <div key={cIdx} className="bg-ghost rounded-[20px] border border-[var(--rule)] p-6 sm:p-8 shadow-2xs">
                 <div className="flex items-center gap-3 mb-2">
                   {getCategoryIcon(cat.category)}
                   <h3
@@ -225,7 +209,7 @@ export default function WorkPage({
                   {cat.items.map((item, iIdx) => (
                     <div
                       key={iIdx}
-                      className="rounded-[16px] bg-void/60 hover:bg-ghost border border-[var(--rule)] p-5 transition-colors flex flex-col justify-between"
+                      className="rounded-[20px] bg-void/60 hover:bg-ghost border border-[var(--rule)] p-5 transition-colors flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-start justify-between gap-2 mb-2">

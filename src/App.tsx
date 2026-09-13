@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "./components/Navigation";
-import Footer from "./components/Footer";
+import SiteFooter from "./components/site/SiteFooter";
 import HomePage from "./components/HomePage";
 import WorkPage from "./components/WorkPage";
 import CaseStudyDetailPage from "./components/CaseStudyDetailPage";
@@ -210,19 +210,10 @@ export default function App() {
 
       {/* Persistent Footer */}
       {!isHome && (
-      <Footer
-        onNavigate={navigate}
-        onOpenResumeModal={() => setIsResumeModalOpen(true)}
-        onOpenContactModal={() => setIsContactModalOpen(true)}
-        onSelectCaseStudy={(id) => {
-          const found =
-            ALL_FLAGSHIP_CASE_STUDIES.find(
-              (c) => c.id === id || c.slug === id
-            ) || RESHAMANDI_CASE_STUDY;
-          setSelectedModalCaseStudy(found);
-          setIsCaseStudyModalOpen(true);
-        }}
-      />
+        <SiteFooter
+          onOpenContact={() => openCalendly()}
+          onAskDipa={() => document.getElementById("copilot-launcher-btn")?.click()}
+        />
       )}
 
       {/* Interactive Modals */}
