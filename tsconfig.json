@@ -23,5 +23,9 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  }
+  },
+  // portfolio-v1/ is a separate, self-contained application with its own
+  // tsconfig, dependencies and stricter compiler settings. It is excluded here
+  // so this project's typecheck continues to cover only this application.
+  "exclude": ["portfolio-v1", "node_modules", "dist"]
 }
