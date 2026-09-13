@@ -247,7 +247,14 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
               }
             }}
           >
-            {caseStudies.map((cs, i) => (
+            {caseStudies.map((cs, i) => {
+              /* cards beyond one step are at opacity 0, so their cover is
+                 weight the reader never sees: decoding six photographs on a
+                 throttled phone cost 0.7s of LCP for five invisible ones */
+              let offset = (((i - active) % n) + n) % n;
+              if (offset > n / 2) offset -= n;
+              const cover = Math.abs(offset) <= 1 ? coverFor(cs.slug) : undefined;
+              return (
               <article
                 key={cs.id}
                 className="dp-fcard absolute left-1/2 top-1/2 flex flex-col gap-[9px] rounded-[20px] cursor-pointer"
@@ -273,9 +280,9 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                 >
                   {/* a real number carries further than a placeholder. The
                       screenshot takes over the moment one exists on disk. */}
-                  {coverFor(cs.slug) && (
+                  {cover && (
                     <img
-                      src={coverFor(cs.slug)}
+                      src={cover}
                       alt=""
                       aria-hidden="true"
                       loading="lazy"
@@ -360,7 +367,8 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                   ))}
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
 
           {/* the visual deck hides five of six cards, so the whole set is
