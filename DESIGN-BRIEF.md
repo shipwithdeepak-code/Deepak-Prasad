@@ -1,6 +1,6 @@
 # Portfolio v2: locked design decisions
 
-Working brief for the redesign of `deepak-prasad.ai.studio`. Written at the end of a
+Working brief for the redesign of `deepakprasad.ai.studio`. Written at the end of a
 long design session so the next session can start building instead of re-deciding.
 Read this first.
 
@@ -172,7 +172,7 @@ updated but binds at environment provision time, so a new session is needed.
 | `boilerlab.ai` | Section animations |
 | `vanlent.dev` | Not yet reviewed |
 | `wallofportfolios.in` | Khaled Batt is the locked hero reference |
-| `deepak-prasad.ai.studio` | The current live site |
+| `deepakprasad.ai.studio` | Where the redesign is published |
 
 The SLY screenshot (letters as windows onto animated content) is the source of the
 name-fill idea and was the only reference actually seen.
