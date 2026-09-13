@@ -84,7 +84,8 @@ function keywordFallbackScore(query: string, chunk: KnowledgeChunk): number {
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  // Cloud Run hands the port to the container; 3000 is the local default.
+  const PORT = Number(process.env.PORT) || 3000;
 
   app.use(express.json());
 
@@ -270,18 +271,28 @@ CRITICAL GROUNDING RULES:
   // -------------------------------------------------------------
   // Vite Integration (Dev vs Prod)
   // -------------------------------------------------------------
-  if (process.env.NODE_ENV !== "production") {
+  // A built site is the signal to serve it, so a host that does not set
+  // NODE_ENV cannot accidentally start a dev server in production.
+  const distPath = path.join(process.cwd(), "dist");
+  const hasBuild = fs.existsSync(path.join(distPath, "index.html"));
+  const serveBuild = process.env.NODE_ENV === "production" || hasBuild;
+
+  if (serveBuild) {
+    if (!hasBuild) {
+      console.error(
+        `[Server] NODE_ENV is production but no build was found at ${distPath}. Run the build first.`
+      );
+    }
+    app.use(express.static(distPath));
+    app.get("*", (_req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
+    });
+  } else {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (_req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
   }
 
   app.listen(PORT, "0.0.0.0", () => {
