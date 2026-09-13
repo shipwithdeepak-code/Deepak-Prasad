@@ -265,6 +265,18 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                   />
+                  {/* the number sits over the photograph, so the ground is
+                      carried across the left of the frame rather than
+                      trusting every image to be dark where the type lands */}
+                  <i
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(90deg,rgba(10,10,11,.94) 0%,rgba(10,10,11,.8) 34%," +
+                        "rgba(10,10,11,.32) 62%,rgba(10,10,11,0) 100%)",
+                    }}
+                  />
                   <div className="absolute inset-0 flex flex-col justify-center" style={{ padding: "0 clamp(11px,1.4cqw,16px)" }}>
                     <b
                       className="block font-display text-coral"
