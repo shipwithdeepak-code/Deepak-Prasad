@@ -1,11 +1,20 @@
 import React from "react";
-import { Linkedin, Github, Mail, ArrowUpRight } from "lucide-react";
+import { Linkedin, Mail, ArrowUpRight, Download } from "lucide-react";
+import { downloadResumePDF } from "../../utils/downloadResume";
+import {
+  CONTACT_EMAIL,
+  CONTACT_MAILTO,
+  LINKEDIN_URL,
+  LOCATION,
+  RESPONSE_TIME,
+} from "../../utils/contact";
 
 interface SiteFooterProps {
   onOpenContact?: () => void;
+  onAskDipa?: () => void;
 }
 
-export default function SiteFooter({ onOpenContact }: SiteFooterProps) {
+export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps) {
   return (
     <footer
       className="relative overflow-hidden bg-void text-ivory"
@@ -56,7 +65,7 @@ export default function SiteFooter({ onOpenContact }: SiteFooterProps) {
             Let us talk <ArrowUpRight size={14} />
           </button>
           <a
-            href="https://www.linkedin.com/in/deepak-prasad-pm/"
+            href={LINKEDIN_URL}
             target="_blank"
             rel="noreferrer noopener"
             aria-label="LinkedIn"
@@ -64,18 +73,29 @@ export default function SiteFooter({ onOpenContact }: SiteFooterProps) {
           >
             <Linkedin size={17} />
           </a>
-          <a
-            href="https://github.com/shipwithdeepak-code"
-            target="_blank"
-            rel="noreferrer noopener"
-            aria-label="GitHub"
-            className="dp-icb"
-          >
-            <Github size={17} />
-          </a>
-          <a href="mailto:founder@welzea.com" aria-label="Email" className="dp-icb">
+          <button type="button" onClick={() => downloadResumePDF()} className="dp-ghost">
+            Download resume <Download size={14} />
+          </button>
+          <a href={CONTACT_MAILTO} aria-label="Email" className="dp-icb">
             <Mail size={17} />
           </a>
+        </div>
+
+        {/* the reader who has decided to act should not have to go looking:
+            the address in plain text, how fast a reply comes, and where he is */}
+        <div
+          className="flex items-center justify-center flex-wrap font-mono uppercase"
+          style={{
+            gap: 20,
+            marginTop: "clamp(14px,2cqw,20px)",
+            fontSize: 11,
+            letterSpacing: ".14em",
+            color: "var(--color-mute)",
+          }}
+        >
+          <a href={CONTACT_MAILTO} style={{ color: "inherit" }}>{CONTACT_EMAIL}</a>
+          <span>{RESPONSE_TIME}</span>
+          <span>{LOCATION}</span>
         </div>
 
         <div
@@ -86,14 +106,22 @@ export default function SiteFooter({ onOpenContact }: SiteFooterProps) {
             borderTop: "1px solid var(--rule)",
             fontSize: 10,
             letterSpacing: ".11em",
-            color: "rgba(242,242,240,.42)",
+            color: "rgba(242,242,240,.58)",
           }}
         >
           <span>&copy; {new Date().getFullYear()} Deepak Prasad. All rights reserved.</span>
           <span className="flex items-center flex-wrap" style={{ gap: "clamp(10px,1.6cqw,20px)" }}>
-            <em className="not-italic text-coral">Ask Dipa</em>
+            <button
+              type="button"
+              onClick={onAskDipa}
+              className="not-italic text-coral font-mono uppercase cursor-pointer"
+              style={{ background: "none", border: 0, padding: 0, letterSpacing: "inherit", fontSize: "inherit" }}
+              aria-label="Ask Dipa, the site assistant"
+            >
+              Ask Dipa
+            </button>
             <span>Senior Product Manager</span>
-            <span>Bengaluru / Remote</span>
+            <span>{LOCATION}</span>
           </span>
         </div>
       </div>

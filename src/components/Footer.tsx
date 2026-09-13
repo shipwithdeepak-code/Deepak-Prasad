@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { CALENDLY_URL } from "../utils/calendly";
 import { downloadResumePDF } from "../utils/downloadResume";
+import { CONTACT_EMAIL, CONTACT_MAILTO, GITHUB_URL, LINKEDIN_URL } from "../utils/contact";
 
 interface FooterProps {
   onNavigate: (path: string) => void;
@@ -272,7 +273,7 @@ export default function Footer({
                   {[
                     {
                       name: "ReshaMandi Deep Dive",
-                      href: "#flagship-case-study",
+                      href: "/work",
                       onClick: () => {
                         if (onSelectCaseStudy) {
                           onSelectCaseStudy("01");
@@ -288,9 +289,9 @@ export default function Footer({
                       },
                       icon: Download,
                     },
-                    { name: "Product Methodology", href: "#methodology" },
-                    { name: "Operating Principles", href: "#principles" },
-                    { name: "Key Metrics", href: "#metrics" },
+                    { name: "Product Methodology", href: "/about" },
+                    { name: "Operating Principles", href: "/#principles" },
+                    { name: "Key Metrics", href: "/#track-record" },
                   ].map((link) => (
                     <motion.li key={link.name} variants={itemVariants}>
                       {link.onClick ? (
@@ -355,7 +356,7 @@ export default function Footer({
                         else window.open(CALENDLY_URL, "_blank");
                       },
                     },
-                    { name: "Read PM Essays", href: "#principles" },
+                    { name: "Read PM Essays", href: "/#principles" },
                   ].map((item, idx) => (
                     <motion.li key={idx} variants={itemVariants}>
                       {item.onClick ? (
@@ -399,17 +400,17 @@ export default function Footer({
                     {
                       name: "LinkedIn",
                       icon: Linkedin,
-                      href: "https://www.linkedin.com/in/prasad-deepak/",
+                      href: LINKEDIN_URL,
                     },
                     {
                       name: "GitHub",
                       icon: Github,
-                      href: "https://github.com/shipwithdeepak-code",
+                      href: GITHUB_URL,
                     },
                     {
-                      name: "shipwithdeepak@gmail.com",
+                      name: CONTACT_EMAIL,
                       icon: Mail,
-                      href: "mailto:shipwithdeepak@gmail.com",
+                      href: CONTACT_MAILTO,
                     },
                   ].map((social, idx) => (
                     <motion.li key={idx} variants={itemVariants}>
@@ -431,7 +432,8 @@ export default function Footer({
 
           {/* Big Watermark: DEEPAK PRASAD */}
           <div className="w-full max-w-full flex justify-center items-center select-none py-4 sm:py-6 px-4 overflow-hidden">
-            <motion.h1
+            <motion.div
+              aria-hidden="true"
               initial={{ y: "60%", opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
@@ -443,7 +445,7 @@ export default function Footer({
               style={{ fontVariationSettings: '"wdth" 92' }}
             >
               Deepak Prasad
-            </motion.h1>
+            </motion.div>
           </div>
 
           {/* Bottom Copyright Row */}

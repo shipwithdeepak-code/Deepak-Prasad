@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { NAV_LINKS } from "../../data/nav";
 
 interface HeroFullFaceProps {
   onNavigate: (path: string) => void;
@@ -7,12 +8,7 @@ interface HeroFullFaceProps {
   onOpenContact?: () => void;
 }
 
-const NAV = [
-  { label: "Work", path: "/work" },
-  { label: "Process", path: "/about#process" },
-  { label: "Principles", path: "/#principles" },
-  { label: "Track Record", path: "/#track-record" },
-];
+
 
 const ASSISTANT_LINES = [
   "ask me anything about how I work",
@@ -20,9 +16,10 @@ const ASSISTANT_LINES = [
   "why build AI myself?",
 ];
 
-/** The teaser: the top of the strip's outlined row, clipped by the hero's
- *  bottom edge so the next section is implied before you reach it. */
-const TEASER_WORDS = ["SUBSCRIPTION", "SUPPLY CHAIN", "LOCALISATION"];
+/** The teaser: the top of the strip's number row, clipped by the hero's
+ *  bottom edge. It previews the metrics rather than repeating the words the
+ *  strip's second row already carries. */
+const TEASER_WORDS = ["80K+ FARMERS", "12K+ SUBSCRIBERS", "2 HRS PAYOUT"];
 
 export default function HeroFullFace({
   onNavigate,
@@ -109,7 +106,7 @@ export default function HeroFullFace({
                  flex flex-col justify-end cursor-crosshair"
       style={{
         containerType: "inline-size",
-        minHeight: "clamp(540px, 64cqw, 760px)",
+        minHeight: "clamp(620px, 64cqw, 760px)",
         paddingBottom: "calc(clamp(30px,3.9cqw,46px) + clamp(14px,1.8cqw,22px))",
       }}
     >
@@ -149,14 +146,14 @@ export default function HeroFullFace({
           the photograph: nothing can surface on his face */}
       <div
         aria-hidden
-        className="dp-figure-mask absolute z-[2] overflow-hidden pointer-events-none bg-void"
+        className="dp-figure-mask dp-hero-portrait absolute z-[2] overflow-hidden pointer-events-none bg-void"
         style={{ right: "2%", top: 0, width: "46cqw", height: "84%" }}
       />
 
       {/* the photograph, masked to the same outline. full hair, both sides
           of the face, and a soft edge that dissolves into the page */}
       <figure
-        className="absolute z-[3] overflow-hidden pointer-events-none m-0"
+        className="dp-hero-portrait absolute z-[3] overflow-hidden pointer-events-none m-0"
         style={{ right: "2%", top: 0, width: "46cqw", height: "84%" }}
       >
         <img
@@ -206,7 +203,7 @@ export default function HeroFullFace({
           className="hidden sm:flex font-medium"
           style={{ gap: "clamp(9px,1.6cqw,22px)", fontSize: "clamp(10.5px,1.08cqw,13.5px)" }}
         >
-          {NAV.map((n) => (
+          {NAV_LINKS.map((n) => (
             <button
               key={n.label}
               type="button"
@@ -236,9 +233,40 @@ export default function HeroFullFace({
         </button>
       </nav>
 
+      {/* the same routes for a thumb: the desktop row is hidden below 640px,
+          and until now nothing replaced it on this page */}
+      <nav
+        className="sm:hidden absolute inset-x-0 z-[9] flex items-center justify-center flex-wrap font-mono uppercase"
+        style={{
+          top: "clamp(44px,7cqw,64px)",
+          gap: "clamp(4px,2cqw,14px)",
+          fontSize: 11,
+          letterSpacing: ".14em",
+        }}
+        aria-label="Sections"
+      >
+        {NAV_LINKS.map((nItem) => (
+          <button
+            key={nItem.label}
+            type="button"
+            onClick={() => onNavigate(nItem.path)}
+            className="cursor-pointer"
+            style={{
+              color: "rgba(242,242,240,.78)",
+              minHeight: 44,
+              padding: "0 10px",
+              background: "none",
+              border: 0,
+            }}
+          >
+            {nItem.label}
+          </button>
+        ))}
+      </nav>
+
       {/* the floor: headline left, support right */}
       <div
-        className="relative z-[8] grid items-end"
+        className="dp-hero-floor relative z-[8] grid items-end"
         style={{
           padding: "0 clamp(15px,2.5cqw,32px)",
           gridTemplateColumns: "minmax(0,1.15fr) minmax(0,.85fr)",
@@ -320,7 +348,11 @@ export default function HeroFullFace({
               marginTop: "clamp(9px,1.5cqw,15px)",
             }}
           >
-            <button type="button" onClick={() => onNavigate("/work")} className="dp-link text-ivory cursor-pointer">
+            <button
+              type="button"
+              onClick={() => onNavigate("/work")}
+              className="dp-link dp-link-primary text-ivory cursor-pointer"
+            >
               See the work
             </button>
             <button

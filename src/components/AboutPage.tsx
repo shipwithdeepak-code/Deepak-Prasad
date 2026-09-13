@@ -65,7 +65,7 @@ export default function AboutPage({
               I like solving problems where the answer isn’t obvious.
             </h1>
             <p className="font-body text-base sm:text-lg text-mute leading-relaxed font-normal mb-4">
-              I turn complex customer, business and operational problems into products people use — from AI-powered experiences and subscription businesses to B2B marketplaces and connected ecosystems.
+              I turn complex customer, business and operational problems into products people use, from AI-powered experiences and subscription businesses to B2B marketplaces and connected ecosystems.
             </p>
             <p className="font-body text-sm sm:text-base text-mute/80 leading-relaxed font-normal">
               Over the past 7+ years, I’ve operated across both India and European markets, building 0→1 products from concept to scale, managing cross-border pods, and designing systems that connect hardware, software, and human operations.
@@ -110,12 +110,12 @@ export default function AboutPage({
           <span className="text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral block mb-2">
             Career Journey & Evolution
           </span>
-          <h3
+          <h2
             className="font-display text-xl sm:text-2xl font-bold text-ivory mb-6"
             style={{ fontVariationSettings: '"wdth" 92' }}
           >
             From physical hardware and rural mandis to consumer AI platforms
-          </h3>
+          </h2>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {careerEvolutionSteps.map((step, idx) => (

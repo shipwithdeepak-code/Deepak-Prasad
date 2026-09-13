@@ -117,7 +117,7 @@ export default function WorkPage({
                     <span className="font-mono text-xs uppercase tracking-[0.18em] text-coral font-medium">
                       CASE {study.number}
                     </span>
-                    <span className="text-[var(--rule-strong)]">/</span>
+                    <span className="text-mute">/</span>
                     <span className="font-mono text-xs text-mute uppercase tracking-[0.14em]">
                       {study.category}
                     </span>

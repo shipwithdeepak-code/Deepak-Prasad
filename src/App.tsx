@@ -191,6 +191,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-void text-ivory selection:bg-coral selection:text-void">
+      {/* the first stop for a keyboard, so the nav is not re-traversed
+          before the content on every page load */}
+      <a href="#main" className="dp-skip">Skip to content</a>
+
       {/* Persistent Navigation */}
       {!isHome && (
       <Navigation
@@ -202,7 +206,7 @@ export default function App() {
       )}
 
       {/* Main Page View */}
-      <main className="flex-1 w-full">{renderCurrentView()}</main>
+      <main id="main" className="flex-1 w-full">{renderCurrentView()}</main>
 
       {/* Persistent Footer */}
       {!isHome && (

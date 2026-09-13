@@ -22,6 +22,7 @@ import {
 import { EXPERIENCE_ROLES } from "@/data/caseStudies";
 import { downloadResumePDF } from "@/utils/downloadResume";
 import { CALENDLY_URL } from "@/utils/calendly";
+import { CONTACT_EMAIL, CONTACT_MAILTO, GITHUB_URL, LINKEDIN_URL } from "../utils/contact";
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -31,7 +32,7 @@ interface ResumeModalProps {
 
 export const RESUME_TEXT = `DEEPAK P
 Senior Product Manager | B2B & B2C | AI | Product Strategy & Roadmapping
-Bengaluru, India • +91 8792964656 • shipwithdeepak@gmail.com • linkedin.com/in/prasad-deepak • github.com/shipwithdeepak-code
+Bengaluru, India • +91 8792964656 • ${CONTACT_EMAIL} • linkedin.com/in/prasad-deepak • github.com/shipwithdeepak-code
 
 PROFILE
 Senior Product Manager with 7+ years building and scaling B2B and B2C products across SaaS, AI, marketplaces, workflow automation and connected products, including a production conversational AI feature and an ML-powered pricing model, alongside enterprise workflow automation across CRM, ERP and payments systems. Skilled at reading market trends and customer pain points and turning them into scalable product solutions, owning quarterly planning and roadmap creation through customer interviews, UAT, launch and adoption tracking. Known for taking 0→1 products from ambiguous charters, managing and mentoring product teams, and bringing automation to complex, non-desk operational workflows.
@@ -292,7 +293,7 @@ export default function ResumeModal({
             <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 mb-3 bg-ghost rounded-2xl border border-[var(--rule)] text-xs font-mono uppercase tracking-[0.12em] text-mute shadow-xs shrink-0">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-ivory">Original Executive Resume (PDF)</span>
-                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-mute">/</span>
                 <span className="text-mute">Standard 2-Page Format</span>
               </div>
               <div className="flex items-center gap-2">
@@ -324,16 +325,16 @@ export default function ResumeModal({
                   <Phone size={14} className="text-coral" /> +91 8792964656
                 </a>
                 <a
-                  href="mailto:shipwithdeepak@gmail.com"
+                  href={CONTACT_MAILTO}
                   className="flex items-center gap-1 hover:text-coral font-medium text-ivory transition-colors"
                 >
-                  <Mail size={14} className="text-coral" /> shipwithdeepak@gmail.com
+                  <Mail size={14} className="text-coral" /> {CONTACT_EMAIL}
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <a
-                  href="https://www.linkedin.com/in/prasad-deepak/"
+                  href={LINKEDIN_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1 text-coral hover:text-[#F6AE96] font-semibold transition-colors"
@@ -341,9 +342,9 @@ export default function ResumeModal({
                   <Linkedin size={14} />
                   <span>LinkedIn</span>
                 </a>
-                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-mute">/</span>
                 <a
-                  href="https://github.com/shipwithdeepak-code"
+                  href={GITHUB_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1 text-mute hover:text-coral font-semibold transition-colors"
@@ -534,12 +535,12 @@ export default function ResumeModal({
         <div className="px-6 py-4 border-t border-[var(--rule)] bg-ghost flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3 text-xs text-mute font-mono uppercase tracking-[0.1em]">
             <span>Bengaluru, India</span>
-            <span className="text-[var(--rule-strong)]">/</span>
+            <span className="text-mute">/</span>
             <a
-              href="mailto:shipwithdeepak@gmail.com"
+              href={CONTACT_MAILTO}
               className="text-coral font-medium hover:text-[#F6AE96] transition-colors"
             >
-              shipwithdeepak@gmail.com
+              {CONTACT_EMAIL}
             </a>
           </div>
 

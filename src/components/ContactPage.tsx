@@ -8,6 +8,7 @@ import {
   Clock,
   MapPin,
 } from "lucide-react";
+import { CONTACT_EMAIL, CONTACT_MAILTO, LINKEDIN_URL } from "../utils/contact";
 
 interface ContactPageProps {
   onNavigate: (path: string) => void;
@@ -56,7 +57,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
 
               <div className="flex flex-col gap-4">
                 <a
-                  href="mailto:shipwithdeepak@gmail.com"
+                  href={CONTACT_MAILTO}
                   id="contact-email-link"
                   className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-ghost-active border border-transparent hover:border-[var(--rule)] transition-colors group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
@@ -68,13 +69,13 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                       Email
                     </span>
                     <span className="font-body text-sm font-semibold text-ivory group-hover:text-coral transition-colors">
-                      shipwithdeepak@gmail.com
+                      {CONTACT_EMAIL}
                     </span>
                   </div>
                 </a>
 
                 <a
-                  href="https://www.linkedin.com/in/prasad-deepak/"
+                  href={LINKEDIN_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   id="contact-linkedin-link"
@@ -111,12 +112,12 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
           {/* Right Column: Quick Contact Form */}
           <div className="md:col-span-3">
             <div className="p-6 sm:p-8 rounded-[24px] bg-ghost border border-[var(--rule)] shadow-2xs">
-              <h3
+              <h2
                 className="font-display text-xl font-bold text-ivory mb-2"
                 style={{ fontVariationSettings: '"wdth" 92' }}
               >
                 Send a message
-              </h3>
+              </h2>
               <p className="font-body text-xs sm:text-sm text-mute mb-6">
                 Whether you’re hiring, exploring product advisory, or discussing a 0→1 problem, feel free to reach out.
               </p>

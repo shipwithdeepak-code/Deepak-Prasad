@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Menu, X, FileText } from "lucide-react";
 
 import { CALENDLY_URL } from "../utils/calendly";
+import { NAV_LINKS } from "../data/nav";
 
 interface NavigationProps {
   currentPath: string;
@@ -40,12 +41,7 @@ export default function Navigation({
     };
   }, [isMobileMenuOpen]);
 
-  const navLinks = [
-    { label: "Work", path: "/work", targetId: "selected-work" },
-    { label: "Process", path: "/#methodology", targetId: "methodology" },
-    { label: "Principles", path: "/#principles", targetId: "principles" },
-    { label: "Track Record", path: "/about#experience", targetId: "experience" },
-  ];
+  const navLinks = NAV_LINKS;
 
   const handleLinkClick = (link: { label: string; path: string; targetId?: string }, e: React.MouseEvent) => {
     e.preventDefault();

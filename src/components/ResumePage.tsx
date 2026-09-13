@@ -143,7 +143,7 @@ export default function ResumePage({
                     {role.period}
                   </span>
                   <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-mute block mt-1">
-                    {role.type.split("·")[0].trim()}
+                    {role.type.split(",")[0].trim()}
                   </span>
                 </div>
               </div>

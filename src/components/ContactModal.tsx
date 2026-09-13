@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { X, Calendar, Mail, Linkedin, Github, Send, CheckCircle2 } from "lucide-react";
+import { CONTACT_EMAIL, CONTACT_MAILTO, GITHUB_URL, LINKEDIN_URL } from "../utils/contact";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -185,7 +186,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             <div className="pt-3 border-t border-[var(--rule)] flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-3 text-xs text-mute font-mono uppercase tracking-[0.1em]">
                 <a
-                  href="https://www.linkedin.com/in/prasad-deepak/"
+                  href={LINKEDIN_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-coral flex items-center gap-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-xs"
@@ -193,9 +194,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   <Linkedin size={14} />
                   <span>LinkedIn</span>
                 </a>
-                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-mute">/</span>
                 <a
-                  href="https://github.com/shipwithdeepak-code"
+                  href={GITHUB_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-coral flex items-center gap-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-xs"
@@ -203,13 +204,13 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   <Github size={14} />
                   <span>GitHub</span>
                 </a>
-                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-mute">/</span>
                 <a
-                  href="mailto:shipwithdeepak@gmail.com"
+                  href={CONTACT_MAILTO}
                   className="hover:text-[#F6AE96] flex items-center gap-1 font-medium text-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-xs"
                 >
                   <Mail size={14} />
-                  <span>shipwithdeepak@gmail.com</span>
+                  <span>{CONTACT_EMAIL}</span>
                 </a>
               </div>
 
