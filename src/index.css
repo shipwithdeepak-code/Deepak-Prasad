@@ -6,11 +6,6 @@
    hex in a component is visible in review.
    ============================================================ */
 @theme {
-  /* retained for the pages not yet migrated */
-  --font-inter: 'Inter', sans-serif;
-  --font-onest: 'Onest', sans-serif;
-  --font-playfair: 'Playfair Display', Georgia, serif;
-
   /* v2 typefaces */
   --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
