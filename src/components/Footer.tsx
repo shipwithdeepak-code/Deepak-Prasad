@@ -61,7 +61,7 @@ export default function Footer({
       opacity: 1,
       transition: {
         duration: 0.6,
-        ease: [0.21, 0.45, 0.32, 0.9] as const,
+        ease: [0.16, 1, 0.3, 1] as const,
       },
     },
   };
@@ -81,7 +81,7 @@ export default function Footer({
   };
 
   return (
-    <footer className="relative w-full overflow-hidden flex flex-col items-center">
+    <footer className="relative w-full overflow-hidden flex flex-col items-center bg-void text-ivory">
       {/* Background Video */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {isMounted && (
@@ -90,7 +90,7 @@ export default function Footer({
             loop
             muted
             playsInline
-            className="w-full h-full object-cover opacity-20"
+            className="w-full h-full object-cover opacity-15"
           >
             <source
               src="https://cdn.jiro.build/Amox/All%20Images/P01-Header-01-BG.mp4"
@@ -98,13 +98,13 @@ export default function Footer({
             />
           </video>
         )}
-        <div className="absolute inset-0 bg-[#FAFDFB]/70" />
-        <div className="absolute bottom-0 left-0 right-0 h-[400px] bg-white/5 backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_40%,transparent)]" />
+        <div className="absolute inset-0 bg-void/85" />
+        <div className="absolute bottom-0 left-0 right-0 h-[400px] bg-void/40 backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_40%,transparent)]" />
       </div>
 
       {/* CTA SECTION */}
       <section className="w-full relative pt-20 lg:pt-32 pb-0 overflow-hidden flex flex-col items-center">
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#FAFDFB] via-[#FAFDFB]/60 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-void via-void/70 to-transparent pointer-events-none" />
 
         <div className="max-w-[1440px] w-full mx-auto px-6 lg:px-[96px] relative z-10 flex flex-col items-center">
           <div className="max-w-[1248px] w-full flex flex-col items-center">
@@ -112,12 +112,12 @@ export default function Footer({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E4F2EB] border border-[#188E39]/15 mb-6"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ghost border border-[var(--rule-strong)] mb-6"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#188E39]" />
-              <span className="text-[#188E39] text-xs font-inter font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-coral" />
+              <span className="text-coral text-xs font-mono font-medium uppercase tracking-[0.18em]">
                 Open for High-Impact Roles
               </span>
             </motion.div>
@@ -126,14 +126,18 @@ export default function Footer({
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="w-full max-w-[820px] text-center text-[#042718] font-semibold text-[38px] md:text-[60px] leading-[1.1] tracking-tight md:tracking-[-2px] mb-4 font-onest"
+              className="w-full max-w-[820px] text-center text-ivory font-display font-semibold text-[38px] md:text-[60px] leading-[1.1] tracking-tight md:tracking-[-2px] mb-4"
+              style={{ fontVariationSettings: '"wdth" 92' }}
             >
               Let’s build something{" "}
-              <span className="font-playfair italic font-medium text-black/40">
+              <i
+                className="font-display not-italic"
+                style={{ fontStyle: "italic", fontWeight: 600, color: "var(--color-coral)" }}
+              >
                 extraordinary
-              </span>{" "}
+              </i>{" "}
               together
             </motion.h2>
 
@@ -141,9 +145,9 @@ export default function Footer({
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="w-full max-w-[660px] text-center text-[#042718]/80 font-inter text-base md:text-lg leading-relaxed mb-10"
+              className="w-full max-w-[660px] text-center text-mute font-body text-base md:text-lg leading-relaxed mb-10"
             >
               Looking for a Senior Product Manager who thrives in ambiguity,
               talks to real users, and builds resilient physical-digital
@@ -154,7 +158,7 @@ export default function Footer({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
               className="flex flex-col sm:flex-row items-center gap-4"
             >
@@ -163,9 +167,9 @@ export default function Footer({
                 target="_blank"
                 rel="noopener noreferrer"
                 id="footer-book-strategy-chat-cta"
-                className="h-14 px-8 rounded-full bg-[#042718] text-white font-inter font-semibold text-base shadow-lg hover:bg-[#042718]/90 transition-all flex items-center gap-3 group cursor-pointer"
+                className="h-14 px-8 rounded-full bg-coral text-void font-mono uppercase text-xs tracking-[0.14em] font-semibold hover:bg-[#F6AE96] active:scale-[.97] transition-all flex items-center gap-3 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void shadow-xs"
               >
-                <Calendar size={18} className="text-[#34D399]" />
+                <Calendar size={18} className="text-void" />
                 <span>Book Strategy Chat</span>
                 <ArrowUpRight
                   size={16}
@@ -178,9 +182,9 @@ export default function Footer({
                   type="button"
                   id="footer-view-resume-cta"
                   onClick={onOpenResumeModal}
-                  className="h-14 px-8 rounded-full bg-white/70 backdrop-blur-md border border-[#042718]/15 text-[#042718] font-inter font-semibold text-base hover:bg-white transition-all flex items-center gap-2.5 cursor-pointer shadow-xs"
+                  className="h-14 px-8 rounded-full bg-ghost/80 backdrop-blur-md border border-[var(--rule-strong)] text-ivory font-mono uppercase text-xs tracking-[0.16em] font-semibold hover:border-coral active:scale-[.97] transition-all flex items-center gap-2.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void shadow-xs"
                 >
-                  <FileText size={18} className="text-[#188E39]" />
+                  <FileText size={18} className="text-coral" />
                   <span>View Full Resume</span>
                 </button>
               )}
@@ -194,7 +198,7 @@ export default function Footer({
         <div className="relative z-10 w-full max-w-[1440px] px-6 lg:px-[96px] pt-16 pb-8 flex flex-col items-start bg-transparent">
           {/* Content Row */}
           <motion.div
-            className="w-full lg:w-[1248px] pt-16 lg:pt-24 pb-16 flex flex-col lg:flex-row items-start gap-12 lg:gap-24 border-t border-[#042718]/10 mt-12"
+            className="w-full lg:w-[1248px] pt-16 lg:pt-24 pb-16 flex flex-col lg:flex-row items-start gap-12 lg:gap-24 border-t border-[var(--rule)] mt-12"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -206,14 +210,14 @@ export default function Footer({
                 variants={itemVariants}
                 className="flex items-center gap-3"
               >
-                <div className="w-9 h-9 rounded-full bg-[#042718] text-white font-onest font-bold flex items-center justify-center text-sm">
+                <div className="w-9 h-9 rounded-full bg-ghost border border-[var(--rule-strong)] text-ivory font-display font-bold flex items-center justify-center text-sm">
                   DP
                 </div>
                 <div>
-                  <h3 className="text-[#042718] font-onest text-xl font-bold tracking-tight">
+                  <h3 className="text-ivory font-display text-xl font-bold tracking-tight">
                     Deepak Prasad
                   </h3>
-                  <p className="text-xs text-[#042718]/60 font-inter">
+                  <p className="text-xs text-mute font-mono uppercase tracking-[0.18em]">
                     Senior Product Manager
                   </p>
                 </div>
@@ -221,7 +225,7 @@ export default function Footer({
 
               <motion.p
                 variants={itemVariants}
-                className="text-[#042718]/75 font-inter text-sm leading-relaxed"
+                className="text-mute font-body text-sm leading-relaxed"
               >
                 Specializing in complex B2B marketplaces, 0→1 discovery,
                 physical-digital workflow digitisation, and AI model productization.
@@ -231,7 +235,7 @@ export default function Footer({
               <motion.form
                 variants={itemVariants}
                 onSubmit={handleSubscribe}
-                className="mt-2 relative w-full flex flex-col sm:flex-row items-stretch sm:items-center p-1.5 rounded-[24px] sm:rounded-full border border-[#042718]/15 bg-white/70 backdrop-blur-md shadow-xs"
+                className="mt-2 relative w-full flex flex-col sm:flex-row items-stretch sm:items-center p-1.5 rounded-[24px] sm:rounded-full border border-[var(--rule-strong)] bg-ghost backdrop-blur-md shadow-xs"
               >
                 <input
                   type="email"
@@ -239,11 +243,11 @@ export default function Footer({
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
                   placeholder="Enter your email for notes & updates"
-                  className="flex-1 bg-transparent border-none outline-none px-4 py-2 font-inter text-sm text-[#042718] placeholder:text-[#042718]/50"
+                  className="flex-1 bg-transparent border-none outline-none px-4 py-2 font-body text-sm text-ivory placeholder:text-mute focus-visible:outline-none"
                 />
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 bg-[#042718] px-5 py-2.5 rounded-full text-white font-inter text-xs font-semibold shadow-xs hover:bg-[#042718]/90 transition-all shrink-0 cursor-pointer"
+                  className="flex items-center justify-center gap-2 bg-coral px-5 py-2.5 rounded-full text-void font-mono uppercase text-xs tracking-[0.14em] font-semibold shadow-xs hover:bg-[#F6AE96] active:scale-[.97] transition-all shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
                   <span>{subscribed ? "Subscribed!" : "Subscribe"}</span>
                   <ArrowRight size={14} />
@@ -257,10 +261,10 @@ export default function Footer({
               <div className="flex flex-col gap-4">
                 <motion.div variants={itemVariants} className="flex flex-col">
                   <div
-                    className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                    className="w-6 h-[2px] rounded-full bg-coral mb-3"
                     aria-hidden="true"
                   />
-                  <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                  <h4 className="text-ivory font-mono text-xs font-semibold uppercase tracking-[0.18em]">
                     Portfolio
                   </h4>
                 </motion.div>
@@ -293,10 +297,10 @@ export default function Footer({
                         <button
                           type="button"
                           onClick={link.onClick}
-                          className="text-[#042718]/70 font-inter text-sm hover:text-[#188E39] hover:font-medium transition-all text-left cursor-pointer flex items-center gap-1.5"
+                          className="text-mute font-body text-sm hover:text-coral transition-colors text-left cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
                         >
                           {link.icon && (
-                            <link.icon size={13} className="text-[#188E39]" />
+                            <link.icon size={13} className="text-coral" />
                           )}
                           <span>{link.name}</span>
                         </button>
@@ -307,7 +311,7 @@ export default function Footer({
                             e.preventDefault();
                             handleNavClick(link.href);
                           }}
-                          className="text-[#042718]/70 font-inter text-sm hover:text-[#042718] hover:font-medium transition-all"
+                          className="text-mute font-body text-sm hover:text-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
                         >
                           {link.name}
                         </a>
@@ -321,10 +325,10 @@ export default function Footer({
               <div className="flex flex-col gap-4">
                 <motion.div variants={itemVariants} className="flex flex-col">
                   <div
-                    className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                    className="w-6 h-[2px] rounded-full bg-coral mb-3"
                     aria-hidden="true"
                   />
-                  <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                  <h4 className="text-ivory font-mono text-xs font-semibold uppercase tracking-[0.18em]">
                     Engage
                   </h4>
                 </motion.div>
@@ -358,7 +362,7 @@ export default function Footer({
                         <button
                           type="button"
                           onClick={item.onClick}
-                          className="text-[#042718]/70 font-inter text-sm hover:text-[#042718] hover:font-medium transition-all text-left cursor-pointer"
+                          className="text-mute font-body text-sm hover:text-coral transition-colors text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
                         >
                           {item.name}
                         </button>
@@ -369,7 +373,7 @@ export default function Footer({
                             e.preventDefault();
                             handleNavClick(item.href!);
                           }}
-                          className="text-[#042718]/70 font-inter text-sm hover:text-[#042718] hover:font-medium transition-all"
+                          className="text-mute font-body text-sm hover:text-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
                         >
                           {item.name}
                         </a>
@@ -383,10 +387,10 @@ export default function Footer({
               <div className="flex flex-col gap-4 col-span-2 sm:col-span-1">
                 <motion.div variants={itemVariants} className="flex flex-col">
                   <div
-                    className="w-6 h-[3px] rounded-full bg-[#188E39] mb-3"
+                    className="w-6 h-[2px] rounded-full bg-coral mb-3"
                     aria-hidden="true"
                   />
-                  <h4 className="text-[#042718] font-onest text-sm font-bold uppercase tracking-wider">
+                  <h4 className="text-ivory font-mono text-xs font-semibold uppercase tracking-[0.18em]">
                     Connect
                   </h4>
                 </motion.div>
@@ -413,9 +417,9 @@ export default function Footer({
                         href={social.href}
                         target={social.href.startsWith("mailto:") ? undefined : "_blank"}
                         rel={social.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                        className="flex items-center gap-2 text-[#042718]/70 font-inter text-sm hover:text-[#042718] transition-all"
+                        className="flex items-center gap-2 text-mute font-body text-sm hover:text-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
                       >
-                        <social.icon size={15} className="text-[#188E39]" />
+                        <social.icon size={15} className="text-coral" />
                         <span>{social.name}</span>
                       </a>
                     </motion.li>
@@ -433,9 +437,10 @@ export default function Footer({
               viewport={{ once: true }}
               transition={{
                 duration: 1,
-                ease: [0.21, 0.45, 0.32, 0.9] as const,
+                ease: [0.16, 1, 0.3, 1] as const,
               }}
-              className="w-full text-center text-[#042718]/12 font-onest text-[clamp(38px,10vw,150px)] font-bold leading-none tracking-tighter whitespace-nowrap select-none"
+              className="w-full text-center text-ivory/[0.05] font-display text-[clamp(38px,10vw,150px)] font-bold leading-none tracking-tighter whitespace-nowrap select-none"
+              style={{ fontVariationSettings: '"wdth" 92' }}
             >
               Deepak Prasad
             </motion.h1>
@@ -443,7 +448,7 @@ export default function Footer({
 
           {/* Bottom Copyright Row */}
           <motion.div
-            className="w-full lg:w-[1248px] pt-6 pb-4 border-t border-[#042718]/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#042718]/60 font-inter"
+            className="w-full lg:w-[1248px] pt-6 pb-4 border-t border-[var(--rule)] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.12em] text-mute"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -454,7 +459,7 @@ export default function Footer({
             </div>
             <div className="flex items-center gap-4">
               <span>Senior Product Manager</span>
-              <span>•</span>
+              <span>/</span>
               <span>Bengaluru / Remote</span>
             </div>
           </motion.div>

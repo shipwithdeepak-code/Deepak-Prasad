@@ -30,18 +30,20 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
   };
 
   return (
-    <div className="w-full bg-[#FAFDFB] text-[#042718] py-12 md:py-20">
+    <div className="w-full bg-void text-ivory py-12 md:py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#042718]/5 text-xs font-inter font-semibold text-[#042718]/80 mb-4">
-            <span className="w-2 h-2 rounded-full bg-[#188E39] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.18em] text-coral mb-4">
             <span>Open for Senior Product Opportunities</span>
           </div>
-          <h1 className="font-onest text-4xl sm:text-5xl font-bold tracking-tight text-[#042718] leading-[1.15] mb-4">
+          <h1
+            className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-ivory leading-[1.15] mb-4"
+            style={{ fontVariationSettings: '"wdth" 92' }}
+          >
             Have a product problem worth unpacking?
           </h1>
-          <p className="font-inter text-base sm:text-lg text-[#042718]/75 leading-relaxed font-normal max-w-2xl">
+          <p className="font-body text-base sm:text-lg text-mute leading-relaxed font-normal max-w-2xl">
             I’m open to Senior Product Management opportunities, product strategy conversations, and interesting 0→1 problems across B2B, AI and consumer platforms.
           </p>
         </div>
@@ -49,8 +51,8 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
           {/* Left Column: Direct Contacts */}
           <div className="md:col-span-2 flex flex-col gap-6">
-            <div className="p-6 rounded-[20px] bg-white border border-[#042718]/8 shadow-2xs">
-              <span className="text-xs font-inter font-semibold uppercase tracking-wider text-[#042718]/40 block mb-4">
+            <div className="p-6 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs">
+              <span className="text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral block mb-4">
                 Direct Channels
               </span>
 
@@ -58,16 +60,16 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                 <a
                   href="mailto:shipwithdeepak@gmail.com"
                   id="contact-email-link"
-                  className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-[#FAFDFB] border border-transparent hover:border-[#042718]/8 transition-colors group cursor-pointer"
+                  className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-ghost-active border border-transparent hover:border-[var(--rule)] transition-colors group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[#042718]/5 flex items-center justify-center text-[#188E39] group-hover:bg-[#188E39] group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-void border border-[var(--rule)] flex items-center justify-center text-coral group-hover:border-coral transition-colors">
                     <Mail size={18} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-inter text-[#042718]/50 block font-medium">
+                    <span className="text-[11px] font-mono uppercase tracking-[0.12em] text-mute block font-medium">
                       Email
                     </span>
-                    <span className="font-inter text-sm font-semibold text-[#042718] group-hover:text-[#188E39] transition-colors">
+                    <span className="font-body text-sm font-semibold text-ivory group-hover:text-coral transition-colors">
                       shipwithdeepak@gmail.com
                     </span>
                   </div>
@@ -78,16 +80,16 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   id="contact-linkedin-link"
-                  className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-[#FAFDFB] border border-transparent hover:border-[#042718]/8 transition-colors group cursor-pointer"
+                  className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-ghost-active border border-transparent hover:border-[var(--rule)] transition-colors group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[#042718]/5 flex items-center justify-center text-[#188E39] group-hover:bg-[#188E39] group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-void border border-[var(--rule)] flex items-center justify-center text-coral group-hover:border-coral transition-colors">
                     <Linkedin size={18} />
                   </div>
                   <div>
-                    <span className="text-[11px] font-inter text-[#042718]/50 block font-medium">
+                    <span className="text-[11px] font-mono uppercase tracking-[0.12em] text-mute block font-medium">
                       LinkedIn
                     </span>
-                    <span className="font-inter text-sm font-semibold text-[#042718] group-hover:text-[#188E39] transition-colors flex items-center gap-1">
+                    <span className="font-body text-sm font-semibold text-ivory group-hover:text-coral transition-colors flex items-center gap-1">
                       <span>linkedin.com/in/prasad-deepak</span>
                       <ArrowUpRight size={13} />
                     </span>
@@ -96,13 +98,13 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
               </div>
             </div>
 
-            <div className="p-6 rounded-[20px] bg-white border border-[#042718]/8 shadow-2xs flex flex-col gap-3 text-xs font-inter text-[#042718]/70">
+            <div className="p-6 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs flex flex-col gap-3 text-xs font-mono uppercase tracking-[0.1em] text-mute">
               <div className="flex items-center gap-2.5">
-                <MapPin size={16} className="text-[#188E39]" />
-                <span>Bengaluru, India · Open to Remote & Global Relocation</span>
+                <MapPin size={16} className="text-coral" />
+                <span>Bengaluru, India / Open to Remote & Global Relocation</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Clock size={16} className="text-[#188E39]" />
+                <Clock size={16} className="text-coral" />
                 <span>Typically responds within 24 hours</span>
               </div>
             </div>
@@ -110,24 +112,30 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
 
           {/* Right Column: Quick Contact Form */}
           <div className="md:col-span-3">
-            <div className="p-6 sm:p-8 rounded-[24px] bg-white border border-[#042718]/8 shadow-2xs">
-              <h3 className="font-onest text-xl font-bold text-[#042718] mb-2">
+            <div className="p-6 sm:p-8 rounded-[24px] bg-ghost border border-[var(--rule)] shadow-2xs">
+              <h3
+                className="font-display text-xl font-bold text-ivory mb-2"
+                style={{ fontVariationSettings: '"wdth" 92' }}
+              >
                 Send a message
               </h3>
-              <p className="font-inter text-xs sm:text-sm text-[#042718]/60 mb-6">
+              <p className="font-body text-xs sm:text-sm text-mute mb-6">
                 Whether you’re hiring, exploring product advisory, or discussing a 0→1 problem, feel free to reach out.
               </p>
 
               {isSubmitted ? (
-                <div className="p-8 rounded-[16px] bg-[#ECFDF5] border border-[#6EE7B7]/40 text-center flex flex-col items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[#059669] text-white flex items-center justify-center">
+                <div className="p-8 rounded-[16px] bg-ghost border border-coral/40 text-center flex flex-col items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-ghost border border-coral text-coral flex items-center justify-center">
                     <CheckCircle2 size={24} />
                   </div>
-                  <h4 className="font-onest text-lg font-bold text-[#065F46]">
+                  <h4
+                    className="font-display text-lg font-bold text-ivory"
+                    style={{ fontVariationSettings: '"wdth" 92' }}
+                  >
                     Message received!
                   </h4>
-                  <p className="font-inter text-xs sm:text-sm text-[#047857] max-w-sm">
-                    Thank you for getting in touch. I will review your note and respond to <span className="font-semibold">{formData.email}</span> within 24 hours.
+                  <p className="font-body text-xs sm:text-sm text-mute max-w-sm">
+                    Thank you for getting in touch. I will review your note and respond to <span className="font-semibold text-coral">{formData.email}</span> within 24 hours.
                   </p>
                   <button
                     type="button"
@@ -135,7 +143,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                       setIsSubmitted(false);
                       setFormData({ name: "", email: "", subject: "", message: "" });
                     }}
-                    className="mt-2 text-xs font-inter font-semibold text-[#065F46] underline cursor-pointer"
+                    className="mt-2 text-xs font-mono uppercase tracking-[0.12em] font-semibold text-coral hover:underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
                   >
                     Send another note
                   </button>
@@ -144,7 +152,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block font-inter text-xs font-medium text-[#042718]/70 mb-1.5">
+                      <label className="block font-mono text-xs uppercase tracking-[0.14em] text-mute mb-1.5">
                         Your Name *
                       </label>
                       <input
@@ -153,12 +161,12 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Sarah Connor"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#042718]/15 bg-[#FAFDFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#188E39]/30 text-sm font-inter text-[#042718]"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--rule)] bg-void/70 focus:bg-void focus:outline-none focus:ring-2 focus:ring-coral/50 text-sm font-body text-ivory placeholder:text-mute/50"
                       />
                     </div>
 
                     <div>
-                      <label className="block font-inter text-xs font-medium text-[#042718]/70 mb-1.5">
+                      <label className="block font-mono text-xs uppercase tracking-[0.14em] text-mute mb-1.5">
                         Your Email *
                       </label>
                       <input
@@ -167,13 +175,13 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="sarah@company.com"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#042718]/15 bg-[#FAFDFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#188E39]/30 text-sm font-inter text-[#042718]"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--rule)] bg-void/70 focus:bg-void focus:outline-none focus:ring-2 focus:ring-coral/50 text-sm font-body text-ivory placeholder:text-mute/50"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block font-inter text-xs font-medium text-[#042718]/70 mb-1.5">
+                    <label className="block font-mono text-xs uppercase tracking-[0.14em] text-mute mb-1.5">
                       Subject
                     </label>
                     <input
@@ -181,12 +189,12 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="Senior PM role / Product Advisory / Hello"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#042718]/15 bg-[#FAFDFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#188E39]/30 text-sm font-inter text-[#042718]"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--rule)] bg-void/70 focus:bg-void focus:outline-none focus:ring-2 focus:ring-coral/50 text-sm font-body text-ivory placeholder:text-mute/50"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-inter text-xs font-medium text-[#042718]/70 mb-1.5">
+                    <label className="block font-mono text-xs uppercase tracking-[0.14em] text-mute mb-1.5">
                       Message *
                     </label>
                     <textarea
@@ -195,14 +203,14 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Share context on your product, team, or opportunity..."
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#042718]/15 bg-[#FAFDFB] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#188E39]/30 text-sm font-inter text-[#042718] resize-y"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[var(--rule)] bg-void/70 focus:bg-void focus:outline-none focus:ring-2 focus:ring-coral/50 text-sm font-body text-ivory placeholder:text-mute/50 resize-y"
                     />
                   </div>
 
                   <button
                     type="submit"
                     id="contact-form-submit"
-                    className="mt-2 w-full py-3 rounded-xl bg-[#042718] hover:bg-[#063b25] text-white font-inter text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                    className="mt-2 w-full py-3 rounded-xl bg-coral hover:bg-[#F6AE96] text-void font-mono uppercase text-xs tracking-[0.14em] font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
                   >
                     <Send size={15} />
                     <span>Send Message</span>

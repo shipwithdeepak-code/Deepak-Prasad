@@ -61,46 +61,24 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
     return () => window.removeEventListener("resize", layout);
   }, [layout]);
 
-  /* One gesture moves one card. A wheel gesture arrives as a burst of
-     events, so the deck steps on the first of them and then waits for the
-     burst to end rather than stepping once per event.
-
-     The deck is endless, so consuming the wheel forever would trap the
-     page. Once a run of steps in one direction has been round the whole
-     deck, the wheel goes back to the page until the reader changes
-     direction or comes back to the section. */
+  /* the wheel steps the deck while the pointer is over it, and the page
+     keeps scrolling once the deck reaches the end of a gesture */
   useEffect(() => {
     const fan = fanRef.current;
     if (!fan || shouldReduceMotion) return;
-    const GESTURE_END_MS = 140;
-    let consuming = false;
-    let idleTimer: ReturnType<typeof setTimeout> | null = null;
-    let runDir = 0;
-    let runLength = 0;
+    let lockedUntil = 0;
 
     const onWheel = (e: WheelEvent) => {
+      const now = Date.now();
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
       if (Math.abs(delta) < 8) return;
-      const dir = delta > 0 ? 1 : -1;
-
-      if (dir !== runDir) {
-        runDir = dir;
-        runLength = 0;
+      if (now < lockedUntil) {
+        e.preventDefault();
+        return;
       }
-      /* every card has been past the middle: the page takes the wheel back */
-      if (runLength >= n) return;
-
+      lockedUntil = now + 420;
       e.preventDefault();
-      if (idleTimer) clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => {
-        consuming = false;
-        idleTimer = null;
-      }, GESTURE_END_MS);
-
-      if (consuming) return;
-      consuming = true;
-      runLength += 1;
-      go(dir);
+      go(delta > 0 ? 1 : -1);
     };
 
     const onMove = (e: PointerEvent) => {
@@ -114,27 +92,15 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
       layout();
     };
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) return;
-        runDir = 0;
-        runLength = 0;
-      },
-      { threshold: 0.2 }
-    );
-    io.observe(fan);
-
     fan.addEventListener("wheel", onWheel, { passive: false });
     fan.addEventListener("pointermove", onMove);
     fan.addEventListener("pointerleave", onLeave);
     return () => {
-      io.disconnect();
-      if (idleTimer) clearTimeout(idleTimer);
       fan.removeEventListener("wheel", onWheel);
       fan.removeEventListener("pointermove", onMove);
       fan.removeEventListener("pointerleave", onLeave);
     };
-  }, [go, layout, n, shouldReduceMotion]);
+  }, [go, layout, shouldReduceMotion]);
 
   /* drag */
   useEffect(() => {
@@ -211,14 +177,7 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
               <article
                 key={cs.id}
                 className="dp-fcard absolute left-1/2 top-1/2 flex flex-col gap-[9px] rounded-[20px] cursor-pointer"
-                onClick={() => {
-                  if (i !== active) {
-                    setActive(i);
-                    return;
-                  }
-                  onSelectCaseStudy(cs);
-                  onNavigate(`/work/${cs.slug}`);
-                }}
+                onClick={() => (i === active ? onSelectCaseStudy(cs) : setActive(i))}
                 style={{
                   width: "clamp(205px,24cqw,290px)",
                   height: "clamp(280px,33cqw,385px)",

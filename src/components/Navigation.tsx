@@ -75,7 +75,7 @@ export default function Navigation({
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isTransparent
           ? "bg-transparent border-transparent"
-          : "bg-[#FAFDFB]/85 backdrop-blur-md border-b border-[#042718]/10 shadow-xs"
+          : "bg-void/90 backdrop-blur-md border-b border-[var(--rule)] shadow-xs"
       }`}
     >
       <style>{`
@@ -105,11 +105,11 @@ export default function Navigation({
             setIsMobileMenuOpen(false);
             onNavigate("/");
           }}
-          className="flex items-center gap-3 hover:opacity-85 transition-opacity group"
+          className="flex items-center gap-3 hover:opacity-85 transition-opacity group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void rounded-sm"
           id="nav-logo"
         >
           <div className="relative shrink-0">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-[#042718]/15 shadow-xs group-hover:scale-105 transition-transform bg-[#042718] flex items-center justify-center relative">
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--rule-strong)] shadow-xs group-hover:scale-105 transition-transform bg-ghost flex items-center justify-center relative">
               <img
                 src="/images/deepak-prasad.jpg"
                 alt="Deepak Prasad"
@@ -124,24 +124,23 @@ export default function Navigation({
                   if (fallback) (fallback as HTMLElement).style.display = "flex";
                 }}
               />
-              <div className="nav-dp-fallback hidden w-full h-full items-center justify-center font-onest font-bold text-white text-sm bg-[#042718]">
+              <div className="nav-dp-fallback hidden w-full h-full items-center justify-center font-display font-bold text-ivory text-sm bg-ghost">
                 DP
               </div>
             </div>
-            {/* Green available status dot on corner */}
+            {/* Live status dot on corner */}
             <span
-              className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#188E39] border-2 border-[#FAFDFB]"
+              className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-live border-2 border-void"
               title="Available"
             />
           </div>
           <div className="text-left">
             <div className="flex items-center gap-2">
-              <span className="font-onest text-base font-bold text-[#042718] leading-none tracking-[-0.2px]">
+              <span className="font-display text-base font-semibold text-ivory leading-none tracking-[-0.02em]">
                 Deepak Prasad
               </span>
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#188E39] animate-pulse" />
             </div>
-            <span className="font-inter text-[12px] text-[#042718]/70 font-medium leading-none block mt-1">
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-mute leading-none block mt-1">
               Senior Product Manager
             </span>
           </div>
@@ -165,10 +164,10 @@ export default function Navigation({
                 href={link.path}
                 onClick={(e) => handleLinkClick(link, e)}
                 id={`nav-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className={`font-inter text-[14px] sm:text-[15px] leading-6 tracking-[-0.2px] transition-all relative py-1 ${
+                className={`font-body text-[14px] sm:text-[15px] leading-6 tracking-tight transition-colors relative py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void rounded-sm ${
                   isActive
-                    ? "text-[#042718] font-semibold"
-                    : "text-[#042718]/80 font-medium hover:text-[#042718]"
+                    ? "text-coral font-semibold"
+                    : "text-ivory/80 font-medium hover:text-ivory"
                 }`}
               >
                 {link.label}
@@ -188,9 +187,9 @@ export default function Navigation({
                 if (onOpenResumeModal) onOpenResumeModal();
                 else onNavigate("/resume");
               }}
-              className="inline-flex items-center gap-2 text-[#042718] text-[14px] font-medium px-3.5 py-1.5 rounded-full hover:bg-white/60 transition-colors border border-transparent hover:border-[#042718]/10 cursor-pointer"
+              className="font-mono uppercase text-[11px] tracking-[0.16em] inline-flex items-center gap-2 text-ivory px-3.5 py-1.5 rounded-full border border-[var(--rule-strong)] hover:border-coral transition-all active:scale-[.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void"
             >
-              <FileText size={16} className="text-[#188E39]" />
+              <FileText size={14} className="text-coral" />
               <span>Resume</span>
             </button>
 
@@ -203,15 +202,15 @@ export default function Navigation({
               onMouseEnter={() => setIsNavHovered(true)}
               onMouseLeave={() => setIsNavHovered(false)}
               className={
-                "flex items-center gap-2.5 py-1.5 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-[#042718]/15 group cursor-pointer relative h-10 transition-all duration-300 shadow-2xs " +
-                (isNavHovered ? "flex-row-reverse pl-1.5 pr-4" : "flex-row pl-4 pr-1.5")
+                "flex items-center gap-2.5 py-1.5 rounded-full bg-coral text-void hover:bg-[#F6AE96] active:scale-[.97] cursor-pointer relative h-10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void " +
+                (isNavHovered ? "flex-row-reverse pl-2 pr-4" : "flex-row pl-4 pr-2")
               }
             >
-              <span className="font-inter text-xs lg:text-[13px] font-semibold leading-5 text-[#042718]">
+              <span className="font-mono text-xs uppercase tracking-[0.14em] font-semibold leading-5 text-void">
                 Book Chat
               </span>
-              <div className="w-7 h-7 rounded-full bg-[#042718] flex items-center justify-center shrink-0">
-                <ArrowUpRight className="w-3.5 h-3.5 text-white group-hover:scale-110 transition-transform" />
+              <div className="w-7 h-7 rounded-full bg-void text-ivory flex items-center justify-center shrink-0">
+                <ArrowUpRight className="w-3.5 h-3.5 text-coral group-hover:scale-110 transition-transform" />
               </div>
             </a>
           </div>
@@ -221,7 +220,7 @@ export default function Navigation({
             type="button"
             id="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="nav-mobile-toggle flex lg:hidden p-2 text-[#042718] bg-white/80 backdrop-blur-sm rounded-full border border-[#042718]/10 cursor-pointer shadow-2xs"
+            className="nav-mobile-toggle flex lg:hidden p-2 text-ivory bg-ghost/80 backdrop-blur-sm rounded-full border border-[var(--rule)] cursor-pointer active:scale-[.97] hover:border-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void shadow-2xs"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -237,8 +236,8 @@ export default function Navigation({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="lg:hidden bg-[#FAFDFB]/95 backdrop-blur-lg border-b border-[#042718]/10 px-6 py-6 flex flex-col gap-5"
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden bg-void/95 backdrop-blur-lg border-b border-[var(--rule)] px-6 py-6 flex flex-col gap-5"
           >
             <ul className="flex flex-col gap-3.5">
               {navLinks.map((link) => (
@@ -246,7 +245,7 @@ export default function Navigation({
                   <a
                     href={link.path}
                     onClick={(e) => handleLinkClick(link, e)}
-                    className="font-inter text-base block py-1 text-[#042718] font-medium hover:text-[#188E39]"
+                    className="font-body text-base block py-1 text-ivory font-medium hover:text-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void rounded-sm"
                   >
                     {link.label}
                   </a>
@@ -254,7 +253,7 @@ export default function Navigation({
               ))}
             </ul>
 
-            <div className="pt-4 border-t border-[#042718]/10 flex flex-col gap-3">
+            <div className="pt-4 border-t border-[var(--rule)] flex flex-col gap-3">
               <button
                 type="button"
                 onClick={() => {
@@ -262,9 +261,9 @@ export default function Navigation({
                   if (onOpenResumeModal) onOpenResumeModal();
                   else onNavigate("/resume");
                 }}
-                className="w-full py-2.5 rounded-full bg-white border border-[#042718]/15 text-[#042718] font-inter font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                className="w-full py-2.5 rounded-full bg-ghost border border-[var(--rule-strong)] text-ivory font-mono uppercase text-xs tracking-[0.16em] font-medium flex items-center justify-center gap-2 cursor-pointer active:scale-[.97] hover:border-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void shadow-2xs"
               >
-                <FileText size={16} className="text-[#188E39]" />
+                <FileText size={16} className="text-coral" />
                 <span>View Full Resume</span>
               </button>
 
@@ -273,7 +272,7 @@ export default function Navigation({
                 target="_blank"
                 rel="noopener"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full py-2.5 rounded-full bg-[#042718] text-white font-inter font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                className="w-full py-2.5 rounded-full bg-coral text-void font-mono uppercase text-xs tracking-[0.14em] font-semibold flex items-center justify-center gap-2 cursor-pointer active:scale-[.97] hover:bg-[#F6AE96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void shadow-xs"
               >
                 <span>Book Chat</span>
                 <ArrowUpRight size={16} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
   Sparkles,
@@ -97,23 +97,26 @@ export default function CaseStudyModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-5xl h-[92vh] flex flex-col bg-[#0c0f14] border border-white/20 rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.8)] overflow-hidden text-left select-text relative cursor-default"
+        className="w-full max-w-5xl h-[92vh] flex flex-col bg-void border border-[var(--rule-strong)] rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.8)] overflow-hidden text-left select-text relative cursor-default text-ivory"
       >
         {/* Top Header Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.03] backdrop-blur-md shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--rule)] bg-ghost backdrop-blur-md shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#01bc7c]/20 border border-[#01bc7c]/40 flex items-center justify-center text-[#01bc7c]">
+            <div className="w-8 h-8 rounded-full bg-ghost border border-[var(--rule-strong)] flex items-center justify-center text-coral">
               <Sparkles size={16} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#01bc7c]">
+                <span className="text-xs font-mono font-bold uppercase tracking-[0.16em] text-coral">
                   {caseStudy.category}
                 </span>
-                <span className="text-white/30">•</span>
-                <span className="text-xs text-white/60 font-medium">{caseStudy.timeline}</span>
+                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-xs font-mono uppercase tracking-[0.12em] text-mute">{caseStudy.timeline}</span>
               </div>
-              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight leading-none mt-0.5">
+              <h2
+                className="font-display text-base sm:text-lg font-bold text-ivory tracking-tight leading-none mt-0.5"
+                style={{ fontVariationSettings: '"wdth" 92' }}
+              >
                 {caseStudy.title}
               </h2>
             </div>
@@ -123,7 +126,7 @@ export default function CaseStudyModal({
             <button
               type="button"
               onClick={onOpenContact}
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#01bc7c]/15 hover:bg-[#01bc7c]/25 border border-[#01bc7c]/40 text-[#01bc7c] text-xs font-bold transition-all cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-coral/15 hover:bg-coral/25 border border-coral/40 text-coral text-xs font-mono uppercase tracking-[0.12em] font-semibold transition-all cursor-pointer active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <span>Discuss Strategy</span>
               <ArrowRight size={13} />
@@ -131,7 +134,7 @@ export default function CaseStudyModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-full bg-ghost hover:bg-ghost-active border border-[var(--rule)] text-mute hover:text-ivory transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <X size={18} />
             </button>
@@ -141,8 +144,8 @@ export default function CaseStudyModal({
         {/* Modal Main Body: 2-column layout on desktop */}
         <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
           {/* Left Sidebar: Section Index */}
-          <div className="w-full lg:w-72 border-b lg:border-b-0 lg:border-r border-white/10 bg-black/30 p-4 overflow-y-auto shrink-0 flex lg:flex-col gap-1.5">
-            <div className="text-[11px] font-bold text-white/40 uppercase tracking-wider px-2 py-1 hidden lg:block">
+          <div className="w-full lg:w-72 border-b lg:border-b-0 lg:border-r border-[var(--rule)] bg-void/50 p-4 overflow-y-auto shrink-0 flex lg:flex-col gap-1.5">
+            <div className="text-[11px] font-mono font-bold text-mute uppercase tracking-[0.18em] px-2 py-1 hidden lg:block">
               Case Study Outline ({caseStudy.sections.length} Sections)
             </div>
             {caseStudy.sections.map((section) => {
@@ -152,21 +155,21 @@ export default function CaseStudyModal({
                   key={section.id}
                   type="button"
                   onClick={() => setActiveSectionId(section.id)}
-                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-left transition-all duration-200 cursor-pointer shrink-0 lg:shrink ${
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-left transition-all duration-200 cursor-pointer shrink-0 lg:shrink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
                     isActive
-                      ? 'bg-[#01bc7c]/20 border border-[#01bc7c]/50 text-white font-semibold shadow-sm'
-                      : 'text-white/60 hover:text-white hover:bg-white/5 border border-transparent'
+                      ? 'bg-ghost border border-[var(--rule-strong)] text-ivory font-semibold shadow-xs'
+                      : 'text-mute hover:text-ivory hover:bg-ghost border border-transparent'
                   }`}
                 >
                   <span
                     className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${
-                      isActive ? 'bg-[#01bc7c] text-black font-bold' : 'bg-white/10 text-white/50'
+                      isActive ? 'bg-coral text-void font-bold' : 'bg-ghost border border-[var(--rule)] text-mute'
                     }`}
                   >
                     {section.number}
                   </span>
-                  <span className="truncate flex-1">{section.title}</span>
-                  {isActive && <ChevronRight size={14} className="text-[#01bc7c] hidden lg:block" />}
+                  <span className="truncate flex-1 font-body text-xs">{section.title}</span>
+                  {isActive && <ChevronRight size={14} className="text-coral hidden lg:block" />}
                 </button>
               );
             })}
@@ -175,14 +178,17 @@ export default function CaseStudyModal({
           {/* Right Area: Active Section Content */}
           <div className="flex-1 p-6 sm:p-8 overflow-y-auto space-y-6">
             {/* Thesis Banner */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#01bc7c]/15 via-emerald-900/10 to-transparent border border-[#01bc7c]/30">
-              <div className="text-[11px] font-bold text-[#01bc7c] uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <div className="p-4 sm:p-5 rounded-2xl bg-ghost border border-[var(--rule-strong)]">
+              <div className="text-[11px] font-mono font-bold text-coral uppercase tracking-[0.18em] mb-1 flex items-center gap-1.5">
                 <Compass size={13} /> Product Thesis
               </div>
-              <div className="text-base sm:text-lg font-bold text-white tracking-tight italic">
-                “{caseStudy.thesis}”
+              <div
+                className="font-display text-base sm:text-lg font-bold text-ivory tracking-tight italic"
+                style={{ fontVariationSettings: '"wdth" 92' }}
+              >
+                "{caseStudy.thesis}"
               </div>
-              <p className="text-xs sm:text-sm text-white/70 mt-1.5 leading-relaxed">
+              <p className="font-body text-xs sm:text-sm text-mute mt-1.5 leading-relaxed">
                 {caseStudy.subtitle}
               </p>
             </div>
@@ -192,11 +198,16 @@ export default function CaseStudyModal({
               {caseStudy.keyStats.map((stat, i) => (
                 <div
                   key={i}
-                  className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs"
+                  className="p-3.5 rounded-2xl bg-ghost border border-[var(--rule)]"
                 >
-                  <div className="text-[11px] text-white/50 font-medium mb-1">{stat.label}</div>
-                  <div className="text-xl font-extrabold text-[#01bc7c]">{stat.value}</div>
-                  <div className="text-[11px] text-white/60 truncate">{stat.detail}</div>
+                  <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-mute mb-1">{stat.label}</div>
+                  <div
+                    className="text-xl font-display font-bold text-coral"
+                    style={{ fontVariationSettings: '"wdth" 92' }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div className="text-[11px] font-body text-mute truncate">{stat.detail}</div>
                 </div>
               ))}
             </div>
@@ -204,21 +215,24 @@ export default function CaseStudyModal({
             {/* Current Section Content View */}
             <div className="space-y-4 pt-2">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[#01bc7c]/20 text-[#01bc7c] border border-[#01bc7c]/30">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-ghost text-coral border border-[var(--rule-strong)] uppercase tracking-[0.12em]">
                   Section {activeSection.number}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                <h3
+                  className="font-display text-xl sm:text-2xl font-bold text-ivory tracking-tight"
+                  style={{ fontVariationSettings: '"wdth" 92' }}
+                >
                   {activeSection.title}
                 </h3>
               </div>
 
               {activeSection.subtitle && (
-                <p className="text-sm font-semibold text-white/80 italic">
+                <p className="font-body text-sm font-semibold text-mute italic">
                   {activeSection.subtitle}
                 </p>
               )}
 
-              <div className="space-y-3.5 text-sm sm:text-base text-white/80 leading-relaxed">
+              <div className="space-y-3.5 font-body text-sm sm:text-base text-mute/90 leading-relaxed">
                 {activeSection.content.map((paragraph, idx) => (
                   <p key={idx} className="leading-relaxed">
                     {paragraph}
@@ -232,13 +246,16 @@ export default function CaseStudyModal({
                   {activeSection.highlights.map((h, i) => (
                     <div
                       key={i}
-                      className="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-[#01bc7c]/40 transition-colors"
+                      className="p-4 rounded-2xl bg-ghost border border-[var(--rule)] hover:border-coral/40 transition-colors"
                     >
-                      <div className="flex items-center gap-2 font-bold text-white text-sm mb-1.5">
-                        <CheckCircle2 size={16} className="text-[#01bc7c] shrink-0" />
+                      <div
+                        className="flex items-center gap-2 font-display font-bold text-ivory text-sm mb-1.5"
+                        style={{ fontVariationSettings: '"wdth" 92' }}
+                      >
+                        <CheckCircle2 size={16} className="text-coral shrink-0" />
                         <span>{h.title}</span>
                       </div>
-                      <p className="text-xs sm:text-sm text-white/70 leading-relaxed">{h.desc}</p>
+                      <p className="font-body text-xs sm:text-sm text-mute leading-relaxed">{h.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -246,27 +263,30 @@ export default function CaseStudyModal({
 
               {/* Quote if present */}
               {activeSection.quote && (
-                <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border-l-4 border-l-[#01bc7c] border-white/10 my-4">
-                  <p className="text-sm sm:text-base text-white/90 font-medium italic">
-                    “{activeSection.quote}”
+                <div className="p-4 sm:p-5 rounded-2xl bg-ghost border-l-4 border-l-coral border-[var(--rule)] my-4">
+                  <p
+                    className="font-display text-sm sm:text-base text-ivory font-medium italic"
+                    style={{ fontVariationSettings: '"wdth" 92' }}
+                  >
+                    "{activeSection.quote}"
                   </p>
                 </div>
               )}
 
               {/* Evaluation Table if present */}
               {activeSection.evaluationTable && activeSection.evaluationTable.length > 0 && (
-                <div className="my-4 rounded-2xl bg-white/[0.04] border border-white/10 overflow-hidden">
-                  <div className="p-4 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 bg-white/[0.02]">
-                    <div className="text-xs font-bold text-[#01bc7c] uppercase tracking-wider flex items-center gap-1.5">
+                <div className="my-4 rounded-2xl bg-ghost border border-[var(--rule)] overflow-hidden">
+                  <div className="p-4 border-b border-[var(--rule)] flex flex-wrap items-center justify-between gap-2 bg-ghost">
+                    <div className="text-xs font-mono font-bold text-coral uppercase tracking-[0.16em] flex items-center gap-1.5">
                       <Sparkles size={14} /> Golden Evaluation Test Benchmark (20 Queries)
                     </div>
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#01bc7c]/20 text-[#01bc7c] border border-[#01bc7c]/30">
+                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-ghost text-coral border border-[var(--rule-strong)] uppercase tracking-[0.1em]">
                       95% Accuracy (19/20 Pass)
                     </span>
                   </div>
                   <div className="overflow-x-auto max-h-80">
                     <table className="w-full text-left border-collapse text-xs">
-                      <thead className="sticky top-0 bg-[#042718] text-white/60 border-b border-white/10">
+                      <thead className="sticky top-0 bg-void text-mute font-mono text-[11px] uppercase tracking-[0.12em] border-b border-[var(--rule)]">
                         <tr>
                           <th className="py-2.5 px-3">#</th>
                           <th className="py-2.5 px-3 min-w-[200px]">Query</th>
@@ -277,32 +297,32 @@ export default function CaseStudyModal({
                           <th className="py-2.5 px-3 min-w-[200px]">Notes</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/5">
+                      <tbody className="divide-y divide-[var(--rule)] font-body text-xs">
                         {activeSection.evaluationTable.map((row) => (
-                          <tr key={row.id} className="hover:bg-white/[0.02]">
-                            <td className="py-2.5 px-3 font-mono text-white/50">{row.id}</td>
-                            <td className="py-2.5 px-3 text-white/90 font-medium">"{row.query}"</td>
+                          <tr key={row.id} className="hover:bg-ghost-active transition-colors">
+                            <td className="py-2.5 px-3 font-mono text-mute">{row.id}</td>
+                            <td className="py-2.5 px-3 text-ivory font-medium">"{row.query}"</td>
                             <td className="py-2.5 px-3">
-                              <span className="px-2 py-0.5 rounded bg-white/5 text-white/70 text-[10px]">
+                              <span className="px-2 py-0.5 rounded bg-ghost border border-[var(--rule)] text-mute font-mono text-[10px]">
                                 {row.category}
                               </span>
                             </td>
-                            <td className="py-2.5 px-3 text-white/70 text-[11px]">{row.groundTruthSource}</td>
-                            <td className="py-2.5 px-3 text-center font-mono text-[#01bc7c]">
+                            <td className="py-2.5 px-3 text-mute text-[11px]">{row.groundTruthSource}</td>
+                            <td className="py-2.5 px-3 text-center font-mono text-coral">
                               {row.similarity.toFixed(2)}
                             </td>
                             <td className="py-2.5 px-3 text-center">
                               <span
-                                className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                className={`px-2 py-0.5 rounded font-mono text-[10px] font-bold uppercase tracking-[0.1em] ${
                                   row.status === "Pass"
-                                    ? "bg-[#01bc7c]/20 text-[#01bc7c]"
-                                    : "bg-amber-500/20 text-amber-300"
+                                    ? "bg-ghost border border-coral/40 text-coral"
+                                    : "bg-ghost border border-[var(--rule)] text-mute"
                                 }`}
                               >
                                 {row.status}
                               </span>
                             </td>
-                            <td className="py-2.5 px-3 text-white/60 text-[11px]">{row.notes}</td>
+                            <td className="py-2.5 px-3 text-mute text-[11px]">{row.notes}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -313,8 +333,8 @@ export default function CaseStudyModal({
 
               {/* Special Interactive System Diagram for Section 10 */}
               {activeSection.id === 'the-system' && (
-                <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/15 my-4 space-y-4">
-                  <div className="text-xs font-bold text-[#01bc7c] uppercase tracking-wider flex items-center gap-1.5">
+                <div className="p-5 rounded-2xl bg-ghost border border-[var(--rule)] my-4 space-y-4">
+                  <div className="text-xs font-mono font-bold text-coral uppercase tracking-[0.16em] flex items-center gap-1.5">
                     <Layers size={14} /> Interactive Multi-Tier Supply Flow
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -323,25 +343,25 @@ export default function CaseStudyModal({
                         key={index}
                         type="button"
                         onClick={() => setActiveSystemNode(index)}
-                        className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
+                        className={`p-3 rounded-xl text-left border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
                           activeSystemNode === index
-                            ? 'bg-[#01bc7c]/20 border-[#01bc7c] text-white shadow-md'
-                            : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'
+                            ? 'bg-ghost border-coral text-ivory shadow-xs'
+                            : 'bg-void/50 border-[var(--rule)] text-mute hover:bg-ghost'
                         }`}
                       >
-                        <div className="text-[11px] font-bold text-white leading-tight truncate">
+                        <div className="text-[11px] font-display font-bold text-ivory leading-tight truncate">
                           {node.title}
                         </div>
-                        <div className="text-[10px] text-[#01bc7c] font-medium mt-0.5 truncate">
+                        <div className="text-[10px] font-mono uppercase tracking-[0.1em] text-coral font-medium mt-0.5 truncate">
                           {node.tool}
                         </div>
                       </button>
                     ))}
                   </div>
 
-                  <div className="p-4 rounded-xl bg-black/40 border border-white/10 text-xs sm:text-sm text-white/85 leading-relaxed">
-                    <div className="font-bold text-[#01bc7c] mb-1">
-                      {systemNodes[activeSystemNode].title} · {systemNodes[activeSystemNode].role}
+                  <div className="p-4 rounded-xl bg-void border border-[var(--rule)] text-xs sm:text-sm font-body text-ivory/85 leading-relaxed">
+                    <div className="font-mono text-xs uppercase tracking-[0.12em] font-bold text-coral mb-1">
+                      {systemNodes[activeSystemNode].title} / {systemNodes[activeSystemNode].role}
                     </div>
                     <div>{systemNodes[activeSystemNode].desc}</div>
                   </div>
@@ -350,7 +370,7 @@ export default function CaseStudyModal({
             </div>
 
             {/* Navigation footer within case study */}
-            <div className="pt-8 border-t border-white/10 flex items-center justify-between">
+            <div className="pt-8 border-t border-[var(--rule)] flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => {
@@ -360,7 +380,7 @@ export default function CaseStudyModal({
                   }
                 }}
                 disabled={caseStudy.sections.findIndex((s) => s.id === activeSection.id) === 0}
-                className="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none text-xs font-semibold text-white/80 hover:text-white transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-full bg-ghost hover:bg-ghost-active border border-[var(--rule)] disabled:opacity-30 disabled:pointer-events-none text-xs font-mono uppercase tracking-[0.12em] font-semibold text-mute hover:text-ivory transition-colors cursor-pointer active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
               >
                 ← Previous Section
               </button>
@@ -375,7 +395,7 @@ export default function CaseStudyModal({
                     onOpenContact();
                   }
                 }}
-                className="px-5 py-2 rounded-full bg-[#01bc7c] hover:bg-[#01a26c] text-xs font-bold text-white transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-5 py-2 rounded-full bg-coral hover:bg-[#F6AE96] text-xs font-mono uppercase tracking-[0.14em] font-bold text-void transition-colors cursor-pointer flex items-center gap-1.5 active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
               >
                 <span>
                   {caseStudy.sections.findIndex((s) => s.id === activeSection.id) ===

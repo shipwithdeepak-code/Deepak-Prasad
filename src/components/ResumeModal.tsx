@@ -192,7 +192,7 @@ export default function ResumeModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-md cursor-pointer"
+      className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md cursor-pointer"
     >
       <motion.div
         onClick={(e) => e.stopPropagation()}
@@ -200,49 +200,52 @@ export default function ResumeModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-4xl h-[92vh] bg-white rounded-[32px] border border-[#042718]/10 shadow-2xl overflow-hidden flex flex-col text-left cursor-default"
+        className="w-full max-w-4xl h-[92vh] bg-void rounded-[32px] border border-[var(--rule-strong)] shadow-2xl overflow-hidden flex flex-col text-left cursor-default text-ivory"
       >
         {/* Top Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#042718]/10 bg-[#FAFDFB] shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--rule)] bg-ghost shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#E4F2EB] flex items-center justify-center text-[#188E39]">
+            <div className="w-10 h-10 rounded-2xl bg-void border border-[var(--rule)] flex items-center justify-center text-coral">
               <FileText size={20} />
             </div>
             <div>
-              <h3 className="font-onest text-lg font-bold text-[#042718]">
-                Deepak P — Senior Product Manager
+              <h3
+                className="font-display text-lg font-bold text-ivory"
+                style={{ fontVariationSettings: '"wdth" 92' }}
+              >
+                Deepak P / Senior Product Manager
               </h3>
-              <p className="font-inter text-xs text-[#042718]/60">
-                B2B & B2C · AI & Machine Learning · Product Strategy & Roadmapping
+              <p className="font-mono text-xs uppercase tracking-[0.1em] text-mute">
+                B2B & B2C / AI & Machine Learning / Product Strategy & Roadmapping
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             {/* View Switcher Tabs */}
-            <div className="flex items-center bg-[#042718]/5 p-1 rounded-full border border-[#042718]/10 text-xs font-inter font-medium">
+            <div className="flex items-center bg-void p-1 rounded-full border border-[var(--rule)] text-xs font-mono uppercase tracking-[0.1em]">
               <button
                 type="button"
                 onClick={() => setActiveTab("pdf")}
-                className={`px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
                   activeTab === "pdf"
-                    ? "bg-white text-[#042718] font-semibold shadow-2xs"
-                    : "text-[#042718]/60 hover:text-[#042718]"
+                    ? "bg-ghost text-ivory font-semibold shadow-xs border border-[var(--rule-strong)]"
+                    : "text-mute hover:text-ivory"
                 }`}
               >
-                <FileText size={12} className={activeTab === "pdf" ? "text-[#188E39]" : ""} />
+                <FileText size={12} className={activeTab === "pdf" ? "text-coral" : ""} />
                 <span>Original PDF</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab("structured")}
-                className={`px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
                   activeTab === "structured"
-                    ? "bg-white text-[#042718] font-semibold shadow-2xs"
-                    : "text-[#042718]/60 hover:text-[#042718]"
+                    ? "bg-ghost text-ivory font-semibold shadow-xs border border-[var(--rule-strong)]"
+                    : "text-mute hover:text-ivory"
                 }`}
               >
-                <Layers size={12} className={activeTab === "structured" ? "text-[#188E39]" : ""} />
+                <Layers size={12} className={activeTab === "structured" ? "text-coral" : ""} />
                 <span className="hidden sm:inline">Structured Profile</span>
                 <span className="sm:hidden">Profile</span>
               </button>
@@ -252,7 +255,7 @@ export default function ResumeModal({
             <button
               type="button"
               onClick={handleDownload}
-              className="px-3.5 py-1.5 rounded-full bg-[#188E39] hover:bg-[#188E39]/90 text-white font-inter text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
+              className="px-3.5 py-1.5 rounded-full bg-coral hover:bg-[#F6AE96] text-void font-mono uppercase text-xs tracking-[0.14em] font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
               title="Download Resume PDF"
             >
               <Download size={13} />
@@ -269,7 +272,7 @@ export default function ResumeModal({
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener"
-              className="px-4 py-1.5 rounded-full bg-[#042718] text-white font-inter text-xs font-semibold hover:bg-[#042718]/90 transition-all cursor-pointer hidden lg:flex items-center gap-1.5"
+              className="px-4 py-1.5 rounded-full bg-ghost hover:bg-ghost-active border border-[var(--rule)] text-ivory font-mono uppercase text-xs tracking-[0.14em] font-semibold transition-all cursor-pointer hidden lg:flex items-center gap-1.5 active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <span>Book Chat</span>
               <ArrowRight size={13} />
@@ -278,7 +281,7 @@ export default function ResumeModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-[#042718]/5 text-[#042718]/60 hover:text-[#042718] transition-colors cursor-pointer"
+              className="p-2 rounded-full hover:bg-ghost text-mute hover:text-ivory transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <X size={20} />
             </button>
@@ -287,20 +290,19 @@ export default function ResumeModal({
 
         {/* Modal Body */}
         {activeTab === "pdf" ? (
-          <div className="flex-1 flex flex-col bg-[#F4F7F5] p-3 sm:p-5 overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 mb-3 bg-white rounded-2xl border border-[#042718]/10 text-xs font-inter text-[#042718]/75 shadow-xs shrink-0">
+          <div className="flex-1 flex flex-col bg-void p-3 sm:p-5 overflow-hidden">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 mb-3 bg-ghost rounded-2xl border border-[var(--rule)] text-xs font-mono uppercase tracking-[0.12em] text-mute shadow-xs shrink-0">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#188E39] animate-pulse" />
-                <span className="font-semibold text-[#042718]">Original Executive Resume (PDF)</span>
-                <span className="text-black/30">•</span>
-                <span className="text-[#042718]/70">Standard 2-Page Format</span>
+                <span className="font-semibold text-ivory">Original Executive Resume (PDF)</span>
+                <span className="text-[var(--rule-strong)]">/</span>
+                <span className="text-mute">Standard 2-Page Format</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] text-[#042718]/60">Exact attached PDF</span>
+                <span className="text-[11px] text-mute">Exact attached PDF</span>
               </div>
             </div>
 
-            <div className="flex-1 w-full bg-white rounded-2xl border border-[#042718]/10 overflow-hidden shadow-sm relative flex flex-col">
+            <div className="flex-1 w-full bg-void rounded-2xl border border-[var(--rule)] overflow-hidden shadow-sm relative flex flex-col">
               <iframe
                 src="/Deepak_Prasad_Senior_Product_Manager_Resume.pdf#toolbar=1&navpanes=0&view=FitH"
                 title="Deepak Prasad Original Resume PDF"
@@ -309,25 +311,25 @@ export default function ResumeModal({
             </div>
           </div>
         ) : (
-          <div className="flex-1 p-6 sm:p-8 overflow-y-auto space-y-8">
+          <div className="flex-1 p-6 sm:p-8 overflow-y-auto space-y-8 bg-void">
           {/* Contact & Profile Quick Bar */}
-          <div className="p-5 rounded-2xl bg-[#FAFDFB] border border-[#042718]/10 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#042718]/10 text-xs font-inter text-[#042718]/80">
+          <div className="p-5 rounded-2xl bg-ghost border border-[var(--rule)] space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--rule)] text-xs font-mono uppercase tracking-[0.12em] text-mute">
               <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                <span className="flex items-center gap-1 font-medium text-[#042718]">
-                  <MapPin size={14} className="text-[#188E39]" /> Bengaluru, India
+                <span className="flex items-center gap-1 font-medium text-ivory">
+                  <MapPin size={14} className="text-coral" /> Bengaluru, India
                 </span>
                 <a
                   href="tel:+918792964656"
-                  className="flex items-center gap-1 hover:text-[#188E39] transition-colors"
+                  className="flex items-center gap-1 hover:text-coral transition-colors"
                 >
-                  <Phone size={14} className="text-[#188E39]" /> +91 8792964656
+                  <Phone size={14} className="text-coral" /> +91 8792964656
                 </a>
                 <a
                   href="mailto:shipwithdeepak@gmail.com"
-                  className="flex items-center gap-1 hover:text-[#188E39] font-medium text-[#042718] transition-colors"
+                  className="flex items-center gap-1 hover:text-coral font-medium text-ivory transition-colors"
                 >
-                  <Mail size={14} className="text-[#188E39]" /> shipwithdeepak@gmail.com
+                  <Mail size={14} className="text-coral" /> shipwithdeepak@gmail.com
                 </a>
               </div>
 
@@ -336,17 +338,17 @@ export default function ResumeModal({
                   href="https://www.linkedin.com/in/prasad-deepak/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[#188E39] hover:underline font-semibold"
+                  className="flex items-center gap-1 text-coral hover:text-[#F6AE96] font-semibold transition-colors"
                 >
                   <Linkedin size={14} />
                   <span>LinkedIn</span>
                 </a>
-                <span className="text-[#042718]/30">•</span>
+                <span className="text-[var(--rule-strong)]">/</span>
                 <a
                   href="https://github.com/shipwithdeepak-code"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[#042718] hover:text-[#188E39] font-semibold"
+                  className="flex items-center gap-1 text-mute hover:text-coral font-semibold transition-colors"
                 >
                   <Github size={14} />
                   <span>GitHub</span>
@@ -355,19 +357,22 @@ export default function ResumeModal({
             </div>
 
             <div>
-              <h4 className="font-onest text-xs font-bold uppercase tracking-wider text-[#188E39] mb-1.5 flex items-center gap-1.5">
+              <h4 className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral mb-1.5 flex items-center gap-1.5">
                 <Sparkles size={14} /> Profile Summary
               </h4>
-              <p className="font-inter text-xs sm:text-sm text-[#042718]/85 leading-relaxed">
-                Senior Product Manager with <strong>7+ years</strong> building and scaling B2B and B2C products across SaaS, AI, marketplaces, workflow automation and connected products, including a production conversational AI feature (in-app AI Coach with Gemini + ChatGPT fallback) and an ML-powered pricing model (&gt;90% accuracy), alongside enterprise workflow automation across CRM, ERP and payments systems. Skilled at reading market trends and customer pain points and turning them into scalable product solutions, owning quarterly planning and roadmap creation through customer interviews, UAT, launch and adoption tracking. Known for taking 0→1 products from ambiguous charters, managing and mentoring product teams, and bringing automation to complex, non-desk operational workflows.
+              <p className="font-body text-xs sm:text-sm text-mute leading-relaxed">
+                Senior Product Manager with <strong className="text-ivory font-semibold">7+ years</strong> building and scaling B2B and B2C products across SaaS, AI, marketplaces, workflow automation and connected products, including a production conversational AI feature (in-app AI Coach with Gemini + ChatGPT fallback) and an ML-powered pricing model (&gt;90% accuracy), alongside enterprise workflow automation across CRM, ERP and payments systems. Skilled at reading market trends and customer pain points and turning them into scalable product solutions, owning quarterly planning and roadmap creation through customer interviews, UAT, launch and adoption tracking. Known for taking 0→1 products from ambiguous charters, managing and mentoring product teams, and bringing automation to complex, non-desk operational workflows.
               </p>
             </div>
           </div>
 
           {/* Work Experience Timeline */}
           <div>
-            <h4 className="font-onest text-base font-bold text-[#042718] mb-4 flex items-center gap-2">
-              <Briefcase size={18} className="text-[#188E39]" />
+            <h4
+              className="font-display text-base font-bold text-ivory mb-4 flex items-center gap-2"
+              style={{ fontVariationSettings: '"wdth" 92' }}
+            >
+              <Briefcase size={18} className="text-coral" />
               <span>Work Experience</span>
             </h4>
 
@@ -375,31 +380,34 @@ export default function ResumeModal({
               {EXPERIENCE_ROLES.map((role, idx) => (
                 <div
                   key={idx}
-                  className="p-6 rounded-2xl bg-white border border-[#042718]/10 shadow-xs space-y-3"
+                  className="p-6 rounded-2xl bg-ghost border border-[var(--rule)] shadow-xs space-y-3"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <div>
-                      <h5 className="font-onest text-lg font-bold text-[#042718]">
-                        {role.title} · <span className="text-[#188E39]">{role.company}</span>
+                      <h5
+                        className="font-display text-lg font-bold text-ivory"
+                        style={{ fontVariationSettings: '"wdth" 92' }}
+                      >
+                        {role.title} / <span className="font-mono text-coral text-sm uppercase tracking-[0.12em] font-semibold">{role.company}</span>
                       </h5>
-                      <p className="font-inter text-xs text-[#042718]/60 font-medium">
+                      <p className="font-mono text-xs uppercase tracking-[0.1em] text-mute font-medium mt-0.5">
                         {role.type}
                       </p>
                     </div>
 
-                    <span className="font-mono text-xs font-semibold px-2.5 py-1 rounded-full bg-[#FAFDFB] border border-[#042718]/10 text-[#042718]/70 w-fit">
+                    <span className="font-mono text-xs font-semibold px-2.5 py-1 rounded-full bg-void border border-[var(--rule)] text-mute w-fit">
                       {role.period}
                     </span>
                   </div>
 
-                  <p className="font-inter text-xs sm:text-sm text-[#042718]/80 leading-relaxed italic">
-                    “{role.description}”
+                  <p className="font-body text-xs sm:text-sm text-mute leading-relaxed italic">
+                    "{role.description}"
                   </p>
 
                   <ul className="space-y-2 pt-1">
                     {role.highlights.map((bullet, bIdx) => (
-                      <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#042718]/85 leading-relaxed">
-                        <CheckCircle2 size={15} className="text-[#188E39] shrink-0 mt-0.5" />
+                      <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm font-body text-mute/90 leading-relaxed">
+                        <CheckCircle2 size={15} className="text-coral shrink-0 mt-0.5" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -409,7 +417,7 @@ export default function ResumeModal({
                     {role.skills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="px-2.5 py-0.5 rounded text-[11px] font-inter font-medium bg-[#FAFDFB] text-[#042718]/70 border border-[#042718]/10"
+                        className="px-2.5 py-0.5 rounded text-[11px] font-mono uppercase tracking-[0.1em] bg-void text-mute border border-[var(--rule)]"
                       >
                         {skill}
                       </span>
@@ -422,8 +430,11 @@ export default function ResumeModal({
 
           {/* Core Competencies Matrix */}
           <div>
-            <h4 className="font-onest text-base font-bold text-[#042718] mb-4 flex items-center gap-2">
-              <Layers size={18} className="text-[#188E39]" />
+            <h4
+              className="font-display text-base font-bold text-ivory mb-4 flex items-center gap-2"
+              style={{ fontVariationSettings: '"wdth" 92' }}
+            >
+              <Layers size={18} className="text-coral" />
               <span>Core Competencies</span>
             </h4>
 
@@ -431,16 +442,16 @@ export default function ResumeModal({
               {competencies.map((group, idx) => (
                 <div
                   key={idx}
-                  className="p-5 rounded-2xl bg-[#FAFDFB] border border-[#042718]/10 space-y-2.5"
+                  className="p-5 rounded-2xl bg-ghost border border-[var(--rule)] space-y-2.5"
                 >
-                  <h5 className="font-onest text-xs font-bold uppercase tracking-wider text-[#188E39]">
+                  <h5 className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-coral">
                     {group.category}
                   </h5>
                   <div className="flex flex-wrap gap-1.5">
                     {group.items.map((item, iIdx) => (
                       <span
                         key={iIdx}
-                        className="px-2.5 py-1 rounded-lg bg-white text-[#042718] font-inter text-xs font-medium border border-[#042718]/10 shadow-2xs"
+                        className="px-2.5 py-1 rounded-lg bg-void text-ivory font-body text-xs font-medium border border-[var(--rule)] shadow-2xs"
                       >
                         {item}
                       </span>
@@ -453,21 +464,24 @@ export default function ResumeModal({
 
           {/* Tools & Domains */}
           <div>
-            <h4 className="font-onest text-base font-bold text-[#042718] mb-4 flex items-center gap-2">
-              <Wrench size={18} className="text-[#188E39]" />
+            <h4
+              className="font-display text-base font-bold text-ivory mb-4 flex items-center gap-2"
+              style={{ fontVariationSettings: '"wdth" 92' }}
+            >
+              <Wrench size={18} className="text-coral" />
               <span>Skills, Platforms & Domains</span>
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-5 rounded-2xl bg-white border border-[#042718]/10 space-y-2">
-                <h5 className="font-onest text-xs font-bold uppercase tracking-wider text-[#042718]/60">
+              <div className="p-5 rounded-2xl bg-ghost border border-[var(--rule)] space-y-2">
+                <h5 className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-coral">
                   Tools & Platforms
                 </h5>
                 <div className="flex flex-wrap gap-1.5">
                   {toolsAndDomains.tools.map((t, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-md bg-[#E4F2EB] text-[#042718] font-inter text-xs font-medium border border-[#188E39]/15"
+                      className="px-2.5 py-1 rounded-md bg-void text-ivory font-mono uppercase tracking-[0.08em] text-xs font-medium border border-[var(--rule)]"
                     >
                       {t}
                     </span>
@@ -475,15 +489,15 @@ export default function ResumeModal({
                 </div>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white border border-[#042718]/10 space-y-2">
-                <h5 className="font-onest text-xs font-bold uppercase tracking-wider text-[#042718]/60">
+              <div className="p-5 rounded-2xl bg-ghost border border-[var(--rule)] space-y-2">
+                <h5 className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-coral">
                   Domains & Verticals
                 </h5>
                 <div className="flex flex-wrap gap-1.5">
                   {toolsAndDomains.domains.map((d, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-md bg-[#FAFDFB] text-[#042718] font-inter text-xs font-medium border border-[#042718]/15"
+                      className="px-2.5 py-1 rounded-md bg-void text-ivory font-body text-xs font-medium border border-[var(--rule)]"
                     >
                       {d}
                     </span>
@@ -494,21 +508,24 @@ export default function ResumeModal({
           </div>
 
           {/* Education */}
-          <div className="p-5 rounded-2xl bg-[#FAFDFB] border border-[#042718]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="p-5 rounded-2xl bg-ghost border border-[var(--rule)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-white border border-[#042718]/10 flex items-center justify-center text-[#188E39]">
+              <div className="w-9 h-9 rounded-xl bg-void border border-[var(--rule)] flex items-center justify-center text-coral">
                 <GraduationCap size={20} />
               </div>
               <div>
-                <h5 className="font-onest text-sm font-bold text-[#042718]">
+                <h5
+                  className="font-display text-sm font-bold text-ivory"
+                  style={{ fontVariationSettings: '"wdth" 92' }}
+                >
                   Bachelor of Engineering (B.E.)
                 </h5>
-                <p className="font-inter text-xs text-[#042718]/60">
+                <p className="font-body text-xs text-mute">
                   Visvesvaraya Technological University (VTU)
                 </p>
               </div>
             </div>
-            <span className="font-mono text-xs font-semibold px-2.5 py-1 rounded-full bg-white border border-[#042718]/10 text-[#042718]/70 w-fit">
+            <span className="font-mono text-xs font-semibold px-2.5 py-1 rounded-full bg-void border border-[var(--rule)] text-mute w-fit">
               Graduated 2018
             </span>
           </div>
@@ -516,13 +533,13 @@ export default function ResumeModal({
         )}
 
         {/* Footer Bar */}
-        <div className="px-6 py-4 border-t border-[#042718]/10 bg-[#FAFDFB] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-3 text-xs text-[#042718]/70 font-inter">
+        <div className="px-6 py-4 border-t border-[var(--rule)] bg-ghost flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-3 text-xs text-mute font-mono uppercase tracking-[0.1em]">
             <span>Bengaluru, India</span>
-            <span>•</span>
+            <span className="text-[var(--rule-strong)]">/</span>
             <a
               href="mailto:shipwithdeepak@gmail.com"
-              className="text-[#188E39] font-medium hover:underline"
+              className="text-coral font-medium hover:text-[#F6AE96] transition-colors"
             >
               shipwithdeepak@gmail.com
             </a>
@@ -532,7 +549,7 @@ export default function ResumeModal({
             <button
               type="button"
               onClick={handleDownload}
-              className="px-4 py-2 rounded-full bg-[#188E39] hover:bg-[#188E39]/90 text-white font-inter text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs"
+              className="px-4 py-2 rounded-full bg-coral hover:bg-[#F6AE96] text-void font-mono uppercase tracking-[0.14em] text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <Download size={14} />
               <span>
@@ -548,7 +565,7 @@ export default function ResumeModal({
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener"
-              className="px-5 py-2 rounded-full bg-[#042718] hover:bg-[#042718]/90 text-white font-inter text-xs font-semibold transition-all cursor-pointer flex items-center gap-2"
+              className="px-5 py-2 rounded-full bg-ghost hover:bg-ghost-active border border-[var(--rule)] text-ivory font-mono uppercase tracking-[0.14em] text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <span>Discuss Role / Interview</span>
               <ArrowRight size={14} />

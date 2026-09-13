@@ -190,13 +190,7 @@ export default function App() {
   const isHome = currentPath === "/";
 
   return (
-    <div
-      className={
-        isHome
-          ? "min-h-screen flex flex-col bg-void text-ivory selection:bg-coral selection:text-void"
-          : "min-h-screen flex flex-col bg-[#FAFDFB] text-[#042718] selection:bg-[#188E39]/20 selection:text-[#042718]"
-      }
-    >
+    <div className="min-h-screen flex flex-col bg-void text-ivory selection:bg-coral selection:text-void">
       {/* Persistent Navigation */}
       {!isHome && (
       <Navigation
