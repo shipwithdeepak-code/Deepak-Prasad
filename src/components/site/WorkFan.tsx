@@ -9,6 +9,22 @@ interface WorkFanProps {
   onNavigate: (path: string) => void;
 }
 
+/* The build resolves this folder, so the card knows which covers exist and
+   never requests one that does not. A missing file in public/ is answered
+   by the SPA with index.html, not a 404. */
+const COVERS = import.meta.glob<string>("../../assets/work/*.{jpg,jpeg,png,webp}", {
+  eager: true,
+  query: "?url",
+  import: "default",
+});
+
+function coverFor(slug: string): string | undefined {
+  const hit = Object.entries(COVERS).find(([path]) =>
+    path.split("/").pop()?.replace(/\.[^.]+$/, "") === slug
+  );
+  return hit?.[1];
+}
+
 /** The number a card leads with: its first key stat, or its timeline when a
  *  study has none. */
 function headline(cs: CaseStudyDetail): { value: string; label: string } {
@@ -257,14 +273,16 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                 >
                   {/* a real number carries further than a placeholder. The
                       screenshot takes over the moment one exists on disk. */}
-                  <img
-                    src={`/work/${cs.slug}.jpg`}
-                    alt=""
-                    aria-hidden="true"
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                  />
+                  {coverFor(cs.slug) && (
+                    <img
+                      src={coverFor(cs.slug)}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  )}
                   {/* the number sits over the photograph, so the ground is
                       carried across the left of the frame rather than
                       trusting every image to be dark where the type lands */}
