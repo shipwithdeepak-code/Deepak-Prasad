@@ -93,7 +93,7 @@ export default function CaseStudyModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-5xl h-[92vh] flex flex-col bg-void border border-[var(--rule-strong)] rounded-[28px] shadow-[0_25px_80px_rgba(0,0,0,0.8)] overflow-hidden text-left select-text relative cursor-default text-ivory"
+        className="w-full max-w-5xl h-[92vh] flex flex-col bg-void border border-[var(--rule-strong)] rounded-[20px] shadow-[0_25px_80px_rgba(0,0,0,0.8)] overflow-hidden text-left select-text relative cursor-default text-ivory"
       >
         {/* Top Header Bar */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--rule)] bg-ghost backdrop-blur-md shrink-0">

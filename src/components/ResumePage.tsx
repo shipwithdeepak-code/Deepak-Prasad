@@ -32,7 +32,8 @@ export default function ResumePage({
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.18em] text-coral mb-4">
+          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.18em] text-mute mb-4 w-fit">
+            <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
             <span>Official Curriculum Vitae</span>
           </div>
           <h1
@@ -49,7 +50,7 @@ export default function ResumePage({
         {/* =========================================================================
             DOWNLOAD CALLOUT CARD (PRIMARY FOCUS OF SECTION 19)
             ========================================================================= */}
-        <div className="p-8 rounded-[24px] bg-ghost border border-[var(--rule-strong)] text-ivory mb-16 shadow-md relative overflow-hidden">
+        <div className="p-8 rounded-[20px] bg-ghost border border-[var(--rule-strong)] text-ivory mb-16 shadow-md relative overflow-hidden">
           <div className="max-w-xl relative z-10">
             <span className="text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral mb-2 block">
               Official PDF Resume
@@ -122,7 +123,7 @@ export default function ResumePage({
             {EXPERIENCE_ROLES.map((role, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-[18px] bg-ghost border border-[var(--rule)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs"
+                className="p-6 rounded-[20px] bg-ghost border border-[var(--rule)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs"
               >
                 <div>
                   <h4

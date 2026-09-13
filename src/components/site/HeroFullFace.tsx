@@ -125,8 +125,7 @@ export default function HeroFullFace({
       {/* the name, behind him */}
       <div
         aria-hidden
-        className="absolute left-1/2 top-[25%] z-[2] pointer-events-none select-none"
-        style={{ transform: "translateX(-50%)" }}
+        className="dp-hero-name absolute top-[25%] z-[2] pointer-events-none select-none"
       >
         <p
           className="dp-chrome-text font-display m-0 whitespace-nowrap"
@@ -135,7 +134,7 @@ export default function HeroFullFace({
             fontVariationSettings: '"wdth" 112',
             letterSpacing: "-.055em",
             lineHeight: 0.78,
-            fontSize: "23cqw",
+            fontSize: "clamp(44px, 16cqw, 225px)",
           }}
         >
           Deepak

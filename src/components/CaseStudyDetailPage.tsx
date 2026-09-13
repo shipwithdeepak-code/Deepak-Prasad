@@ -54,11 +54,11 @@ export default function CaseStudyDetailPage({
 
           {/* Eyebrow & Status Notice */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.18em] text-coral font-medium">
+            <span className="text-xs font-mono uppercase tracking-[0.18em] text-coral font-medium">
               CASE {caseStudy.number} / {caseStudy.category}
             </span>
             {caseStudy.isStrategyOnly && (
-              <span className="px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.16em] text-coral">
+              <span className="text-xs font-mono uppercase tracking-[0.16em] text-mute">
                 Development-Ready Strategy
               </span>
             )}
@@ -112,7 +112,7 @@ export default function CaseStudyDetailPage({
 
           {/* Strategy Status Callout if applicable */}
           {caseStudy.statusNotice && (
-            <div className="p-4 rounded-[16px] bg-ghost border border-coral/30 flex items-start gap-3 text-xs sm:text-sm font-body text-ivory/90 mb-8">
+            <div className="p-4 rounded-[20px] bg-ghost border border-coral/30 flex items-start gap-3 text-xs sm:text-sm font-body text-ivory/90 mb-8">
               <AlertTriangle size={18} className="shrink-0 text-coral mt-0.5" />
               <span>{caseStudy.statusNotice}</span>
             </div>
@@ -332,7 +332,7 @@ export default function CaseStudyDetailPage({
                     {sec.highlights.map((h, hIdx) => (
                       <div
                         key={hIdx}
-                        className="p-5 rounded-[18px] bg-ghost border border-[var(--rule)] shadow-2xs"
+                        className="p-5 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs"
                       >
                         <h3
                           className="font-display text-base font-bold text-ivory mb-1.5 flex items-center gap-2"
@@ -351,7 +351,7 @@ export default function CaseStudyDetailPage({
 
                 {/* Reflection Quote */}
                 {sec.quote && (
-                  <div className="my-8 p-6 sm:p-8 rounded-[24px] bg-ghost border border-[var(--rule-strong)] text-ivory relative overflow-hidden">
+                  <div className="my-8 p-6 sm:p-8 rounded-[20px] bg-ghost border border-[var(--rule-strong)] text-ivory relative overflow-hidden">
                     <Quote size={32} className="text-coral/30 mb-3" />
                     <p
                       className="font-display text-lg sm:text-xl font-medium leading-relaxed italic text-ivory"

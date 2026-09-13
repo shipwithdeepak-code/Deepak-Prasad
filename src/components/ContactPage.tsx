@@ -33,7 +33,8 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.18em] text-coral mb-4">
+          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.18em] text-mute mb-4 w-fit">
+            <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
             <span>Open for Senior Product Opportunities</span>
           </div>
           <h1
@@ -111,7 +112,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
 
           {/* Right Column: Quick Contact Form */}
           <div className="md:col-span-3">
-            <div className="p-6 sm:p-8 rounded-[24px] bg-ghost border border-[var(--rule)] shadow-2xs">
+            <div className="p-6 sm:p-8 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs">
               <h2
                 className="font-display text-xl font-bold text-ivory mb-2"
                 style={{ fontVariationSettings: '"wdth" 92' }}
@@ -123,7 +124,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
               </p>
 
               {isSubmitted ? (
-                <div className="p-8 rounded-[16px] bg-ghost border border-coral/40 text-center flex flex-col items-center gap-3">
+                <div className="p-8 rounded-[20px] bg-ghost border border-coral/40 text-center flex flex-col items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-ghost border border-coral text-coral flex items-center justify-center">
                     <CheckCircle2 size={24} />
                   </div>

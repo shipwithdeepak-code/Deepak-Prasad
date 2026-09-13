@@ -104,39 +104,13 @@ export default function Navigation({
           className="flex items-center gap-3 hover:opacity-85 transition-opacity group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void rounded-sm"
           id="nav-logo"
         >
-          <div className="relative shrink-0">
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--rule-strong)] shadow-xs group-hover:scale-105 transition-transform bg-ghost flex items-center justify-center relative">
-              <img
-                src="/images/deepak-prasad.jpg"
-                alt="Deepak Prasad"
-                referrerPolicy="no-referrer"
-                loading="eager"
-                decoding="async"
-                className="w-full h-full object-cover object-center block"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = "none";
-                  const fallback = target.parentElement?.querySelector(".nav-dp-fallback");
-                  if (fallback) (fallback as HTMLElement).style.display = "flex";
-                }}
-              />
-              <div className="nav-dp-fallback hidden w-full h-full items-center justify-center font-display font-bold text-ivory text-sm bg-ghost">
-                DP
-              </div>
-            </div>
-            {/* Live status dot on corner */}
-            <span
-              className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-live border-2 border-void"
-              title="Available"
-            />
-          </div>
+          {/* the homepage wordmark, so both navs read as one site: a mono
+              name over the role, no avatar and no status dot */}
           <div className="text-left">
-            <div className="flex items-center gap-2">
-              <span className="font-display text-base font-semibold text-ivory leading-none tracking-[-0.02em]">
-                Deepak Prasad
-              </span>
-            </div>
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-mute leading-none block mt-1">
+            <span className="font-mono uppercase text-ivory block" style={{ fontSize: 12, letterSpacing: ".22em" }}>
+              Deepak Prasad
+            </span>
+            <span className="font-mono uppercase text-mute block" style={{ fontSize: 10, letterSpacing: ".18em", marginTop: 5 }}>
               Senior Product Manager
             </span>
           </div>
@@ -160,10 +134,8 @@ export default function Navigation({
                 href={link.path}
                 onClick={(e) => handleLinkClick(link, e)}
                 id={`nav-link-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
-                className={`font-body text-[14px] sm:text-[15px] leading-6 tracking-tight transition-colors relative py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2 focus-visible:ring-offset-void rounded-sm ${
-                  isActive
-                    ? "text-coral font-semibold"
-                    : "text-ivory/80 font-medium hover:text-ivory"
+                className={`dp-navlink font-body text-[14px] sm:text-[15px] leading-6 tracking-tight transition-colors relative pb-0.5 ${
+                  isActive ? "text-coral" : "text-ivory/80 hover:text-ivory"
                 }`}
               >
                 {link.label}

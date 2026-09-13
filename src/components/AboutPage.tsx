@@ -55,7 +55,8 @@ export default function AboutPage({
         {/* Header Hero with Portrait */}
         <div className="mb-16 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="md:col-span-7 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-xs font-mono uppercase tracking-[0.18em] text-coral mb-4 w-fit">
+            <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.18em] text-mute mb-4 w-fit">
+            <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
               <span>About Deepak Prasad</span>
             </div>
             <h1
@@ -73,7 +74,7 @@ export default function AboutPage({
           </div>
 
           <div className="md:col-span-5 flex justify-center md:justify-end">
-            <div className="relative w-full max-w-[340px] sm:max-w-[380px] md:max-w-full aspect-[4/5] rounded-[24px] overflow-hidden border border-[var(--rule-strong)] shadow-xl bg-ghost group">
+            <div className="relative w-full max-w-[340px] sm:max-w-[380px] md:max-w-full aspect-[4/5] rounded-[20px] overflow-hidden border border-[var(--rule-strong)] shadow-xl bg-ghost group">
               <img
                 src="/deepak_portrait_4x5.jpg"
                 alt="Deepak Prasad - Senior Product Manager"
@@ -106,7 +107,7 @@ export default function AboutPage({
         {/* =========================================================================
             CAREER EVOLUTION DIAGRAM
             ========================================================================= */}
-        <div className="mb-20 p-6 sm:p-8 rounded-[24px] bg-ghost border border-[var(--rule)] shadow-2xs">
+        <div className="mb-20 p-6 sm:p-8 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs">
           <span className="text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral block mb-2">
             Career Journey & Evolution
           </span>
@@ -161,7 +162,7 @@ export default function AboutPage({
             {EXPERIENCE_ROLES.map((role, idx) => (
               <div
                 key={idx}
-                className="bg-ghost rounded-[24px] border border-[var(--rule)] p-6 sm:p-8 shadow-2xs"
+                className="bg-ghost rounded-[20px] border border-[var(--rule)] p-6 sm:p-8 shadow-2xs"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                   <div>
@@ -176,7 +177,7 @@ export default function AboutPage({
                     </div>
                   </div>
                   <div className="text-left sm:text-right">
-                    <span className="inline-block px-3 py-1 rounded-full bg-ghost border border-[var(--rule)] font-mono text-xs uppercase tracking-[0.12em] font-medium text-ivory">
+                    <span className="inline-block font-mono text-xs uppercase tracking-[0.14em] font-medium text-mute">
                       {role.period}
                     </span>
                     <span className="block font-mono text-[11px] uppercase tracking-[0.1em] text-mute mt-1">
@@ -226,7 +227,7 @@ export default function AboutPage({
         {/* =========================================================================
             CROSS-BORDER PRODUCT LEADERSHIP (SECTION 16)
             ========================================================================= */}
-        <section className="mb-20 p-8 rounded-[24px] bg-ghost border border-[var(--rule)]">
+        <section className="mb-20 p-8 rounded-[20px] bg-ghost border border-[var(--rule)]">
           <div className="flex items-center gap-3 mb-3">
             <Users2 size={20} className="text-coral" />
             <h2
@@ -244,7 +245,7 @@ export default function AboutPage({
             {LEADERSHIP_SECTION.details.map((d, dIdx) => (
               <div
                 key={dIdx}
-                className="p-5 rounded-[18px] bg-void/60 border border-[var(--rule)] shadow-2xs"
+                className="p-5 rounded-[20px] bg-void/60 border border-[var(--rule)] shadow-2xs"
               >
                 <span className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral block mb-2">
                   PILLAR 0{dIdx + 1}
@@ -318,7 +319,7 @@ export default function AboutPage({
             {CAPABILITY_GROUPS.map((group, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-[18px] bg-ghost border border-[var(--rule)] shadow-2xs"
+                className="p-5 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs"
               >
                 <h3
                   className="font-display text-base font-bold text-ivory mb-3"
@@ -342,7 +343,7 @@ export default function AboutPage({
         </section>
 
         {/* Resume & Contact Callout Footer */}
-        <div className="p-8 rounded-[24px] bg-ghost border border-[var(--rule-strong)] text-ivory flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="p-8 rounded-[20px] bg-ghost border border-[var(--rule-strong)] text-ivory flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <h3
               className="font-display text-xl sm:text-2xl font-bold mb-1 text-ivory"

@@ -217,11 +217,17 @@
   }
 }
 
+/* The name reads left to right, so anchoring it left is what keeps it
+   readable: the portrait then covers its tail rather than its middle. */
+.dp-hero-name { left: clamp(15px, 2.5cqw, 32px); }
+
 /* the hero stacks before the copy can reach the portrait */
 @container (max-width: 700px) {
   .dp-hero-floor { grid-template-columns: 1fr !important; }
+  /* further off the edge on a phone, so his silhouette still reads but the
+     name keeps its length instead of being shrunk to fit beside him */
   .dp-hero-portrait {
-    width: 72cqw !important; right: -12% !important;
+    width: 68cqw !important; right: -24% !important;
     height: 58% !important; opacity: .55;
   }
 }

@@ -199,7 +199,7 @@ export default function ResumeModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-4xl h-[92vh] bg-void rounded-[32px] border border-[var(--rule-strong)] shadow-2xl overflow-hidden flex flex-col text-left cursor-default text-ivory"
+        className="w-full max-w-4xl h-[92vh] bg-void rounded-[20px] border border-[var(--rule-strong)] shadow-2xl overflow-hidden flex flex-col text-left cursor-default text-ivory"
       >
         {/* Top Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--rule)] bg-ghost shrink-0">
