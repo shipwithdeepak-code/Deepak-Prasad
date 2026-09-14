@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 interface FlowerBloomSectionProps {
