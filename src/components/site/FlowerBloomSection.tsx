@@ -1,88 +1,27 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 interface FlowerBloomSectionProps {
   onOpenContact?: () => void;
 }
 
-const bloomFrames = Array.from({ length: 6 }, (_, index) => `/images/bloom/bloom-${index}.webp`);
+const petals = Array.from({ length: 18 }, (_, index) => index);
 
 export default function FlowerBloomSection({ onOpenContact }: FlowerBloomSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [assetsReady, setAssetsReady] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [framePair, setFramePair] = useState({ current: 0, next: 1, mix: 0 });
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const progress = useSpring(scrollYProgress, { stiffness: 52, damping: 30, mass: 0.8 });
+  const progress = useSpring(scrollYProgress, { stiffness: 45, damping: 28, mass: 0.9 });
 
-  const flowerScale = useTransform(progress, [0, 0.24, 0.58, 1], [0.58, 0.78, 1, 1.18]);
-  const flowerY = useTransform(progress, [0, 0.45, 1], [150, 8, -55]);
-  const flowerX = useTransform(progress, [0, 0.45, 1], [110, 25, -18]);
-  const flowerRotate = useTransform(progress, [0, 0.45, 1], [-11, 0, 5]);
-  const flowerBlur = useTransform(progress, [0, 0.2, 0.55, 1], ["blur(8px)", "blur(2px)", "blur(0px)", "blur(1px)"]);
-  const copyOpacity = useTransform(progress, [0.1, 0.25, 0.68, 0.82], [0, 1, 1, 0]);
-  const copyY = useTransform(progress, [0.1, 0.25], [42, 0]);
-  const atmosphereOpacity = useTransform(progress, [0, 0.35, 1], [0.12, 0.45, 0.72]);
-  const vignetteOpacity = useTransform(progress, [0, 0.5, 1], [0.7, 0.35, 0.85]);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
-    update();
-    media.addEventListener?.("change", update);
-    return () => media.removeEventListener?.("change", update);
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    const images = bloomFrames.map((src) => {
-      const image = new Image();
-      image.decoding = "async";
-      image.src = src;
-      return image;
-    });
-
-    Promise.all(images.map((image) => new Promise<void>((resolve) => {
-      if (image.complete) return resolve();
-      image.onload = () => resolve();
-      image.onerror = () => resolve();
-    }))).then(() => {
-      if (!cancelled) setAssetsReady(images.every((image) => image.naturalWidth > 0));
-    });
-
-    return () => { cancelled = true; };
-  }, []);
-
-  useMotionValueEvent(progress, "change", (value) => {
-    if (reducedMotion) return;
-    const clamped = Math.min(0.9999, Math.max(0, value));
-    const position = clamped * (bloomFrames.length - 1);
-    const current = Math.floor(position);
-    setFramePair({
-      current,
-      next: Math.min(current + 1, bloomFrames.length - 1),
-      mix: position - current,
-    });
-  });
-
-  const currentOpacity = reducedMotion ? 0 : 1 - framePair.mix;
-  const nextOpacity = reducedMotion ? 1 : framePair.mix;
-  const currentScale = 1 - framePair.mix * 0.035;
-  const nextScale = 0.965 + framePair.mix * 0.035;
+  const bloomScale = useTransform(progress, [0, 0.28, 0.62, 1], [0.48, 0.72, 1, 1.18]);
+  const bloomY = useTransform(progress, [0, 0.5, 1], [180, 0, -70]);
+  const bloomRotate = useTransform(progress, [0, 0.5, 1], [-18, 0, 12]);
+  const bloomOpacity = useTransform(progress, [0, 0.12, 0.3, 0.88, 1], [0, 0.55, 1, 1, 0.72]);
+  const copyOpacity = useTransform(progress, [0.12, 0.26, 0.7, 0.84], [0, 1, 1, 0]);
+  const copyY = useTransform(progress, [0.12, 0.26], [40, 0]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-[230vh] overflow-clip bg-[#0A0A0B] md:h-[270vh]"
-      aria-label="Ideas in bloom"
-    >
+    <section ref={sectionRef} className="relative h-[230vh] overflow-clip bg-[#0A0A0B]" aria-label="Ideas in bloom">
       <div className="sticky top-0 flex h-screen min-h-[620px] flex-col justify-between overflow-hidden px-6 py-7 md:px-12 md:py-9">
-        <div className="pointer-events-none absolute inset-0 bg-[#0A0A0B]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_48%,rgba(240,151,122,0.1),transparent_58%)]" />
-        <motion.div
-          style={{ opacity: atmosphereOpacity }}
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_68%_55%,rgba(240,151,122,0.18),transparent_38%)]"
-        />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_48%,rgba(240,151,122,0.12),transparent_58%)]" />
 
         <div className="relative z-20 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-white/45">
           <span>Deepak Prasad</span>
@@ -90,55 +29,50 @@ export default function FlowerBloomSection({ onOpenContact }: FlowerBloomSection
         </div>
 
         <div className="relative flex flex-1 items-center">
-          <motion.div
-            style={{ opacity: copyOpacity, y: copyY }}
-            className="relative z-20 max-w-[420px] space-y-6 pt-16 md:pt-0"
-          >
+          <motion.div style={{ opacity: copyOpacity, y: copyY }} className="relative z-20 max-w-[420px] space-y-6 pt-16 md:pt-0">
             <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/45">The closing thought</p>
-            <h2 className="font-serif text-[clamp(3.5rem,7vw,7.5rem)] font-normal leading-[0.88] tracking-[-0.065em] text-[#f1e9dc]">
-              Ideas in<br />bloom.
-            </h2>
+            <h2 className="font-serif text-[clamp(3.5rem,7vw,7.5rem)] font-normal leading-[0.88] tracking-[-0.065em] text-[#f1e9dc]">Ideas in<br />bloom.</h2>
             <p className="max-w-[300px] text-sm leading-6 text-white/50">I turn complex problems into products people love to use.</p>
-            <button
-              type="button"
-              onClick={onOpenContact}
-              className="rounded-full border border-white/20 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white transition-colors hover:border-[#F0977A] hover:text-[#F0977A]"
-            >
-              Let’s talk ↗
-            </button>
+            <button type="button" onClick={onOpenContact} className="rounded-full border border-white/20 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white transition-colors hover:border-[#F0977A] hover:text-[#F0977A]">Let’s talk ↗</button>
           </motion.div>
 
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center md:justify-end md:pr-[3vw]">
-            <motion.div
-              style={{ scale: flowerScale, x: flowerX, y: flowerY, rotate: flowerRotate, filter: flowerBlur }}
-              className="relative h-[min(92vw,820px)] w-[min(92vw,820px)] md:h-[min(74vw,860px)] md:w-[min(74vw,860px)]"
-              aria-hidden="true"
-            >
-              {assetsReady ? (
-                <>
-                  <motion.img
-                    src={bloomFrames[framePair.current]}
-                    alt=""
-                    className="absolute inset-[-8%] h-[116%] w-[116%] object-contain mix-blend-screen [mask-image:radial-gradient(ellipse_at_center,black_42%,rgba(0,0,0,0.94)_64%,rgba(0,0,0,0.5)_80%,transparent_100%)]"
-                    style={{ opacity: currentOpacity, scale: currentScale }}
-                    draggable={false}
-                  />
-                  <motion.img
-                    src={bloomFrames[framePair.next]}
-                    alt=""
-                    className="absolute inset-[-8%] h-[116%] w-[116%] object-contain mix-blend-screen [mask-image:radial-gradient(ellipse_at_center,black_42%,rgba(0,0,0,0.94)_64%,rgba(0,0,0,0.5)_80%,transparent_100%)]"
-                    style={{ opacity: nextOpacity, scale: nextScale }}
-                    draggable={false}
-                  />
-                  <div className="absolute inset-[4%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(240,151,122,0.16),transparent_62%)] mix-blend-screen blur-[70px]" />
-                </>
-              ) : (
-                <div className="absolute inset-[12%] rounded-full bg-[radial-gradient(ellipse_at_center,#ead8b7_0%,#a78b61_30%,#30261b_64%,transparent_72%)] opacity-80 blur-[1px]" />
-              )}
-              <motion.div
-                style={{ opacity: vignetteOpacity }}
-                className="absolute inset-[-12%] rounded-full bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(10,10,11,0.22)_70%,#0A0A0B_91%)]"
-              />
+            <motion.div style={{ scale: bloomScale, y: bloomY, rotate: bloomRotate, opacity: bloomOpacity }} className="relative h-[min(94vw,860px)] w-[min(94vw,860px)] md:h-[min(76vw,900px)] md:w-[min(76vw,900px)]" aria-hidden="true">
+              <svg viewBox="0 0 800 800" className="h-full w-full overflow-visible" role="presentation">
+                <defs>
+                  <radialGradient id="coralPetal" cx="38%" cy="28%" r="78%">
+                    <stop offset="0%" stopColor="#F8C4B0" />
+                    <stop offset="38%" stopColor="#F0977A" />
+                    <stop offset="78%" stopColor="#B85F4B" />
+                    <stop offset="100%" stopColor="#351B18" />
+                  </radialGradient>
+                  <radialGradient id="coralCore">
+                    <stop offset="0%" stopColor="#FFE0C9" />
+                    <stop offset="35%" stopColor="#F0977A" />
+                    <stop offset="100%" stopColor="#5A2922" />
+                  </radialGradient>
+                  <filter id="softBloom" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur stdDeviation="8" />
+                  </filter>
+                </defs>
+                <circle cx="400" cy="400" r="265" fill="#F0977A" opacity="0.07" filter="url(#softBloom)" />
+                {petals.map((petal) => {
+                  const angle = petal * 20;
+                  const scale = 0.88 + (petal % 4) * 0.045;
+                  return (
+                    <g key={petal} transform={`translate(400 400) rotate(${angle}) scale(${scale})`}>
+                      <ellipse cx="0" cy="-155" rx="92" ry="230" fill="url(#coralPetal)" opacity={0.36 + (petal % 5) * 0.09} transform={`rotate(${petal % 3 === 0 ? -12 : petal % 3 === 1 ? 4 : 16})`} />
+                      <ellipse cx="0" cy="-112" rx="58" ry="170" fill="none" stroke="#F8B49B" strokeOpacity="0.24" strokeWidth="2" />
+                    </g>
+                  );
+                })}
+                {petals.slice(0, 10).map((petal) => (
+                  <ellipse key={`inner-${petal}`} cx="400" cy="300" rx="54" ry="150" fill="url(#coralPetal)" opacity="0.8" transform={`rotate(${petal * 36} 400 400)`} />
+                ))}
+                <circle cx="400" cy="400" r="78" fill="url(#coralCore)" />
+                <circle cx="400" cy="400" r="34" fill="#F8C4B0" opacity="0.65" />
+              </svg>
+              <div className="absolute inset-[20%] rounded-full bg-[#F0977A] opacity-[0.12] blur-[100px]" />
             </motion.div>
           </div>
         </div>
