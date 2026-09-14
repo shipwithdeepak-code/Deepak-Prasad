@@ -3,6 +3,7 @@ import HeroFullFace from "./site/HeroFullFace";
 import KineticStrip from "./site/KineticStrip";
 import WorkFan from "./site/WorkFan";
 import PrinciplesFloat from "./site/PrinciplesFloat";
+import FlowerBloomSection from "./site/FlowerBloomSection";
 import SiteFooter from "./site/SiteFooter";
 import { openCopilot } from "./CopilotWidget";
 import { ALL_FLAGSHIP_CASE_STUDIES } from "../data/caseStudies";
@@ -43,6 +44,7 @@ export default function HomePage({
         onNavigate={onNavigate}
       />
       <PrinciplesFloat />
+      <FlowerBloomSection onOpenContact={onOpenContact} />
       <SiteFooter
         onOpenContact={onOpenContact}
         onAskDipa={() => openCopilot()}
