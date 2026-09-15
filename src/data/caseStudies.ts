@@ -30,35 +30,60 @@ export const RESHAMANDI_CASE_STUDY: CaseStudyDetail = {
   timeline: 'June 2021 – Sept 2023',
 
   // ---------------------------------------------------------------------
-  // SCOPE — fill these in. They are the three facts hiring managers look for
-  // and that the prose below never states. Empty fields are not rendered.
+  // SCOPE
+  // `ownership` and `collaborators` are sourced from the sections below.
+  // `team` and `reportedTo` are not stated anywhere in this material — fill
+  // them in and they will render; leave them empty and they stay hidden.
   // ---------------------------------------------------------------------
   scope: {
     team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
     reportedTo: '',      // e.g. 'Reported to the CPO'
-    ownership: '',       // the commercial surface you were accountable for
-    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+    ownership: '₹20–25 Cr monthly disbursement volume',
+    collaborators: 'Engineering, field operations, finance and sericulture domain experts',
   },
 
   // ---------------------------------------------------------------------
   // DECISION SPINE — ReshaMandi
-  // Renders only once `decision` and `outcome` are both written, so it is
-  // safe to draft the rest in place. Individual empty blocks are skipped.
-  // Pivotal calls worth writing up here:
-  //   - The assisted-first call: field executives at weigh stations instead of asking farmers to download an app. What did you turn down to get there?
-  //   - Offline-first intake client vs. a thinner always-online app — what did offline-first cost you?
-  //   - Automatic payout at the weighbridge vs. a batched daily run — why trigger at the weighbridge?
+  // Drawn entirely from the sections below, which describe assisted-first and
+  // offline-first as facts. This reframes them as the choice they were.
+  //
+  // `retrospect` is left empty on purpose — nothing in the source material
+  // says what you would change, and it is not mine to invent. Three honest
+  // candidates, each grounded in something already on this page:
+  //   - assisted-first carries field headcount on every transaction; it only
+  //     pays back at volume. Would you have instrumented a self-serve exit
+  //     ramp from day one?
+  //   - the >35% bidding uplift never left pilot. Why not, and what would you
+  //     sequence differently to get it to full rollout?
+  //   - CV grading stayed advisory, with a human confirming the baseline.
+  //     Right call, or did keeping the human in the loop cap the trust gain?
   // ---------------------------------------------------------------------
   decisionSpine: {
-    context: '',      // 2-3 sentences. Where things stood when you arrived.
-    constraint: '',   // The ONE binding limit everything else had to bend around.
+    context:
+      'India is the world’s second-largest silk producer, and its raw-material supply chain ran as an informal cash economy. A farmer finished a 25-day rearing cycle holding a perishable batch of cocoons that had to sell inside 48 hours, accepted whatever a broker’s visual grade offered, and then waited three to fifteen days to be paid. When I took Core Marketplace, trading across the Ramanagara, Sidlaghatta and Dharmapuri yards ran on paper slips, WhatsApp photos and manual finance review.',
+    constraint:
+      'The trading floor set the budget, not the roadmap. Auctions start before dawn in a crowded, noisy yard with crates in motion, and discovery there showed that anything demanding more than two taps or five seconds of latency was dead on arrival. That single limit — not literacy, not smartphone penetration — is what had killed every generic app tried on those floors before.',
     optionsRejected: [
-      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+      {
+        option: 'A self-serve app for farmers and agents',
+        why: 'It would have made adoption depend on the people with the least reason to trust us and the least room to stop and learn, in the one moment they could least afford latency. It also put the burden of data integrity on the party with no incentive to carry it.',
+      },
+      {
+        option: 'An always-online intake and weighing client',
+        why: 'The yards lose cellular signal regularly. A client that stalled on connectivity would have halted live weighing and auctioning, which is the one failure a trading floor cannot absorb.',
+      },
+      {
+        option: 'Replacing brokers and commission agents with full automation',
+        why: 'Their grading judgement was real domain expertise and the only thing the floor already trusted. Automating it away would have traded a transparency problem for a competence problem, and lost the migration path with it.',
+      },
     ],
-    decision: '',     // One sentence. Active voice, first person.
-    rationale: '',    // The reasoning, including what you traded away.
-    outcome: '',      // At least one number and a time frame.
-    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+    decision:
+      'I built the marketplace assisted-first and offline-first: tech-enabled field executives operating intake, weighing and auction at the stations themselves, on a client that queues locally and reconciles on reconnect.',
+    rationale:
+      'It bought adoption from day one and full data integrity, because the person entering a transaction was trained and accountable rather than a farmer learning software at 4:30 AM. That freed the trust budget to be spent where it actually moved people — liquidity. Payout triggered automatically off the weighbridge, so a farmer was paid before leaving the gate instead of waiting up to fifteen days. What I traded away was operating cost: assisted-first carries field headcount on every transaction and only pays back at volume. It also forced progressive migration rather than a cutover, because live trading could never stop.',
+    outcome:
+      'Between June 2021 and September 2023 the automated escrow pipeline scaled from ₹10–15 Cr to ₹20–25 Cr in monthly disbursements at 99.9% reliability, with zero un-reconciled escrow loss behind a multi-bank fallback. Onboarding an informal supplier to a verified digital trade identity came down to under three minutes, ReshaFarms reached 80,000+ farmers upstream, and transparent multi-buyer bidding drove a >35% uplift in realised transaction value — in pilot deployments, not at full rollout.',
+    retrospect: '',   // See the candidates above. Only you can write this one.
   },
   tags: ['B2B', 'Marketplace', 'Workflow', 'AI', '0→1'],
   proofPoints: [
