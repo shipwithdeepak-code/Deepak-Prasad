@@ -284,7 +284,11 @@ CRITICAL GROUNDING RULES:
       );
     }
     app.use(express.static(distPath));
-    app.get("*", (_req, res) => {
+    app.get("*", (req, res) => {
+      // If request has a file extension for media/assets and was not found, return 404 instead of HTML
+      if (/\.(mp4|webm|png|jpg|jpeg|gif|svg|ico|pdf|webp)$/i.test(req.path)) {
+        return res.status(404).end();
+      }
       res.sendFile(path.join(distPath, "index.html"));
     });
   } else {

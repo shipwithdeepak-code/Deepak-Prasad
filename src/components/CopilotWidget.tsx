@@ -363,14 +363,6 @@ export default function CopilotWidget({
                 DP
               </div>
             </div>
-
-            {/* AI Sparkles Badge */}
-            <span className="absolute -bottom-0.5 -right-0.5 z-20 w-4.5 h-4.5 rounded-full bg-void border border-coral/50 flex items-center justify-center shadow-xs">
-              <Sparkles
-                size={10}
-                className={`text-coral ${shouldReduceMotion ? "" : "animate-pulse"}`}
-              />
-            </span>
           </>
         )}
       </button>
