@@ -6,6 +6,8 @@ import {
   AlertTriangle,
   Sparkles,
   Quote,
+  GitBranch,
+  XCircle,
 } from "lucide-react";
 import { CaseStudyDetail } from "../types";
 import { ALL_FLAGSHIP_CASE_STUDIES } from "../data/caseStudies";
@@ -35,6 +37,20 @@ export default function CaseStudyDetailPage({
         ALL_FLAGSHIP_CASE_STUDIES.length
     ];
 
+  // Scope facts render only when filled, so an unwritten scope leaves the
+  // Role / Timeline bar exactly as it was.
+  const scope = caseStudy.scope;
+  const scopeFacts = [
+    { label: "Team", value: scope?.team },
+    { label: "Owned", value: scope?.ownership },
+    { label: "Reported to", value: scope?.reportedTo },
+    { label: "Partners", value: scope?.collaborators },
+  ].filter((f): f is { label: string; value: string } => Boolean(f.value?.trim()));
+
+  // The spine stays hidden until the two load-bearing blocks are written, so
+  // it is safe to draft the others in place.
+  const spine = caseStudy.decisionSpine;
+  const spineIsReady = Boolean(spine?.decision?.trim() && spine?.outcome?.trim());
   return (
     <div className="w-full bg-void text-ivory">
       {/* =========================================================================
@@ -88,6 +104,15 @@ export default function CaseStudyDetailPage({
               <span className="font-semibold text-ivory">Timeline: </span>
               <span>{caseStudy.timeline}</span>
             </div>
+            {scopeFacts.map(({ label, value }) => (
+              <React.Fragment key={label}>
+                <div className="hidden sm:block text-mute">/</div>
+                <div>
+                  <span className="font-semibold text-ivory">{label}: </span>
+                  <span>{value}</span>
+                </div>
+              </React.Fragment>
+            ))}
           </div>
 
           {/* Thesis Callout */}
@@ -141,6 +166,129 @@ export default function CaseStudyDetailPage({
           </div>
         </div>
       </section>
+
+      {/* =========================================================================
+          DECISION SPINE
+          The six blocks an interviewer is buying: what you chose, what you
+          turned down, and what you'd change. Hidden until written.
+          ========================================================================= */}
+      {spineIsReady && (
+        <section
+          id="decisions"
+          aria-labelledby="decisions-heading"
+          className="scroll-mt-24 py-14 md:py-20 border-b border-[var(--rule)]"
+        >
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral mb-2">
+              <GitBranch size={14} className="text-coral" />
+              <span>The decision</span>
+            </div>
+            <h2
+              id="decisions-heading"
+              className="font-display text-2xl sm:text-3xl font-bold text-ivory leading-tight mb-8"
+              style={{ fontVariationSettings: '"wdth" 92' }}
+            >
+              What I chose, and what I turned down
+            </h2>
+
+            <dl className="flex flex-col gap-8">
+              {spine?.context?.trim() && (
+                <div>
+                  <dt className="font-mono text-xs uppercase tracking-[0.16em] text-mute font-semibold mb-2">
+                    01 / Context
+                  </dt>
+                  <dd className="font-body text-base sm:text-lg text-mute leading-relaxed">
+                    {spine.context}
+                  </dd>
+                </div>
+              )}
+
+              {spine?.constraint?.trim() && (
+                <div>
+                  <dt className="font-mono text-xs uppercase tracking-[0.16em] text-mute font-semibold mb-2">
+                    02 / The constraint
+                  </dt>
+                  <dd className="font-body text-base sm:text-lg text-ivory leading-relaxed border-l-2 border-coral pl-4">
+                    {spine.constraint}
+                  </dd>
+                </div>
+              )}
+
+              {spine?.optionsRejected && spine.optionsRejected.length > 0 && (
+                <div>
+                  <dt className="font-mono text-xs uppercase tracking-[0.16em] text-mute font-semibold mb-3">
+                    03 / Options I rejected
+                  </dt>
+                  <dd>
+                    <ul className="flex flex-col gap-3">
+                      {spine.optionsRejected.map((opt) => (
+                        <li
+                          key={opt.option}
+                          className="p-4 rounded-[16px] bg-ghost border border-[var(--rule)]"
+                        >
+                          <div className="flex items-start gap-2.5">
+                            <XCircle size={16} className="shrink-0 text-mute mt-1" />
+                            <div>
+                              <p
+                                className="font-display text-base font-bold text-ivory leading-snug"
+                                style={{ fontVariationSettings: '"wdth" 92' }}
+                              >
+                                {opt.option}
+                              </p>
+                              <p className="font-body text-sm sm:text-base text-mute leading-relaxed mt-1">
+                                {opt.why}
+                              </p>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              )}
+
+              <div>
+                <dt className="font-mono text-xs uppercase tracking-[0.16em] text-coral font-semibold mb-2">
+                  04 / What I decided
+                </dt>
+                <dd>
+                  <p
+                    className="font-display text-lg sm:text-xl font-bold text-ivory leading-snug"
+                    style={{ fontVariationSettings: '"wdth" 92' }}
+                  >
+                    {spine?.decision}
+                  </p>
+                  {spine?.rationale?.trim() && (
+                    <p className="font-body text-base sm:text-lg text-mute leading-relaxed mt-3">
+                      {spine.rationale}
+                    </p>
+                  )}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="font-mono text-xs uppercase tracking-[0.16em] text-mute font-semibold mb-2">
+                  05 / What happened
+                </dt>
+                <dd className="font-body text-base sm:text-lg text-mute leading-relaxed">
+                  {spine?.outcome}
+                </dd>
+              </div>
+
+              {spine?.retrospect?.trim() && (
+                <div>
+                  <dt className="font-mono text-xs uppercase tracking-[0.16em] text-mute font-semibold mb-2">
+                    06 / What I'd do differently
+                  </dt>
+                  <dd className="font-body text-base sm:text-lg text-mute leading-relaxed italic">
+                    {spine.retrospect}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        </section>
+      )}
 
       {/* =========================================================================
           NARRATIVE SECTIONS (EDITORIAL LAYOUT, NOT EXCESSIVE CARDS)

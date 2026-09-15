@@ -28,6 +28,38 @@ export const RESHAMANDI_CASE_STUDY: CaseStudyDetail = {
   category: 'B2B Marketplace & Operational Systems',
   role: 'Product Manager, Core Marketplace, Workflows & Payments',
   timeline: 'June 2021 – Sept 2023',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — ReshaMandi
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - The assisted-first call: field executives at weigh stations instead of asking farmers to download an app. What did you turn down to get there?
+  //   - Offline-first intake client vs. a thinner always-online app — what did offline-first cost you?
+  //   - Automatic payout at the weighbridge vs. a batched daily run — why trigger at the weighbridge?
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['B2B', 'Marketplace', 'Workflow', 'AI', '0→1'],
   proofPoints: [
     '80K+ farmers',
@@ -328,6 +360,38 @@ export const AI_COACH_CASE_STUDY: CaseStudyDetail = {
   category: 'Conversational AI & Consumer Tech',
   role: 'Senior Product Manager, AI & Consumer Engagement',
   timeline: 'Oct 2024 – May 2026',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — AI Coach
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Where you drew the AI/deterministic boundary, and the use cases you refused.
+  //   - Model strategy: what you rejected (fine-tuning? a bigger model? an agent?) and why.
+  //   - Safety guardrails vs. engagement — name the trade you actually made.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['AI', 'Conversational AI', '0→1', 'Consumer'],
   proofPoints: ['~300 → ~2,000 DAU', 'in ~3 months', 'Gemini + ChatGPT Fallback'],
   keyStats: [
@@ -509,6 +573,38 @@ export const SUBSCRIPTION_CASE_STUDY: CaseStudyDetail = {
   category: 'Monetization, Growth & B2C SaaS',
   role: 'Product Manager, Subscription, Monetization & Onboarding',
   timeline: 'Aug 2023 – May 2026',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — Subscription
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Where you put the paywall, and the placements you rejected.
+  //   - Free trial vs. hard gate vs. freemium — what did you choose and what did it cost?
+  //   - Which retention lever you chose not to pull.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['Growth', 'Monetization', 'Subscription', 'B2C'],
   proofPoints: [
     '12,401 paid subscribers',
@@ -656,6 +752,38 @@ export const PERFORMANCE_SCORE_CASE_STUDY: CaseStudyDetail = {
   category: 'Product Strategy & Connected Ecosystems',
   role: 'Senior Product Manager, Connected Ecosystem Strategy',
   timeline: '2025 (Development-Ready Strategy)',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — Performance Score
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Single composite score vs. a dashboard of separate signals — why one number?
+  //   - What you deliberately left out of the score, and why.
+  //   - This one shipped as strategy, not product — say why, plainly. That is a decision too.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['Product Strategy', 'Connected Products', 'Data', '0→1'],
   proofPoints: [
     'Development-ready P0 strategy',
@@ -801,6 +929,38 @@ export const AI_LOCALIZATION_CASE_STUDY: CaseStudyDetail = {
   category: 'AI Operations & European Expansion',
   role: 'Senior Product Manager, AI Workflow & Content Pipeline',
   timeline: 'Oct 2024 – May 2026',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — AI Localization
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Human-in-the-loop vs. fully automated translation — where you put the human and why.
+  //   - Which languages or surfaces you chose NOT to localize.
+  //   - Quality bar: what you accepted as 'good enough' and what that cost.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['AI', 'Operations', 'Content', 'European Expansion'],
   proofPoints: ['200+ videos', '3 languages', '~3 weeks', '~10× faster'],
   keyStats: [
@@ -1159,6 +1319,38 @@ export const BEHIND_COPILOT_CASE_STUDY: CaseStudyDetail = {
   category: 'Applied AI & Systems Architecture',
   role: 'Product Architect & Engineer',
   timeline: '2025',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — Behind the Copilot
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - In-memory RAG vs. a hosted vector DB — what did you give up?
+  //   - The ChatGPT fallback: why a fallback at all rather than failing closed?
+  //   - Why you chose to publish the evaluation table, including the failures.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['Applied AI', 'RAG', 'Gemini', 'Zero Hallucination', 'Systems Design'],
   proofPoints: [
     '<2ms retrieval latency',
