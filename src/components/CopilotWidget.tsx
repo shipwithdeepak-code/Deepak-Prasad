@@ -154,6 +154,7 @@ export default function CopilotWidget({
           setSelectedChunk(null);
         } else {
           setIsOpen(false);
+          returnFocusToLauncher();
         }
       }
     };
@@ -177,6 +178,13 @@ export default function CopilotWidget({
       }, 100);
     }
   }, [isOpen, messages]);
+
+  // Marking the drawer inert on close blanks the focus ring, so the two
+  // deliberate close paths (Escape, the Close button) hand focus back to the
+  // launcher. Closing by clicking elsewhere leaves focus where the user put it.
+  const returnFocusToLauncher = () => {
+    requestAnimationFrame(() => launcherRef.current?.focus());
+  };
 
   const handleSend = async (queryText?: string) => {
     const textToSend = (queryText || input).trim();
@@ -381,6 +389,10 @@ export default function CopilotWidget({
           ...(shouldReduceMotion ? { transition: "none" } : {}),
         }}
         aria-hidden={!isOpen}
+        inert={!isOpen}
+        role="dialog"
+        aria-modal="false"
+        aria-label="Deepak's AI Copilot"
       >
         {/* Header */}
         <div className="p-4 bg-ghost border-b border-[var(--rule)] text-ivory flex items-center justify-between shrink-0 select-none">
@@ -434,7 +446,10 @@ export default function CopilotWidget({
 
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                returnFocusToLauncher();
+              }}
               title="Close Copilot"
               aria-label="Close Copilot"
               className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-ivory hover:text-coral hover:bg-ghost-active transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral cursor-pointer"
@@ -723,7 +738,7 @@ export default function CopilotWidget({
             <button
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
-              className="p-2.5 rounded-xl bg-coral hover:bg-[#F6AE96] disabled:bg-ghost text-void disabled:text-mute transition-colors shrink-0 shadow-xs cursor-pointer disabled:cursor-not-allowed active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-coral hover:bg-[#F6AE96] disabled:bg-ghost text-void disabled:text-mute transition-colors shrink-0 shadow-xs cursor-pointer disabled:cursor-not-allowed active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
               aria-label="Send query"
             >
               <Send size={16} />
