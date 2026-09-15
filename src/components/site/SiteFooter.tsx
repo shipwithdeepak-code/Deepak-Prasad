@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { Linkedin, Mail, ArrowUpRight, ArrowDown } from "lucide-react";
+import { Linkedin, Github, Mail, ArrowUpRight, ArrowDown } from "lucide-react";
 import { downloadResumePDF } from "../../utils/downloadResume";
 import {
   CONTACT_EMAIL,
   CONTACT_MAILTO,
+  GITHUB_URL,
   LINKEDIN_URL,
   LOCATION,
   RESPONSE_TIME,
@@ -16,32 +17,65 @@ interface SiteFooterProps {
 
 export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  // Respect prefers-reduced-motion
+  /* The footer is on every route, so an eagerly loaded background video is
+     629KB every visitor pays for before they have scrolled anywhere near it.
+     Nothing is fetched until the footer is one viewport away; playback stops
+     when it leaves, and reduced motion gets the poster frame only. */
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handleMotionChange = () => {
-      if (!videoRef.current) return;
-      if (mediaQuery.matches) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play().catch(() => {
-          // Autoplay policy fallback
+    const video = videoRef.current;
+    const section = sectionRef.current;
+    if (!video || !section) return;
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let near = false;
+
+    const sync = () => {
+      if (motionQuery.matches) {
+        video.pause();
+        return;
+      }
+      if (near) {
+        if (!video.currentSrc) video.load();
+        video.play().catch(() => {
+          /* autoplay policy: the poster frame is the fallback */
         });
+      } else {
+        video.pause();
       }
     };
 
-    handleMotionChange();
-    mediaQuery.addEventListener("change", handleMotionChange);
-    return () => mediaQuery.removeEventListener("change", handleMotionChange);
+    if (typeof IntersectionObserver === "undefined") {
+      near = true;
+      sync();
+    } else {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          near = entry.isIntersecting;
+          sync();
+        },
+        { rootMargin: "100% 0px" }
+      );
+      io.observe(section);
+      motionQuery.addEventListener("change", sync);
+      return () => {
+        io.disconnect();
+        motionQuery.removeEventListener("change", sync);
+      };
+    }
+
+    motionQuery.addEventListener("change", sync);
+    return () => motionQuery.removeEventListener("change", sync);
   }, []);
 
   return (
     <footer
       id="site-footer"
+      ref={sectionRef}
       aria-label="Site footer and contact"
-      className="relative isolate overflow-hidden bg-void text-ivory select-none-desktop border-t border-[var(--rule)]"
-      style={{ minHeight: "clamp(480px, 66vh, 760px)" }}
+      className="relative isolate overflow-hidden bg-void text-ivory select-none-desktop"
+      style={{ minHeight: "clamp(560px, 78vh, 880px)" }}
     >
       {/* Background layer: z-0 */}
       <div className="pointer-events-none absolute inset-0 z-0 bg-void" />
@@ -53,11 +87,11 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
       >
         <video
           ref={videoRef}
-          autoPlay
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
+          poster="/flower-poster.jpg"
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-right"
         >
@@ -94,7 +128,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
       </div>
 
       {/* Main Content Layout Container: z-10 */}
-      <div className="relative z-10 mx-auto flex min-h-[clamp(480px,66vh,760px)] w-full max-w-7xl flex-col justify-between px-6 py-12 sm:px-10 md:px-14 lg:px-16">
+      <div className="relative z-10 mx-auto flex min-h-[clamp(560px,78vh,880px)] w-full max-w-7xl flex-col justify-between px-6 py-12 sm:px-10 md:px-14 lg:px-16">
         {/* Top spacer to balance vertical optical center */}
         <div className="hidden lg:block h-6" />
 
@@ -134,7 +168,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
             <button
               type="button"
               onClick={onOpenContact}
-              className="cursor-pointer inline-flex items-center gap-2 rounded-full px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] font-semibold text-void transition-all duration-200 hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="cursor-pointer inline-flex items-center gap-2 rounded-full px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] font-semibold text-void transition-[filter,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:brightness-105 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
               style={{
                 backgroundColor: "var(--color-coral)",
                 boxShadow: "0 4px 20px rgba(240, 151, 122, 0.28)",
@@ -151,9 +185,20 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Deepak Prasad on LinkedIn (opens in a new tab)"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-void/60 text-ivory backdrop-blur-xs transition-all duration-200 hover:border-white/50 hover:bg-white/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-void/60 text-ivory backdrop-blur-xs transition-[border-color,background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white/50 hover:bg-white/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <Linkedin size={16} aria-hidden="true" />
+            </a>
+
+            {/* GitHub Icon Button */}
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Deepak Prasad on GitHub (opens in a new tab)"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-void/60 text-ivory backdrop-blur-xs transition-[border-color,background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white/50 hover:bg-white/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+            >
+              <Github size={16} aria-hidden="true" />
             </a>
 
             {/* Resume Download Action */}
@@ -162,7 +207,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
               onClick={() => {
                 downloadResumePDF();
               }}
-              className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-white/25 bg-void/60 px-5 py-3 font-mono text-xs uppercase tracking-[0.14em] font-medium text-ivory backdrop-blur-xs transition-all duration-200 hover:border-white/60 hover:bg-white/10 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-white/25 bg-void/60 px-5 py-3 font-mono text-xs uppercase tracking-[0.14em] font-medium text-ivory backdrop-blur-xs transition-[border-color,background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white/60 hover:bg-white/10 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
               aria-label="Download Deepak Prasad's product management resume as PDF"
             >
               <span>DOWNLOAD RESUME</span>
@@ -173,7 +218,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
             <a
               href={CONTACT_MAILTO}
               aria-label={`Send direct email to Deepak Prasad at ${CONTACT_EMAIL}`}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-void/60 text-ivory backdrop-blur-xs transition-all duration-200 hover:border-white/50 hover:bg-white/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-void/60 text-ivory backdrop-blur-xs transition-[border-color,background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-white/50 hover:bg-white/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
               <Mail size={16} aria-hidden="true" />
             </a>
@@ -187,13 +232,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
             >
               {CONTACT_EMAIL}
             </a>
-            <span aria-hidden="true" className="hidden sm:inline text-white/20">
-              ·
-            </span>
             <span>{RESPONSE_TIME}</span>
-            <span aria-hidden="true" className="hidden sm:inline text-white/20">
-              ·
-            </span>
             <span>{LOCATION}</span>
           </div>
         </div>
@@ -206,20 +245,6 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
               &copy; {new Date().getFullYear()} DEEPAK PRASAD. ALL RIGHTS RESERVED.
             </div>
 
-            {/* Right Side Navigation + Monogram Badge */}
-            <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
-              <span>SENIOR PRODUCT MANAGER</span>
-
-              <span>{LOCATION}</span>
-
-              {/* Circular Monogram "DP" Badge */}
-              <div
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-white/25 font-mono text-[9px] font-semibold text-ivory"
-                aria-label="Deepak Prasad monogram"
-              >
-                DP
-              </div>
-            </div>
           </div>
         </div>
       </div>
