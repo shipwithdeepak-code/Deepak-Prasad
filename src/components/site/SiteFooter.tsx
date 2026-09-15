@@ -75,7 +75,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
       ref={sectionRef}
       aria-label="Site footer and contact"
       className="relative isolate overflow-hidden bg-void text-ivory select-none-desktop"
-      style={{ minHeight: "clamp(560px, 78vh, 880px)" }}
+      style={{ minHeight: "clamp(560px, 56.25vw, 1010px)" }}
     >
       {/* Background layer: z-0 */}
       <div className="pointer-events-none absolute inset-0 z-0 bg-void" />
@@ -104,7 +104,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
           className="pointer-events-none absolute inset-0 z-[1]"
           style={{
             background:
-              "linear-gradient(90deg, #0A0A0B 0%, #0A0A0B 28%, rgba(10,10,11,0.85) 45%, rgba(10,10,11,0.2) 65%, transparent 100%)",
+              "linear-gradient(90deg, #0A0A0B 0%, #0A0A0B 30%, rgba(10,10,11,0.88) 48%, rgba(10,10,11,0.34) 66%, rgba(10,10,11,0.06) 84%, transparent 100%)",
           }}
         />
 
@@ -128,7 +128,7 @@ export default function SiteFooter({ onOpenContact, onAskDipa }: SiteFooterProps
       </div>
 
       {/* Main Content Layout Container: z-10 */}
-      <div className="relative z-10 mx-auto flex min-h-[clamp(560px,78vh,880px)] w-full max-w-7xl flex-col justify-between px-6 py-12 sm:px-10 md:px-14 lg:px-16">
+      <div className="relative z-10 mx-auto flex min-h-[clamp(560px,56.25vw,1010px)] w-full max-w-7xl flex-col justify-between px-6 py-12 sm:px-10 md:px-14 lg:px-16">
         {/* Top spacer to balance vertical optical center */}
         <div className="hidden lg:block h-6" />
 
