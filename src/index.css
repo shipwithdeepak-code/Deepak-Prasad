@@ -138,7 +138,7 @@
 }
 .dp-scatter { display: grid; gap: clamp(12px,1.6cqw,20px); }
 @container (min-width: 900px) {
-  .dp-scatter { display: block; position: relative; height: clamp(580px,64cqw,780px); }
+  .dp-scatter { display: block; position: relative; height: clamp(540px,58cqw,700px); }
   .dp-scatter .dp-pcard {
     position: absolute; left: var(--l); top: var(--t); width: var(--w);
   }

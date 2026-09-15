@@ -14,6 +14,7 @@ import {
   MORE_WORK_CATEGORIES,
 } from "../data/caseStudies";
 import { CaseStudyDetail } from "../types";
+import { coverFor } from "../utils/covers";
 
 interface WorkPageProps {
   onNavigate: (path: string) => void;
@@ -100,8 +101,29 @@ export default function WorkPage({
                 onSelectCaseStudy(study);
                 onNavigate(`/work/${study.slug}`);
               }}
-              className="group cursor-pointer rounded-[20px] bg-ghost border border-[var(--rule)] p-6 sm:p-10 transition-all duration-300 hover:border-coral/40 hover:bg-ghost-active flex flex-col justify-between relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="group cursor-pointer rounded-[20px] overflow-hidden bg-ghost border border-[var(--rule)] transition-all duration-300 hover:border-coral/40 hover:bg-ghost-active grid grid-cols-1 lg:grid-cols-[minmax(0,288px)_minmax(0,1fr)] relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
             >
+              {/* Cover. Decorative: the title sits beside it, so alt is empty. */}
+              {coverFor(study.slug) && (
+                <div className="relative overflow-hidden bg-void">
+                  <img
+                    src={coverFor(study.slug)}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-44 sm:h-56 lg:h-full lg:absolute lg:inset-0 object-cover opacity-75 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(180deg,rgba(10,10,11,0) 55%,rgba(10,10,11,.75) 100%)",
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="p-6 sm:p-10 flex flex-col justify-between min-w-0">
               <div>
                 {/* Header row */}
                 <div className="flex items-center justify-between gap-4 mb-4">
@@ -164,6 +186,7 @@ export default function WorkPage({
                   <span>Read full case study</span>
                   <ArrowRight size={14} />
                 </div>
+              </div>
               </div>
             </motion.article>
           ))}

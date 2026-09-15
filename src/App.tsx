@@ -12,6 +12,7 @@ import ContactModal from "./components/ContactModal";
 import ResumeModal from "./components/ResumeModal";
 import CopilotWidget from "./components/CopilotWidget";
 import { openCalendly } from "./utils/calendly";
+import { applyPageMeta } from "./utils/pageMeta";
 import {
   ALL_FLAGSHIP_CASE_STUDIES,
   RESHAMANDI_CASE_STUDY,
@@ -116,6 +117,12 @@ export default function App() {
   const handleSelectCaseStudy = (caseStudy: CaseStudyDetail) => {
     setSelectedModalCaseStudy(caseStudy);
   };
+
+  // Every route used to share the homepage title, so the tab, history and
+  // bookmarks all read the same thing wherever you were.
+  useEffect(() => {
+    applyPageMeta(currentPath);
+  }, [currentPath]);
 
   // Resolve current active route
   const renderCurrentView = () => {

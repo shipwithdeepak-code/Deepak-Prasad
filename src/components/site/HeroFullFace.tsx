@@ -278,7 +278,7 @@ export default function HeroFullFace({
       {/* the same routes for a thumb: the desktop row is hidden below 640px,
           and until now nothing replaced it on this page */}
       <nav
-        className="sm:hidden absolute inset-x-0 z-[9] flex items-center justify-center flex-wrap font-mono uppercase"
+        className="sm:hidden absolute inset-x-0 z-[9] flex items-center justify-center flex-wrap px-4 font-mono uppercase"
         style={{
           top: "clamp(44px,7cqw,64px)",
           gap: "clamp(4px,2cqw,14px)",
@@ -296,7 +296,7 @@ export default function HeroFullFace({
             style={{
               color: "rgba(242,242,240,.78)",
               minHeight: 44,
-              padding: "0 10px",
+              padding: "0 6px",
               background: "none",
               border: 0,
             }}

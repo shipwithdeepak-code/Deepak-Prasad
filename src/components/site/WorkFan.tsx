@@ -2,27 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CaseStudyDetail } from "../../types";
+import { coverFor } from "../../utils/covers";
 
 interface WorkFanProps {
   caseStudies: CaseStudyDetail[];
   onSelectCaseStudy: (caseStudy: CaseStudyDetail) => void;
   onNavigate: (path: string) => void;
-}
-
-/* The build resolves this folder, so the card knows which covers exist and
-   never requests one that does not. A missing file in public/ is answered
-   by the SPA with index.html, not a 404. */
-const COVERS = import.meta.glob<string>("../../assets/work/*.{jpg,jpeg,png,webp}", {
-  eager: true,
-  query: "?url",
-  import: "default",
-});
-
-function coverFor(slug: string): string | undefined {
-  const hit = Object.entries(COVERS).find(([path]) =>
-    path.split("/").pop()?.replace(/\.[^.]+$/, "") === slug
-  );
-  return hit?.[1];
 }
 
 /** The number a card leads with: its first key stat, or its timeline when a
@@ -355,7 +340,7 @@ export default function WorkFan({ caseStudies, onSelectCaseStudy, onNavigate }: 
                   className="mt-auto grid rounded-[2px] overflow-hidden"
                   style={{ gridTemplateColumns: "repeat(2,1fr)", gap: 1, background: "var(--rule)", border: "1px solid var(--rule)" }}
                 >
-                  {(cs.keyStats || []).slice(1, 4).map((s, k) => (
+                  {(cs.keyStats || []).slice(1, 3).map((s, k) => (
                     <div key={k} className="bg-void" style={{ padding: "7px 8px 8px" }}>
                       <b className="block font-display text-coral" style={{ fontWeight: 700, fontSize: 13, letterSpacing: "-.02em" }}>
                         {s.value}
