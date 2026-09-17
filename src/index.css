@@ -288,6 +288,36 @@ html, body {
     radial-gradient(58% 52% at 50% 26%, rgba(4, 63, 150, .58), rgba(6, 18, 37, .22) 72%, transparent 88%);
 }
 
+/* The featured CTA.
+   Taken from the reference's one glowing pill, which sits under a neutral
+   Mist button rather than replacing it: the Mist fill stays the everyday
+   primary, and this marks the single action a page most wants taken. It is
+   rationed on purpose. Two of these on a screen and neither is featured.
+
+   The ring and the halo are both box-shadow, so nothing about the element's
+   box changes on hover and the glow can grow without moving its neighbours. */
+.v3-cta {
+  position: relative;
+  background:
+    radial-gradient(120% 160% at 50% 120%, rgba(255, 99, 99, .18), transparent 70%),
+    #0b0708;
+  box-shadow:
+    rgba(255, 255, 255, .06) 0 1px 0 0 inset,
+    rgba(255, 99, 99, .62) 0 0 0 1px,
+    rgba(255, 99, 99, .42) 0 0 34px -2px;
+  transition: box-shadow .3s var(--ease-v3), transform .2s var(--ease-v3);
+}
+.v3-cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    rgba(255, 255, 255, .08) 0 1px 0 0 inset,
+    rgba(255, 99, 99, .8) 0 0 0 1px,
+    rgba(255, 99, 99, .45) 0 0 40px -4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .v3-cta:hover { transform: none; }
+}
+
 /* A slot for artwork that has not been supplied yet. Hatched rather than
    flat, so it reads as a deliberate placeholder in a screenshot and not as a
    card that failed to load. */

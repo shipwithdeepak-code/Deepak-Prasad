@@ -188,7 +188,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
               <button
                 type="submit"
                 id="contact-form-submit"
-                className="mt-1 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-mist px-[18px] py-3 text-sm font-medium text-iron transition-all duration-200 hover:-translate-y-px hover:bg-white"
+                className="v3-cta mt-1 inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-3 text-[15px] font-medium text-pure-white"
               >
                 Open it in my mail client
                 <ArrowUpRight className="size-3.5" strokeWidth={2} aria-hidden="true" />

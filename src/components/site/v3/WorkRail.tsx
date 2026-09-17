@@ -188,7 +188,7 @@ export default function WorkRail({
             <span className="text-[19px] leading-[1.2] text-pure-white">
               The other five, plus the work without its own page.
             </span>
-            <span className="inline-flex items-center gap-2 text-[13px] font-medium text-coral-pulse">
+            <span className="v3-cta inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-medium text-pure-white">
               See all work
               <ArrowUpRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
             </span>
