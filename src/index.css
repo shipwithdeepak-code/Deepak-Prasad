@@ -1,6 +1,101 @@
 @import "tailwindcss";
 
 /* ============================================================
+   v3 typefaces, self-hosted.
+   Linking Google Fonts from the document blocks the first paint on a
+   third party. Both faces are variable and latin-subset: 77KB total.
+   ============================================================ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ============================================================
+   v3 tokens, from DESIGN.md.
+   Names are taken from that file so a value here can be traced back to
+   the reference it came from. These sit alongside the v2 tokens below
+   while sections migrate; v2 goes when its last component does.
+   ============================================================ */
+@theme {
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* surfaces, darkest to lightest */
+  --color-void-black: #040506;
+  --color-ink: #07080a;
+  --color-obsidian: #111214;
+  --color-graphite: #1b1c1e;
+
+  /* text, quietest to loudest */
+  --color-smoke: #6a6b6c;
+  --color-ash: #9c9c9d;
+  --color-mist: #e6e6e6;
+  --color-pure-white: #ffffff;
+
+  /* the one neutral action fill, and its label colour */
+  --color-iron: #454647;
+  --color-slate: #2f3031;
+
+  /* brand accent. logo mark, focus ring and the AI badge only.
+     never body text, never a general icon colour. */
+  --color-coral-pulse: #ff6363;
+  --color-ember-hush: #452324;
+
+  /* hero artwork only, never interface controls */
+  --color-electric-sky: #63a1ff;
+  --color-cobalt-edge: #143ca3;
+  --color-deep-space: #02193b;
+
+  --color-hairline: #363739;
+}
+
+/* ============================================================
+   v3 surfaces and motion.
+   One entrance, one easing curve. The entrance starts from a VISIBLE
+   rest so the page still reads with JavaScript off, with motion
+   reduced, and in a screenshot.
+   ============================================================ */
+:root {
+  /* the 'keyboard key' stack: inset top highlight, hairline ring,
+     inset bottom shadow. Elevation without a drop shadow. */
+  --key: rgba(255, 255, 255, .05) 0 1px 0 0 inset,
+         rgba(255, 255, 255, .22) 0 0 0 1px,
+         rgba(0, 0, 0, .2) 0 -1px 0 0 inset;
+  --key-quiet: rgba(255, 255, 255, .04) 0 1px 0 0 inset,
+               rgba(255, 255, 255, .12) 0 0 0 1px,
+               rgba(0, 0, 0, .2) 0 -1px 0 0 inset;
+  --ease-v3: cubic-bezier(.22, 1, .36, 1);
+}
+
+.v3-key { box-shadow: var(--key); }
+.v3-key-quiet { box-shadow: var(--key-quiet); }
+
+@keyframes v3-rise {
+  from { opacity: .6; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.v3-rise { animation: v3-rise 560ms var(--ease-v3) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-rise { animation: none; opacity: 1; transform: none; }
+}
+
+/* ============================================================
    Portfolio v2 tokens. One accent on near black.
    Every colour the redesigned site uses lives here, so a stray
    hex in a component is visible in review.
