@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, CornerDownLeft, Download, Search } from "lucide-react";
-import { NAV_LINKS } from "../../data/nav";
 import { useReducedMotion } from "framer-motion";
 import ShaderBackground from "../visuals/ShaderBackground";
 
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
-  onOpenContact?: () => void;
   /** Hands the question to the real copilot. The hero does not answer
    *  anything itself: it is the entry point to the RAG, not a copy of it. */
   onAsk: (question?: string) => void;
@@ -51,7 +49,6 @@ const COPILOT_FACTS = ["45 sources", "Cites every answer", "Built by me"];
 export default function HeroConsole({
   onNavigate,
   onOpenResumeModal,
-  onOpenContact,
   onAsk,
 }: HeroConsoleProps) {
   const reduceMotion = useReducedMotion();
@@ -114,61 +111,6 @@ export default function HeroConsole({
             "radial-gradient(132% 98% at 44% 32%, transparent 26%, rgba(4,5,6,.78) 74%, #040506 100%)",
         }}
       />
-
-      {/* Navigation. Flat and full width rather than a floating pill: five
-          real destinations, the availability line, one neutral action. */}
-      <nav className="relative z-10 border-b border-white/[.07] backdrop-blur-3xl">
-        <div className="mx-auto flex max-w-[1200px] items-center gap-7 px-6 py-3.5">
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigate("/");
-            }}
-            className="flex items-center gap-2.5 text-sm font-medium text-pure-white"
-          >
-            <span
-              aria-hidden="true"
-              className="block size-2.5 rotate-45 rounded-[2px] bg-coral-pulse"
-            />
-            Deepak Prasad
-          </a>
-
-          <div className="hidden items-center gap-0.5 lg:flex">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.path}
-                href={link.path}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onNavigate(link.path);
-                }}
-                className="rounded-lg px-2.5 py-1.5 text-[13.5px] font-medium text-ash transition-colors duration-200 hover:bg-white/5 hover:text-pure-white"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          <span className="ml-auto hidden items-center gap-2 font-mono text-xs tracking-[.03em] text-ash xl:inline-flex">
-            {/* The one status dot on the page. It marks a real availability
-                state, which is the only thing a coloured dot may do here. */}
-            <span
-              aria-hidden="true"
-              className="block size-1.5 rounded-full bg-[#59d499]"
-            />
-            OPEN TO SENIOR &amp; LEAD ROLES
-          </span>
-
-          <button
-            type="button"
-            onClick={onOpenContact}
-            className="ml-auto inline-flex min-h-9 items-center gap-2 rounded-lg bg-mist px-3.5 py-2 text-[13px] font-medium text-iron transition-all duration-200 hover:-translate-y-px hover:bg-white xl:ml-0"
-          >
-            Get in touch
-          </button>
-        </div>
-      </nav>
 
       <div className="relative z-10 mx-auto grid max-w-[1200px] items-center gap-14 px-6 pb-18 pt-20 md:grid-cols-2 md:pb-20 md:pt-24">
         <div className="grid gap-6">

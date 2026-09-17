@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Navigation from "./components/Navigation";
-import SiteFooter from "./components/site/SiteFooter";
+import SiteNavV3 from "./components/site/v3/SiteNavV3";
+import SiteFooterV3 from "./components/site/v3/SiteFooterV3";
 import HomePage from "./components/HomePage";
 import WorkPage from "./components/WorkPage";
 import CaseStudyDetailPage from "./components/CaseStudyDetailPage";
@@ -192,23 +192,23 @@ export default function App() {
     );
   };
 
-  /* the v2 homepage carries its own nav and footer, so the shared chrome
-     stands down there rather than framing a page it was not designed for */
+  /* the homepage renders the same nav and footer itself, sequenced with its
+     own sections, so the shared chrome stands down there rather than
+     rendering a second copy of both */
   const isHome = currentPath === "/";
 
   return (
-    <div className="min-h-screen flex flex-col bg-void text-ivory selection:bg-coral selection:text-void">
+    <div className="min-h-screen flex flex-col bg-void-black text-pure-white selection:bg-coral-pulse selection:text-void-black">
       {/* the first stop for a keyboard, so the nav is not re-traversed
           before the content on every page load */}
       <a href="#main" className="dp-skip">Skip to content</a>
 
       {/* Persistent Navigation */}
       {!isHome && (
-      <Navigation
+      <SiteNavV3
         currentPath={currentPath}
         onNavigate={navigate}
-        onOpenResumeModal={() => setIsResumeModalOpen(true)}
-        onOpenContactModal={() => openCalendly()}
+        onOpenContact={() => openCalendly()}
       />
       )}
 
@@ -217,10 +217,7 @@ export default function App() {
 
       {/* Persistent Footer */}
       {!isHome && (
-        <SiteFooter
-          onOpenContact={() => openCalendly()}
-          onAskDipa={() => document.getElementById("copilot-launcher-btn")?.click()}
-        />
+        <SiteFooterV3 onNavigate={navigate} />
       )}
 
       {/* Interactive Modals */}
