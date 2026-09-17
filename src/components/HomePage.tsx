@@ -1,9 +1,13 @@
 import React from "react";
-import HeroFullFace from "./site/HeroFullFace";
-import KineticStrip from "./site/KineticStrip";
-import WorkFan from "./site/WorkFan";
-import PrinciplesFloat from "./site/PrinciplesFloat";
-import SiteFooter from "./site/SiteFooter";
+import HeroConsole from "./site/HeroConsole";
+import SiteNavV3 from "./site/v3/SiteNavV3";
+import ProofStrip from "./site/v3/ProofStrip";
+import WorkRail from "./site/v3/WorkRail";
+import AIBuilds from "./site/v3/AIBuilds";
+import HowIWork from "./site/v3/HowIWork";
+import TrackRecord from "./site/v3/TrackRecord";
+import ContactCTA from "./site/v3/ContactCTA";
+import SiteFooterV3 from "./site/v3/SiteFooterV3";
 import { openCopilot } from "./CopilotWidget";
 import { ALL_FLAGSHIP_CASE_STUDIES } from "../data/caseStudies";
 import { CaseStudyDetail } from "../types";
@@ -16,11 +20,13 @@ interface HomePageProps {
 }
 
 /**
- * Portfolio v2 homepage.
+ * Portfolio v3 homepage.
  *
- * One accent on near black, one theme for the whole page. The hero runs
- * straight into the strip, which carries the whole track record, so the
- * work begins the moment the strip ends.
+ * The order is an argument: Dipa is the claim, the strip is the
+ * evidence, the rail is the record, the builds are the proof that I write the
+ * things I talk about, the principles are how, and the track record is where.
+ * Each section is one idea, and nothing repeats a number another one already
+ * made.
  */
 export default function HomePage({
   onNavigate,
@@ -29,24 +35,30 @@ export default function HomePage({
   onOpenContact,
 }: HomePageProps) {
   return (
-    <div className="bg-void">
-      <HeroFullFace
+    <div className="bg-void-black">
+      <SiteNavV3 onNavigate={onNavigate} onOpenContact={onOpenContact} />
+      <HeroConsole
         onNavigate={onNavigate}
         onOpenResumeModal={onOpenResumeModal}
-        onOpenContact={onOpenContact}
-        onAskDipa={(initialText) => openCopilot(initialText)}
+        onAsk={(question) => openCopilot(question)}
       />
-      <KineticStrip />
-      <WorkFan
+      <ProofStrip />
+      <WorkRail
         caseStudies={ALL_FLAGSHIP_CASE_STUDIES}
         onSelectCaseStudy={onSelectCaseStudy}
         onNavigate={onNavigate}
       />
-      <PrinciplesFloat />
-      <SiteFooter
-        onOpenContact={onOpenContact}
-        onAskDipa={() => openCopilot()}
+      <AIBuilds
+        onNavigate={onNavigate}
+        onAsk={(question) => openCopilot(question)}
       />
+      <HowIWork />
+      <TrackRecord onNavigate={onNavigate} />
+      <ContactCTA
+        onOpenContact={onOpenContact}
+        onOpenResumeModal={onOpenResumeModal}
+      />
+      <SiteFooterV3 onNavigate={onNavigate} />
     </div>
   );
 }

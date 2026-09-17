@@ -1,6 +1,400 @@
 @import "tailwindcss";
 
 /* ============================================================
+   v3 typefaces, self-hosted.
+   Linking Google Fonts from the document blocks the first paint on a
+   third party. Both faces are variable and latin-subset: 77KB total.
+   ============================================================ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ============================================================
+   v3 tokens, from DESIGN.md.
+   Names are taken from that file so a value here can be traced back to
+   the reference it came from. These sit alongside the v2 tokens below
+   while sections migrate; v2 goes when its last component does.
+   ============================================================ */
+@theme {
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* surfaces, darkest to lightest */
+  --color-void-black: #040506;
+  --color-ink: #07080a;
+  --color-obsidian: #111214;
+  --color-graphite: #1b1c1e;
+
+  /* text, quietest to loudest */
+  --color-smoke: #6a6b6c;
+  --color-ash: #9c9c9d;
+  --color-mist: #e6e6e6;
+  --color-pure-white: #ffffff;
+
+  /* the one neutral action fill, and its label colour */
+  --color-iron: #454647;
+  --color-slate: #2f3031;
+
+  /* brand accent. logo mark, focus ring and the AI badge only.
+     never body text, never a general icon colour. */
+  --color-coral-pulse: #ff6363;
+  --color-ember-hush: #452324;
+
+  /* hero artwork and atmospheric washes, never interface controls */
+  --color-electric-sky: #63a1ff;
+  --color-cobalt-edge: #143ca3;
+  --color-deep-space: #02193b;
+
+  /* supporting washes. DESIGN.md is explicit that these are decorative
+     bands and soft emphasis behind content, never status colours. */
+  --color-info-blue: #56c2ff;
+  --color-success-green: #59d499;
+
+  --color-hairline: #363739;
+}
+
+/* ============================================================
+   v3 surfaces and motion.
+   One entrance, one easing curve. The entrance starts from a VISIBLE
+   rest so the page still reads with JavaScript off, with motion
+   reduced, and in a screenshot.
+   ============================================================ */
+:root {
+  /* the 'keyboard key' stack: inset top highlight, hairline ring,
+     inset bottom shadow. Elevation without a drop shadow. */
+  --key: rgba(255, 255, 255, .05) 0 1px 0 0 inset,
+         rgba(255, 255, 255, .22) 0 0 0 1px,
+         rgba(0, 0, 0, .2) 0 -1px 0 0 inset;
+  --key-quiet: rgba(255, 255, 255, .04) 0 1px 0 0 inset,
+               rgba(255, 255, 255, .12) 0 0 0 1px,
+               rgba(0, 0, 0, .2) 0 -1px 0 0 inset;
+  --ease-v3: cubic-bezier(.22, 1, .36, 1);
+}
+
+.v3-key { box-shadow: var(--key); }
+.v3-key-quiet { box-shadow: var(--key-quiet); }
+
+/* The ask bar. A slow highlight travels the top edge, which is the one
+   piece of perpetual motion on the page: this input is the site's primary
+   instrument and the thing no other portfolio has, so it has to read as
+   something you type into rather than a label. It stops on focus, because
+   once someone is typing the invitation has done its job. */
+.v3-ask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding-top: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 99, 99, 0) 35%,
+    rgba(255, 99, 99, .55) 50%,
+    rgba(255, 99, 99, 0) 65%,
+    transparent 100%);
+  background-size: 220% 1px;
+  background-repeat: no-repeat;
+  background-position: -60% 0;
+  animation: v3-sweep 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.v3-ask:focus-within::after { animation: none; opacity: 0; }
+
+@keyframes v3-sweep {
+  0%   { background-position: -60% 0; }
+  55%  { background-position: 160% 0; }
+  100% { background-position: 160% 0; }
+}
+
+/* The rotating question. Crossfaded rather than typed: a typewriter on a
+   placeholder reflows the line on every character. */
+.v3-hint { animation: v3-hint-in .5s var(--ease-v3) both; }
+@keyframes v3-hint-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-ask::after { animation: none; opacity: 0; }
+  .v3-hint { animation: none; }
+}
+
+/* The hero portrait. Framed differently on a phone: at one column the
+   face has to sit behind the type from the top down, not off to one side,
+   or it reads as an empty dark panel. */
+.v3-hero-photo {
+  background-image: url('/deepak-hero-blur.jpg');
+  background-position: 52% 20%;
+  opacity: .7;
+}
+@media (max-width: 767px) {
+  .v3-hero-photo {
+    /* Framed on the face, not the hair: at 12% the crop lands on near-black
+       hair and the panel reads as empty. Screen blend is dropped too, since
+       screening a dark grey over near-black returns near-black. */
+    background-position: 56% 34%;
+    mix-blend-mode: normal;
+    opacity: .38;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 40%, transparent 86%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 40%, transparent 86%);
+  }
+}
+
+@keyframes v3-rise {
+  from { opacity: .6; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.v3-rise { animation: v3-rise 560ms var(--ease-v3) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-rise { animation: none; opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   v3 sections. Marquee, rail, and the breathing orb.
+   ============================================================ */
+
+/* The proof strip. Two identical halves translate by exactly -50%, so the
+   seam lands where the first half ends and the loop is invisible. */
+.v3-marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.v3-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: v3-roll 78s linear infinite;
+}
+.v3-marquee:hover .v3-marquee-track { animation-play-state: paused; }
+@keyframes v3-roll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* The work rail. The scrollbar is hidden because the cards are the affordance
+   and the rail is dragged, not scrubbed. */
+.v3-rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.v3-rail::-webkit-scrollbar { display: none; }
+
+/* The caption panel on a work card. This is the one true glass surface on
+   the page: blur plus a hairline, over artwork that is actually behind it. */
+.v3-glass {
+  background: rgba(7, 8, 10, .42);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: rgba(255, 255, 255, .08) 0 1px 0 0 inset,
+              rgba(255, 255, 255, .14) 0 0 0 1px;
+}
+
+/* The document background. Every page sets its own, but the area a short
+   page leaves below the footer belongs to the root, and it was unpainted. */
+html, body {
+  background-color: var(--color-void-black);
+}
+
+/* ============================================================
+   Atmosphere.
+   DESIGN.md rations colour in the interface and spends all of it on the
+   surfaces behind: multi-layer radial gradients, heavy blur, coral and
+   blue geometry. Without this the palette is 100% grey and the page reads
+   as austere rather than cinematic. None of it touches a control: the
+   washes sit behind content at z-index -1 and the text on top is the same
+   white, ash and smoke it was.
+   ============================================================ */
+.v3-atmos {
+  position: relative;
+  isolation: isolate;
+}
+.v3-atmos::before {
+  content: "";
+  position: absolute;
+  /* Flush, not bled. At -12% the wash painted past the last section and
+     showed under the footer as a band of loose colour. */
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.v3-atmos-coral::before {
+  background:
+    radial-gradient(46% 40% at 10% 16%, rgba(255, 99, 99, .17), transparent 68%),
+    radial-gradient(42% 38% at 90% 84%, rgba(69, 35, 36, .62), transparent 72%);
+}
+.v3-atmos-blue::before {
+  background:
+    radial-gradient(52% 44% at 84% 12%, rgba(86, 194, 255, .13), transparent 68%),
+    radial-gradient(46% 42% at 6% 88%, rgba(20, 60, 163, .3), transparent 72%);
+}
+.v3-atmos-mint::before {
+  background:
+    radial-gradient(44% 40% at 16% 84%, rgba(89, 212, 153, .1), transparent 68%),
+    radial-gradient(48% 42% at 88% 14%, rgba(255, 99, 99, .11), transparent 70%);
+}
+
+/* The hero's cinematic moment. DESIGN.md calls for coral geometry at 40px+
+   blur cutting across a blue radial wash, and says outright that this is the
+   one place the system breaks its own rules. */
+.v3-hero-geo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.v3-hero-geo span {
+  position: absolute;
+  display: block;
+  filter: blur(46px);
+  will-change: transform;
+}
+.v3-hero-geo .bar-a {
+  width: 62%;
+  height: 128px;
+  left: -8%;
+  top: 34%;
+  transform: rotate(-14deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 99, 99, .5), transparent);
+}
+.v3-hero-geo .bar-b {
+  width: 46%;
+  height: 92px;
+  right: -6%;
+  top: 12%;
+  transform: rotate(-22deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 99, 99, .3), transparent);
+}
+.v3-hero-geo .wash {
+  inset: -20% -10% auto -10%;
+  height: 120%;
+  filter: blur(38px);
+  background:
+    radial-gradient(58% 52% at 50% 26%, rgba(4, 63, 150, .58), rgba(6, 18, 37, .22) 72%, transparent 88%);
+}
+
+/* The featured CTA.
+   Taken from the reference's one glowing pill, which sits under a neutral
+   Mist button rather than replacing it: the Mist fill stays the everyday
+   primary, and this marks the single action a page most wants taken. It is
+   rationed on purpose. Two of these on a screen and neither is featured.
+
+   The ring and the halo are both box-shadow, so nothing about the element's
+   box changes on hover and the glow can grow without moving its neighbours. */
+.v3-cta {
+  position: relative;
+  background:
+    radial-gradient(120% 160% at 50% 120%, rgba(255, 99, 99, .18), transparent 70%),
+    #0b0708;
+  box-shadow:
+    rgba(255, 255, 255, .06) 0 1px 0 0 inset,
+    rgba(255, 99, 99, .62) 0 0 0 1px,
+    rgba(255, 99, 99, .42) 0 0 34px -2px;
+  transition: box-shadow .3s var(--ease-v3), transform .2s var(--ease-v3);
+}
+.v3-cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    rgba(255, 255, 255, .08) 0 1px 0 0 inset,
+    rgba(255, 99, 99, .8) 0 0 0 1px,
+    rgba(255, 99, 99, .45) 0 0 40px -4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .v3-cta:hover { transform: none; }
+}
+
+/* A slot for artwork that has not been supplied yet. Hatched rather than
+   flat, so it reads as a deliberate placeholder in a screenshot and not as a
+   card that failed to load. */
+.v3-slot {
+  box-shadow: var(--key-quiet);
+  background-color: var(--color-ink);
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 99, 99, .05) 0 10px,
+    transparent 10px 20px
+  );
+}
+
+/* One visible focus ring for the whole site. There was none: every focusable
+   thing relied on the browser default, which is a white halo the dark surfaces
+   swallow. The v2 pages define their own rings further down this file and
+   still win, because they come later. */
+:focus-visible {
+  outline: 2px solid var(--color-coral-pulse);
+  outline-offset: 3px;
+}
+
+/* A principle card. The lit state is a coral hairline rather than a fill: it
+   marks which one is open without turning the card into a button. */
+.v3-principle {
+  box-shadow: var(--key-quiet);
+  transition: box-shadow .28s var(--ease-v3);
+}
+.v3-principle:hover,
+.v3-principle[aria-expanded="true"] {
+  box-shadow: rgba(255, 255, 255, .05) 0 1px 0 0 inset,
+              rgba(255, 99, 99, .5) 0 0 0 1px;
+}
+
+/* The breathing orb. One slow 12s breath, held at the top of the curve for a
+   third of the cycle so it reads as a breath rather than a pulse. */
+@keyframes v3-breathe-orb {
+  0%              { transform: scale(1); }
+  33.33%, 66.67%  { transform: scale(1.035); }
+  100%            { transform: scale(1); }
+}
+@keyframes v3-breathe-ring {
+  0%              { opacity: .4; transform: scale(1); }
+  33.33%, 66.67%  { opacity: .85; transform: scale(1.07); }
+  100%            { opacity: .4; transform: scale(1); }
+}
+.v3-orb {
+  background: radial-gradient(circle at 34% 30%,
+    #ff9a8b 0%, var(--color-coral-pulse) 38%, #8d2020 78%, #2a0b0b 100%);
+  box-shadow: 0 0 30px rgba(255, 99, 99, .28),
+              inset 0 -14px 30px rgba(0, 0, 0, .45);
+  animation: v3-breathe-orb 12s ease-in-out infinite;
+  transition: box-shadow .7s var(--ease-v3);
+}
+.v3-orb-stage:hover .v3-orb {
+  box-shadow: 0 0 60px rgba(255, 99, 99, .38),
+              inset 0 -14px 30px rgba(0, 0, 0, .45);
+}
+.v3-orb-ring {
+  border: 1px solid rgba(255, 99, 99, .3);
+  animation: v3-breathe-ring 12s ease-in-out infinite;
+}
+.v3-orb-ring-inner {
+  border: 1px solid rgba(255, 99, 99, .16);
+  animation: v3-breathe-ring 12s ease-in-out infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-marquee-track { animation: none; }
+  .v3-orb, .v3-orb-ring, .v3-orb-ring-inner {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ============================================================
    Portfolio v2 tokens. One accent on near black.
    Every colour the redesigned site uses lives here, so a stray
    hex in a component is visible in review.
@@ -16,7 +410,9 @@
   --color-ghost: #1A1B1D;
   --color-mute: #8F8F8D;
   --color-ivory: #F2F2F0;
-  --color-coral: #F0977A;
+  /* Points at the v3 accent so the site has ONE coral. The v2
+     components still read this name; they now render the v3 value. */
+  --color-coral: #ff6363;
   --color-live: #57D98A;
 
   --ease-out-soft: cubic-bezier(.16, 1, .3, 1);
@@ -138,7 +534,7 @@
 }
 .dp-scatter { display: grid; gap: clamp(12px,1.6cqw,20px); }
 @container (min-width: 900px) {
-  .dp-scatter { display: block; position: relative; height: clamp(580px,64cqw,780px); }
+  .dp-scatter { display: block; position: relative; height: clamp(540px,58cqw,700px); }
   .dp-scatter .dp-pcard {
     position: absolute; left: var(--l); top: var(--t); width: var(--w);
   }

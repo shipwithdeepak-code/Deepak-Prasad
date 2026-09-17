@@ -1,321 +1,398 @@
 import React, { useEffect } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  AlertTriangle,
-  Sparkles,
-  Quote,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { CaseStudyDetail } from "../types";
 import { ALL_FLAGSHIP_CASE_STUDIES } from "../data/caseStudies";
+import { coverFor } from "../utils/covers";
+import { ImageSlot, Panel, Tag } from "./site/v3/primitives";
 
 interface CaseStudyDetailPageProps {
   caseStudy: CaseStudyDetail;
   onNavigate: (path: string) => void;
 }
 
+const EYEBROW =
+  "font-mono text-[10.5px] uppercase leading-[.91] tracking-[.8px] text-smoke";
+
+/**
+ * One product, at full length.
+ *
+ * The page is a column, not a dashboard: the decision spine and the narrative
+ * are prose with room around them, and the only things allowed to interrupt
+ * are the ones that carry information a paragraph cannot, which is the stats
+ * bar, the flow, the before and after, and the evaluation table.
+ */
 export default function CaseStudyDetailPage({
   caseStudy,
   onNavigate,
 }: CaseStudyDetailPageProps) {
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   }, [caseStudy.id]);
 
-  // Find adjacent case studies for next/previous navigation
-  const currentIndex = ALL_FLAGSHIP_CASE_STUDIES.findIndex(
-    (c) => c.id === caseStudy.id
+  const index = ALL_FLAGSHIP_CASE_STUDIES.findIndex(
+    (c) => c.id === caseStudy.id,
   );
-  const nextStudy =
-    ALL_FLAGSHIP_CASE_STUDIES[(currentIndex + 1) % ALL_FLAGSHIP_CASE_STUDIES.length];
   const prevStudy =
     ALL_FLAGSHIP_CASE_STUDIES[
-      (currentIndex - 1 + ALL_FLAGSHIP_CASE_STUDIES.length) %
+      (index - 1 + ALL_FLAGSHIP_CASE_STUDIES.length) %
         ALL_FLAGSHIP_CASE_STUDIES.length
     ];
+  const nextStudy =
+    ALL_FLAGSHIP_CASE_STUDIES[(index + 1) % ALL_FLAGSHIP_CASE_STUDIES.length];
+
+  const scope = caseStudy.scope;
+  const spine = caseStudy.decisionSpine;
+  const spineIsReady = Boolean(spine?.decision?.trim() && spine?.outcome?.trim());
+  const cover = coverFor(caseStudy.slug);
+
+  const meta = [
+    { label: "Role", value: caseStudy.role },
+    { label: "Timeline", value: caseStudy.timeline },
+    scope?.team ? { label: "Team", value: scope.team } : null,
+    scope?.reportedTo ? { label: "Reported to", value: scope.reportedTo } : null,
+    scope?.ownership ? { label: "Owned", value: scope.ownership } : null,
+    scope?.collaborators
+      ? { label: "With", value: scope.collaborators }
+      : null,
+  ].filter(Boolean) as { label: string; value: string }[];
 
   return (
-    <div className="w-full bg-void text-ivory">
-      {/* =========================================================================
-          HERO & HEADER
-          ========================================================================= */}
-      <section className="pt-10 pb-16 md:pt-14 md:pb-20 border-b border-[var(--rule)]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back to Work Link */}
+    <div className="bg-void-black">
+      <section className="v3-atmos v3-atmos-coral border-b border-hairline pt-10 md:pt-14">
+        <div className="mx-auto max-w-[900px] px-6 pb-16 md:pb-20">
           <button
             type="button"
             onClick={() => onNavigate("/work")}
-            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.16em] text-mute hover:text-coral mb-8 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
+            className="mb-8 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[.05em] text-smoke transition-colors duration-200 hover:text-pure-white"
           >
-            <ArrowLeft size={15} />
-            <span>Back to selected work</span>
+            <ArrowLeft className="size-3.5" strokeWidth={1.7} aria-hidden="true" />
+            Back to the work
           </button>
 
-          {/* Eyebrow & Status Notice */}
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="text-xs font-mono uppercase tracking-[0.18em] text-coral font-medium">
-              CASE {caseStudy.number} / {caseStudy.category}
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className={EYEBROW.replace("text-smoke", "text-coral-pulse")}>
+              Case {caseStudy.number}, {caseStudy.category}
             </span>
             {caseStudy.isStrategyOnly && (
-              <span className="text-xs font-mono uppercase tracking-[0.16em] text-mute">
-                Development-Ready Strategy
-              </span>
+              <span className={EYEBROW}>Development ready strategy</span>
             )}
           </div>
 
-          {/* Title */}
-          <h1
-            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-ivory leading-[1.15] mb-4"
-            style={{ fontVariationSettings: '"wdth" 92' }}
-          >
+          <h1 className="mb-4 text-[clamp(2rem,4.4vw,3rem)] font-normal leading-[1.14] tracking-[.22px] text-pure-white">
             {caseStudy.title}
           </h1>
-
-          {/* Subtitle */}
-          <p className="font-body text-lg sm:text-xl font-medium text-mute leading-relaxed mb-6">
+          <p className="mb-8 max-w-[68ch] text-[17px] leading-relaxed text-ash">
             {caseStudy.subtitle}
           </p>
 
-          {/* Role and Timeline */}
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono uppercase tracking-[0.12em] text-mute border-t border-b border-[var(--rule)] py-4 mb-8">
-            <div>
-              <span className="font-semibold text-ivory">Role: </span>
-              <span>{caseStudy.role}</span>
-            </div>
-            <div className="hidden sm:block text-mute">/</div>
-            <div>
-              <span className="font-semibold text-ivory">Timeline: </span>
-              <span>{caseStudy.timeline}</span>
-            </div>
-          </div>
-
-          {/* Thesis Callout */}
-          <div className="p-6 rounded-[20px] bg-ghost border border-[var(--rule)] mb-8">
-            <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral mb-2">
-              <Sparkles size={14} className="text-coral" />
-              <span>Core Product Thesis</span>
-            </div>
-            <p
-              className="font-display text-lg sm:text-xl font-bold text-ivory leading-snug"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              "{caseStudy.thesis}"
-            </p>
-            {caseStudy.centralQuestion && (
-              <p className="font-body text-sm text-mute mt-3 pt-3 border-t border-[var(--rule)]">
-                <span className="font-semibold text-ivory">Central Question: </span>
-                {caseStudy.centralQuestion}
-              </p>
-            )}
-          </div>
-
-          {/* Strategy Status Callout if applicable */}
-          {caseStudy.statusNotice && (
-            <div className="p-4 rounded-[20px] bg-ghost border border-coral/30 flex items-start gap-3 text-xs sm:text-sm font-body text-ivory/90 mb-8">
-              <AlertTriangle size={18} className="shrink-0 text-coral mt-0.5" />
-              <span>{caseStudy.statusNotice}</span>
+          {cover && (
+            <div className="mb-8 overflow-hidden rounded-2xl">
+              <img
+                src={cover}
+                alt=""
+                className="aspect-[21/9] w-full object-cover"
+              />
             </div>
           )}
 
-          {/* Key Stats Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs">
-            {caseStudy.keyStats.map((stat, idx) => (
-              <div key={idx} className="flex flex-col">
-                <span
-                  className="font-display text-2xl sm:text-3xl font-bold text-coral"
-                  style={{ fontVariationSettings: '"wdth" 92' }}
-                >
+          <dl className="mb-8 grid gap-x-8 gap-y-3 border-y border-hairline py-5 sm:grid-cols-2">
+            {meta.map((fact) => (
+              <div key={fact.label} className="grid gap-1">
+                <dt className={EYEBROW}>{fact.label}</dt>
+                <dd className="text-[13.5px] leading-relaxed text-mist">
+                  {fact.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <Panel loud className="mb-6 bg-ink p-6">
+            <span className={`${EYEBROW} mb-2 block`}>The thesis</span>
+            <p className="text-xl leading-snug text-pure-white">
+              {caseStudy.thesis}
+            </p>
+            {caseStudy.centralQuestion && (
+              <p className="mt-3 border-t border-hairline pt-3 text-sm leading-relaxed text-ash">
+                <span className="text-mist">The question: </span>
+                {caseStudy.centralQuestion}
+              </p>
+            )}
+          </Panel>
+
+          {caseStudy.statusNotice && (
+            <p className="mb-6 rounded-xl bg-ember-hush/40 px-4 py-3 text-sm leading-relaxed text-mist ring-1 ring-coral-pulse/30">
+              {caseStudy.statusNotice}
+            </p>
+          )}
+
+          <Panel className="grid grid-cols-2 gap-6 bg-ink p-6 md:grid-cols-4">
+            {caseStudy.keyStats.map((stat) => (
+              <div key={stat.label} className="grid gap-1">
+                <span className="text-2xl font-normal text-coral-pulse">
                   {stat.value}
                 </span>
-                <span className="font-mono text-xs uppercase tracking-[0.14em] text-ivory mt-0.5 font-semibold">
+                <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-mist">
                   {stat.label}
                 </span>
                 {stat.detail && (
-                  <span className="font-body text-[11px] text-mute mt-0.5">
+                  <span className="text-[11px] leading-relaxed text-smoke">
                     {stat.detail}
                   </span>
                 )}
               </div>
             ))}
+          </Panel>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {caseStudy.tags.map((tag) => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* =========================================================================
-          NARRATIVE SECTIONS (EDITORIAL LAYOUT, NOT EXCESSIVE CARDS)
-          ========================================================================= */}
+      {spineIsReady && (
+        <section
+          id="decisions"
+          className="scroll-mt-24 border-b border-hairline bg-ink py-14 md:py-20"
+        >
+          <div className="mx-auto max-w-[900px] px-6">
+            <span className={`${EYEBROW} mb-2 block`}>The decision</span>
+            <h2 className="mb-8 text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal leading-[1.17] text-pure-white">
+              What I chose, and what I turned down.
+            </h2>
+
+            <dl className="grid gap-8">
+              {spine?.context?.trim() && (
+                <div>
+                  <dt className={`${EYEBROW} mb-2`}>01 Context</dt>
+                  <dd className="text-[17px] leading-relaxed text-ash">
+                    {spine.context}
+                  </dd>
+                </div>
+              )}
+
+              {spine?.constraint?.trim() && (
+                <div>
+                  <dt className={`${EYEBROW} mb-2`}>02 The constraint</dt>
+                  <dd className="border-l-2 border-coral-pulse pl-4 text-[17px] leading-relaxed text-mist">
+                    {spine.constraint}
+                  </dd>
+                </div>
+              )}
+
+              {spine?.optionsRejected && spine.optionsRejected.length > 0 && (
+                <div>
+                  <dt className={`${EYEBROW} mb-3`}>03 Options I rejected</dt>
+                  <dd className="grid gap-3">
+                    {spine.optionsRejected.map((opt) => (
+                      <Panel key={opt.option} className="p-4">
+                        <p className="text-base font-medium text-pure-white">
+                          {opt.option}
+                        </p>
+                        <p className="mt-1 text-[15px] leading-relaxed text-ash">
+                          {opt.why}
+                        </p>
+                      </Panel>
+                    ))}
+                  </dd>
+                </div>
+              )}
+
+              <div>
+                <dt className={`${EYEBROW.replace("text-smoke", "text-coral-pulse")} mb-2`}>
+                  04 What I decided
+                </dt>
+                <dd>
+                  <p className="text-xl leading-snug text-pure-white">
+                    {spine?.decision}
+                  </p>
+                  {spine?.rationale?.trim() && (
+                    <p className="mt-3 text-[17px] leading-relaxed text-ash">
+                      {spine.rationale}
+                    </p>
+                  )}
+                </dd>
+              </div>
+
+              <div>
+                <dt className={`${EYEBROW} mb-2`}>05 What happened</dt>
+                <dd className="text-[17px] leading-relaxed text-ash">
+                  {spine?.outcome}
+                </dd>
+              </div>
+
+              {spine?.retrospect?.trim() && (
+                <div>
+                  <dt className={`${EYEBROW} mb-2`}>
+                    06 What I would do differently
+                  </dt>
+                  <dd className="text-[17px] leading-relaxed text-ash">
+                    {spine.retrospect}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        </section>
+      )}
+
       <section className="py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-16 md:gap-20">
-            {caseStudy.sections.map((sec) => (
-              <article key={sec.id} id={sec.id} className="scroll-mt-24">
-                {/* Section header */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-xs uppercase tracking-[0.18em] text-mute font-semibold">
-                      {sec.title.split(":")[0]}
-                    </span>
-                  </div>
-                  <h2
-                    className="font-display text-2xl sm:text-3xl font-bold text-ivory leading-tight"
-                    style={{ fontVariationSettings: '"wdth" 92' }}
-                  >
-                    {sec.title.includes(":") ? sec.title.split(":")[1].trim() : sec.title}
+        <div className="mx-auto grid max-w-[900px] gap-16 px-6 md:gap-20">
+          {caseStudy.sections.map((sec) => {
+            const hasVisual = Boolean(
+              sec.workflowSteps || sec.comparison || sec.evaluationTable,
+            );
+            return (
+              <article key={sec.id} id={sec.id} className="min-w-0 scroll-mt-24">
+                <div className="mb-6 grid gap-2">
+                  <span className={EYEBROW}>{sec.title.split(":")[0]}</span>
+                  <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-normal leading-[1.17] text-pure-white">
+                    {sec.title.includes(":")
+                      ? sec.title.split(":")[1].trim()
+                      : sec.title}
                   </h2>
                   {sec.subtitle && (
-                    <p className="font-body text-base text-mute/90 mt-1 font-medium">
+                    <p className="text-base leading-relaxed text-mist/90">
                       {sec.subtitle}
                     </p>
                   )}
                 </div>
 
-                {/* Narrative Paragraphs */}
-                <div className="flex flex-col gap-4 font-body text-base sm:text-lg text-mute leading-relaxed mb-6 font-normal">
-                  {sec.content.map((p, pIdx) => (
-                    <p key={pIdx}>{p}</p>
+                <div className="mb-6 grid gap-4 text-[17px] leading-relaxed text-ash">
+                  {sec.content.map((p) => (
+                    <p key={p.slice(0, 48)}>{p}</p>
                   ))}
                 </div>
 
-                {/* Workflow Steps Diagram */}
                 {sec.workflowSteps && (
-                  <div className="my-8 p-6 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs">
-                    <span className="text-xs font-mono font-semibold uppercase tracking-[0.18em] text-mute block mb-4">
-                      Execution Flow
-                    </span>
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 relative">
-                      {sec.workflowSteps.map((step, sIdx) => (
-                        <div key={sIdx} className="flex-1 flex flex-col items-start bg-void/60 p-3.5 rounded-xl border border-[var(--rule)]">
-                          <span className="text-[11px] font-mono font-bold text-coral">
-                            STEP 0{sIdx + 1}
+                  <Panel className="my-8 bg-ink p-6">
+                    <span className={`${EYEBROW} mb-4 block`}>The flow</span>
+                    <div className="grid gap-3 sm:grid-flow-col sm:auto-cols-fr">
+                      {sec.workflowSteps.map((step, i) => (
+                        <div
+                          key={step.label}
+                          className="v3-key-quiet grid content-start gap-1 rounded-xl p-3.5"
+                        >
+                          <span className="font-mono text-[10px] text-coral-pulse">
+                            0{i + 1}
                           </span>
-                          <span
-                            className="font-display text-sm font-bold text-ivory mt-0.5"
-                            style={{ fontVariationSettings: '"wdth" 92' }}
-                          >
+                          <span className="text-sm font-medium text-pure-white">
                             {step.label}
                           </span>
                           {step.desc && (
-                            <span className="font-body text-[11px] text-mute mt-1 leading-tight">
+                            <span className="text-[11px] leading-snug text-smoke">
                               {step.desc}
                             </span>
                           )}
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </Panel>
                 )}
 
-                {/* Before vs After Comparison */}
                 {sec.comparison && (
-                  <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-6 rounded-[20px] bg-ghost border border-[var(--rule)]">
-                      <span className="text-xs font-mono font-bold uppercase tracking-[0.16em] text-mute block mb-3">
+                  <div className="my-8 grid gap-3 md:grid-cols-2">
+                    <Panel className="bg-ink p-6">
+                      <span className={`${EYEBROW} mb-3 block`}>
                         {sec.comparison.before.title}
                       </span>
-                      <ul className="flex flex-col gap-2.5">
-                        {sec.comparison.before.steps.map((st, i) => (
-                          <li key={i} className="flex items-start gap-2 text-xs sm:text-sm font-body text-mute">
-                            <span className="w-1.5 h-1.5 rounded-full bg-mute/40 mt-1.5 shrink-0" />
+                      <ul className="grid gap-2.5">
+                        {sec.comparison.before.steps.map((st) => (
+                          <li
+                            key={st}
+                            className="grid grid-cols-[auto_1fr] items-start gap-2 text-sm text-smoke"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mt-2 block size-1 rounded-full bg-smoke"
+                            />
                             <span>{st}</span>
                           </li>
                         ))}
                       </ul>
-                    </div>
-
-                    <div className="p-6 rounded-[20px] bg-ghost border border-[var(--rule-strong)]">
-                      <span className="text-xs font-mono font-bold uppercase tracking-[0.16em] text-coral block mb-3">
+                    </Panel>
+                    <Panel loud className="bg-ink p-6">
+                      <span
+                        className={`${EYEBROW.replace("text-smoke", "text-coral-pulse")} mb-3 block`}
+                      >
                         {sec.comparison.after.title}
                       </span>
-                      <ul className="flex flex-col gap-2.5">
-                        {sec.comparison.after.steps.map((st, i) => (
-                          <li key={i} className="flex items-start gap-2 text-xs sm:text-sm font-body text-ivory/90 font-medium">
-                            <CheckCircle2 size={15} className="text-coral mt-0.5 shrink-0" />
+                      <ul className="grid gap-2.5">
+                        {sec.comparison.after.steps.map((st) => (
+                          <li
+                            key={st}
+                            className="grid grid-cols-[auto_1fr] items-start gap-2 text-sm text-mist"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mt-2 block size-1 rounded-full bg-coral-pulse"
+                            />
                             <span>{st}</span>
                           </li>
                         ))}
                       </ul>
-                    </div>
+                    </Panel>
                   </div>
                 )}
 
-                {/* Evaluation Table if present */}
                 {sec.evaluationTable && sec.evaluationTable.length > 0 && (
-                  <div className="my-8 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs overflow-hidden">
-                    <div className="p-5 sm:p-6 border-b border-[var(--rule)] flex flex-wrap items-center justify-between gap-3 bg-ghost">
-                      <div>
-                        <div className="flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral">
-                          <Sparkles size={14} className="text-coral" />
-                          <span>Evaluation Benchmark Matrix</span>
-                        </div>
-                        <h3
-                          className="font-display text-lg sm:text-xl font-bold text-ivory mt-1"
-                          style={{ fontVariationSettings: '"wdth" 92' }}
-                        >
-                          Golden Test Set ({sec.evaluationTable.length} Questions)
+                  <Panel className="my-8 min-w-0 overflow-hidden bg-ink">
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline p-6">
+                      <div className="grid gap-1">
+                        <span className={EYEBROW}>Golden set</span>
+                        <h3 className="text-lg font-normal text-pure-white">
+                          {sec.evaluationTable.length} questions, published with
+                          the failures
                         </h3>
                       </div>
-                      <div className="flex items-center gap-2 text-xs font-mono text-mute">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ghost border border-[var(--rule-strong)] text-coral font-semibold uppercase tracking-[0.12em]">
-                          <CheckCircle2 size={13} className="text-coral" />
-                          <span>95% Pass Rate (19/20)</span>
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-ghost border border-[var(--rule)] text-mute font-semibold uppercase tracking-[0.12em]">
-                          <span>0% Hallucinations</span>
-                        </span>
+                      <div className="flex flex-wrap gap-2">
+                        <Tag>19/20 pass</Tag>
+                        <Tag>0 hallucinations</Tag>
                       </div>
                     </div>
 
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                    <div className="min-w-0 overflow-x-auto">
+                      <table className="w-full border-collapse text-left text-sm">
                         <thead>
-                          <tr className="border-b border-[var(--rule)] bg-void/50 text-mute font-mono uppercase tracking-[0.14em] text-[11px] font-semibold">
-                            <th className="py-3 px-4 w-12 text-center">#</th>
-                            <th className="py-3 px-4 min-w-[220px]">Test Query</th>
-                            <th className="py-3 px-4 min-w-[130px]">Category</th>
-                            <th className="py-3 px-4 min-w-[180px]">Target Ground Source</th>
-                            <th className="py-3 px-4 text-center w-24">Cosine Sim</th>
-                            <th className="py-3 px-4 text-center w-28">Status</th>
-                            <th className="py-3 px-4 min-w-[240px]">Verification Notes</th>
+                          <tr className="border-b border-hairline bg-void-black/50 font-mono text-[10.5px] uppercase tracking-[.05em] text-smoke">
+                            <th className="w-12 px-4 py-3 text-center">#</th>
+                            <th className="min-w-[220px] px-4 py-3">Query</th>
+                            <th className="min-w-[130px] px-4 py-3">Category</th>
+                            <th className="min-w-[180px] px-4 py-3">Ground truth</th>
+                            <th className="w-24 px-4 py-3 text-center">Cosine</th>
+                            <th className="w-28 px-4 py-3 text-center">Status</th>
+                            <th className="min-w-[240px] px-4 py-3">Notes</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[var(--rule)] font-body">
+                        <tbody className="divide-y divide-hairline">
                           {sec.evaluationTable.map((row) => (
-                            <tr key={row.id} className="hover:bg-ghost-active transition-colors">
-                              <td className="py-3 px-4 text-center font-mono text-xs text-mute">
+                            <tr key={row.id}>
+                              <td className="px-4 py-3 text-center font-mono text-xs text-smoke">
                                 {String(row.id).padStart(2, "0")}
                               </td>
-                              <td className="py-3 px-4 font-medium text-ivory">
-                                "{row.query}"
+                              <td className="px-4 py-3 text-mist">{row.query}</td>
+                              <td className="px-4 py-3 font-mono text-[11px] uppercase tracking-[.05em] text-smoke">
+                                {row.category}
                               </td>
-                              <td className="py-3 px-4">
-                                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] font-semibold bg-ghost border border-[var(--rule)] text-mute">
-                                  {row.category}
-                                </span>
-                              </td>
-                              <td className="py-3 px-4 text-xs text-mute">
+                              <td className="px-4 py-3 text-xs text-ash">
                                 {row.groundTruthSource}
                               </td>
-                              <td className="py-3 px-4 text-center font-mono text-xs font-semibold text-ivory">
+                              <td className="px-4 py-3 text-center font-mono text-xs text-mist">
                                 {row.similarity.toFixed(2)}
                               </td>
-                              <td className="py-3 px-4 text-center">
+                              <td className="px-4 py-3 text-center">
                                 <span
-                                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono uppercase tracking-[0.1em] font-semibold ${
+                                  className={`font-mono text-[10.5px] uppercase tracking-[.05em] ${
                                     row.status === "Pass"
-                                      ? "bg-ghost border border-coral/40 text-coral"
-                                      : "bg-ghost border border-[var(--rule)] text-mute"
+                                      ? "text-coral-pulse"
+                                      : "text-smoke"
                                   }`}
                                 >
-                                  {row.status === "Pass" ? (
-                                    <CheckCircle2 size={12} className="text-coral" />
-                                  ) : (
-                                    <AlertTriangle size={12} />
-                                  )}
-                                  <span>{row.status}</span>
+                                  {row.status}
                                 </span>
                               </td>
-                              <td className="py-3 px-4 text-xs text-mute leading-relaxed">
+                              <td className="px-4 py-3 text-xs leading-relaxed text-ash">
                                 {row.notes}
                               </td>
                             </tr>
@@ -323,108 +400,89 @@ export default function CaseStudyDetailPage({
                         </tbody>
                       </table>
                     </div>
-                  </div>
+                  </Panel>
                 )}
 
-                {/* Highlights Grid */}
+                {/* The data says this section has a diagram and nothing here
+                    draws one. The slot names the picture that belongs in it
+                    rather than quietly leaving a gap. */}
+                {sec.diagramType && !hasVisual && (
+                  <ImageSlot
+                    className="my-8"
+                    label={`${sec.title.split(":")[0]}: the ${sec.diagramType} this section describes.`}
+                  />
+                )}
+
                 {sec.highlights && sec.highlights.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
-                    {sec.highlights.map((h, hIdx) => (
-                      <div
-                        key={hIdx}
-                        className="p-5 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs"
-                      >
-                        <h3
-                          className="font-display text-base font-bold text-ivory mb-1.5 flex items-center gap-2"
-                          style={{ fontVariationSettings: '"wdth" 92' }}
-                        >
-                          <CheckCircle2 size={16} className="text-coral shrink-0" />
-                          <span>{h.title}</span>
+                  <div className="my-6 grid gap-3 sm:grid-cols-2">
+                    {sec.highlights.map((h) => (
+                      <Panel key={h.title} className="bg-ink p-5">
+                        <h3 className="mb-1.5 text-base font-medium text-pure-white">
+                          {h.title}
                         </h3>
-                        <p className="font-body text-xs sm:text-sm text-mute leading-relaxed">
+                        <p className="text-[13.5px] leading-relaxed text-ash">
                           {h.desc}
                         </p>
-                      </div>
+                      </Panel>
                     ))}
                   </div>
                 )}
 
-                {/* Reflection Quote */}
                 {sec.quote && (
-                  <div className="my-8 p-6 sm:p-8 rounded-[20px] bg-ghost border border-[var(--rule-strong)] text-ivory relative overflow-hidden">
-                    <Quote size={32} className="text-coral/30 mb-3" />
-                    <p
-                      className="font-display text-lg sm:text-xl font-medium leading-relaxed italic text-ivory"
-                      style={{ fontVariationSettings: '"wdth" 92' }}
-                    >
-                      "{sec.quote}"
+                  <Panel loud className="my-8 bg-ink p-6 sm:p-8">
+                    <p className="text-xl leading-relaxed text-pure-white">
+                      {sec.quote}
                     </p>
-                    <span className="block font-mono text-xs text-coral mt-4 font-semibold uppercase tracking-[0.18em]">
-                      Deepak Prasad / Product Philosophy
+                    <span
+                      className={`${EYEBROW.replace("text-smoke", "text-coral-pulse")} mt-4 block`}
+                    >
+                      Deepak Prasad
                     </span>
-                  </div>
+                  </Panel>
                 )}
-
-                <div className="w-full h-px bg-[var(--rule)] mt-12" />
               </article>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* =========================================================================
-          PREVIOUS / NEXT CASE STUDY PAGINATION
-          ========================================================================= */}
-      <section className="py-12 bg-void border-t border-[var(--rule)]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <section className="border-t border-hairline py-12">
+        <div className="mx-auto flex max-w-[900px] flex-wrap items-center justify-between gap-4 px-6">
           <button
             type="button"
-            onClick={() => {
-              onNavigate(`/work/${prevStudy.slug}`);
-            }}
-            className="flex items-center gap-3 text-left p-4 rounded-xl hover:bg-ghost border border-[var(--rule)] hover:border-coral/40 transition-all cursor-pointer w-full sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+            onClick={() => onNavigate(`/work/${prevStudy.slug}`)}
+            className="v3-key-quiet grid max-w-[300px] gap-1 rounded-xl p-4 text-left transition-transform duration-200 hover:-translate-y-px"
           >
-            <ArrowLeft size={20} className="text-coral" />
-            <div>
-              <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.16em] text-mute block">
-                Previous Case
-              </span>
-              <span
-                className="font-display font-bold text-sm text-ivory"
-                style={{ fontVariationSettings: '"wdth" 92' }}
-              >
-                {prevStudy.title}
-              </span>
-            </div>
+            <span className={`${EYEBROW} inline-flex items-center gap-2`}>
+              <ArrowLeft className="size-3" strokeWidth={1.7} aria-hidden="true" />
+              Previous
+            </span>
+            <span className="text-sm font-medium text-pure-white">
+              {prevStudy.title}
+            </span>
           </button>
 
           <button
             type="button"
             onClick={() => onNavigate("/work")}
-            className="text-xs font-mono font-semibold uppercase tracking-[0.14em] text-mute hover:text-coral transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral rounded-sm"
+            className="inline-flex items-center gap-2 text-[13px] font-medium text-coral-pulse"
           >
-            All Case Studies
+            All the work
+            <ArrowUpRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
           </button>
 
           <button
             type="button"
-            onClick={() => {
-              onNavigate(`/work/${nextStudy.slug}`);
-            }}
-            className="flex items-center justify-end gap-3 text-right p-4 rounded-xl hover:bg-ghost border border-[var(--rule)] hover:border-coral/40 transition-all cursor-pointer w-full sm:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+            onClick={() => onNavigate(`/work/${nextStudy.slug}`)}
+            className="v3-key-quiet grid max-w-[300px] gap-1 rounded-xl p-4 text-right transition-transform duration-200 hover:-translate-y-px"
           >
-            <div>
-              <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.16em] text-mute block">
-                Next Case
-              </span>
-              <span
-                className="font-display font-bold text-sm text-ivory"
-                style={{ fontVariationSettings: '"wdth" 92' }}
-              >
-                {nextStudy.title}
-              </span>
-            </div>
-            <ArrowRight size={20} className="text-coral" />
+            <span className={`${EYEBROW} inline-flex items-center justify-end gap-2`}>
+              Next
+              <ArrowRight className="size-3" strokeWidth={1.7} aria-hidden="true" />
+            </span>
+            <span className="text-sm font-medium text-pure-white">
+              {nextStudy.title}
+            </span>
           </button>
         </div>
       </section>

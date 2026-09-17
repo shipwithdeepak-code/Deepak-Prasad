@@ -28,6 +28,63 @@ export const RESHAMANDI_CASE_STUDY: CaseStudyDetail = {
   category: 'B2B Marketplace & Operational Systems',
   role: 'Product Manager, Core Marketplace, Workflows & Payments',
   timeline: 'June 2021 – Sept 2023',
+
+  // ---------------------------------------------------------------------
+  // SCOPE
+  // `ownership` and `collaborators` are sourced from the sections below.
+  // `team` and `reportedTo` are not stated anywhere in this material — fill
+  // them in and they will render; leave them empty and they stay hidden.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '₹20–25 Cr monthly disbursement volume',
+    collaborators: 'Engineering, field operations, finance and sericulture domain experts',
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — ReshaMandi
+  // Drawn entirely from the sections below, which describe assisted-first and
+  // offline-first as facts. This reframes them as the choice they were.
+  //
+  // `retrospect` is left empty on purpose — nothing in the source material
+  // says what you would change, and it is not mine to invent. Three honest
+  // candidates, each grounded in something already on this page:
+  //   - assisted-first carries field headcount on every transaction; it only
+  //     pays back at volume. Would you have instrumented a self-serve exit
+  //     ramp from day one?
+  //   - the >35% bidding uplift never left pilot. Why not, and what would you
+  //     sequence differently to get it to full rollout?
+  //   - CV grading stayed advisory, with a human confirming the baseline.
+  //     Right call, or did keeping the human in the loop cap the trust gain?
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context:
+      'India is the world’s second-largest silk producer, and its raw-material supply chain ran as an informal cash economy. A farmer finished a 25-day rearing cycle holding a perishable batch of cocoons that had to sell inside 48 hours, accepted whatever a broker’s visual grade offered, and then waited three to fifteen days to be paid. When I took Core Marketplace, trading across the Ramanagara, Sidlaghatta and Dharmapuri yards ran on paper slips, WhatsApp photos and manual finance review.',
+    constraint:
+      'The trading floor set the budget, not the roadmap. Auctions start before dawn in a crowded, noisy yard with crates in motion, and discovery there showed that anything demanding more than two taps or five seconds of latency was dead on arrival. That single limit — not literacy, not smartphone penetration — is what had killed every generic app tried on those floors before.',
+    optionsRejected: [
+      {
+        option: 'A self-serve app for farmers and agents',
+        why: 'It would have made adoption depend on the people with the least reason to trust us and the least room to stop and learn, in the one moment they could least afford latency. It also put the burden of data integrity on the party with no incentive to carry it.',
+      },
+      {
+        option: 'An always-online intake and weighing client',
+        why: 'The yards lose cellular signal regularly. A client that stalled on connectivity would have halted live weighing and auctioning, which is the one failure a trading floor cannot absorb.',
+      },
+      {
+        option: 'Replacing brokers and commission agents with full automation',
+        why: 'Their grading judgement was real domain expertise and the only thing the floor already trusted. Automating it away would have traded a transparency problem for a competence problem, and lost the migration path with it.',
+      },
+    ],
+    decision:
+      'I built the marketplace assisted-first and offline-first: tech-enabled field executives operating intake, weighing and auction at the stations themselves, on a client that queues locally and reconciles on reconnect.',
+    rationale:
+      'It bought adoption from day one and full data integrity, because the person entering a transaction was trained and accountable rather than a farmer learning software at 4:30 AM. That freed the trust budget to be spent where it actually moved people — liquidity. Payout triggered automatically off the weighbridge, so a farmer was paid before leaving the gate instead of waiting up to fifteen days. What I traded away was operating cost: assisted-first carries field headcount on every transaction and only pays back at volume. It also forced progressive migration rather than a cutover, because live trading could never stop.',
+    outcome:
+      'Between June 2021 and September 2023 the automated escrow pipeline scaled from ₹10–15 Cr to ₹20–25 Cr in monthly disbursements at 99.9% reliability, with zero un-reconciled escrow loss behind a multi-bank fallback. Onboarding an informal supplier to a verified digital trade identity came down to under three minutes, ReshaFarms reached 80,000+ farmers upstream, and transparent multi-buyer bidding drove a >35% uplift in realised transaction value — in pilot deployments, not at full rollout.',
+    retrospect: '',   // See the candidates above. Only you can write this one.
+  },
   tags: ['B2B', 'Marketplace', 'Workflow', 'AI', '0→1'],
   proofPoints: [
     '80K+ farmers',
@@ -328,10 +385,42 @@ export const AI_COACH_CASE_STUDY: CaseStudyDetail = {
   category: 'Conversational AI & Consumer Tech',
   role: 'Senior Product Manager, AI & Consumer Engagement',
   timeline: 'Oct 2024 – May 2026',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — AI Coach
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Where you drew the AI/deterministic boundary, and the use cases you refused.
+  //   - Model strategy: what you rejected (fine-tuning? a bigger model? an agent?) and why.
+  //   - Safety guardrails vs. engagement — name the trade you actually made.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['AI', 'Conversational AI', '0→1', 'Consumer'],
-  proofPoints: ['~300 → ~2,000 DAU', 'in ~3 months', 'Gemini + ChatGPT Fallback'],
+  proofPoints: ['~300 → 3,200+ DAU', 'in ~3 months', 'Gemini + ChatGPT Fallback'],
   keyStats: [
-    { label: 'Active User Scale', value: '~300 → ~2,000 DAU', detail: 'Achieved within ~3 months of launch' },
+    { label: 'Active User Scale', value: '~300 → 3,200+ DAU', detail: 'Achieved within ~3 months of launch' },
     { label: 'Primary LLM', value: 'Gemini', detail: 'Cost-efficient & high-speed reasoning' },
     { label: 'Fallback LLM', value: 'ChatGPT', detail: 'High-availability failover architecture' },
     { label: 'Core Principle', value: 'Safety First', detail: 'Deterministic guardrails over open generation' },
@@ -468,15 +557,15 @@ export const AI_COACH_CASE_STUDY: CaseStudyDetail = {
       id: 'outcome',
       number: '06',
       title: 'Adoption Outcome & Key Product Takeaways',
-      subtitle: 'Scaling from ~300 to ~2,000 DAU within roughly 3 months',
+      subtitle: 'Scaling from ~300 to 3,200+ DAU within roughly 3 months',
       content: [
-        'Within approximately 3 months of launch, daily active usage of the AI Coach scaled from ~300 DAU to ~2,000 DAU, becoming a primary discovery surface for workouts and nutrition guides.',
+        'Within approximately 3 months of launch, daily active usage of the AI Coach scaled from ~300 DAU to 3,200+ DAU, becoming a primary discovery surface for workouts and nutrition guides.',
         'Importantly, we maintain disciplined attribution: while overall platform engagement and subscriber numbers grew during this period, we do not make unsubstantiated claims that the AI Coach alone drove company-wide subscription revenue.',
         'The primary achievement was transforming an ambiguous AI novelty into a dependable, safe, and heavily utilized product utility.',
       ],
       highlights: [
         {
-          title: '~300 → ~2,000 DAU',
+          title: '~300 → 3,200+ DAU',
           desc: 'Achieved through organic discovery, in-app workout integration, and word-of-mouth trust.',
         },
         {
@@ -509,6 +598,38 @@ export const SUBSCRIPTION_CASE_STUDY: CaseStudyDetail = {
   category: 'Monetization, Growth & B2C SaaS',
   role: 'Product Manager, Subscription, Monetization & Onboarding',
   timeline: 'Aug 2023 – May 2026',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — Subscription
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Where you put the paywall, and the placements you rejected.
+  //   - Free trial vs. hard gate vs. freemium — what did you choose and what did it cost?
+  //   - Which retention lever you chose not to pull.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['Growth', 'Monetization', 'Subscription', 'B2C'],
   proofPoints: [
     '12,401 paid subscribers',
@@ -656,6 +777,38 @@ export const PERFORMANCE_SCORE_CASE_STUDY: CaseStudyDetail = {
   category: 'Product Strategy & Connected Ecosystems',
   role: 'Senior Product Manager, Connected Ecosystem Strategy',
   timeline: '2025 (Development-Ready Strategy)',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — Performance Score
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Single composite score vs. a dashboard of separate signals — why one number?
+  //   - What you deliberately left out of the score, and why.
+  //   - This one shipped as strategy, not product — say why, plainly. That is a decision too.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['Product Strategy', 'Connected Products', 'Data', '0→1'],
   proofPoints: [
     'Development-ready P0 strategy',
@@ -801,6 +954,38 @@ export const AI_LOCALIZATION_CASE_STUDY: CaseStudyDetail = {
   category: 'AI Operations & European Expansion',
   role: 'Senior Product Manager, AI Workflow & Content Pipeline',
   timeline: 'Oct 2024 – May 2026',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — AI Localization
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - Human-in-the-loop vs. fully automated translation — where you put the human and why.
+  //   - Which languages or surfaces you chose NOT to localize.
+  //   - Quality bar: what you accepted as 'good enough' and what that cost.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['AI', 'Operations', 'Content', 'European Expansion'],
   proofPoints: ['200+ videos', '3 languages', '~3 weeks', '~10× faster'],
   keyStats: [
@@ -987,7 +1172,7 @@ export const COPILOT_GOLDEN_EVALUATION_SET: EvaluationRow[] = [
     retrievalHitTop3: true,
     similarity: 0.87,
     status: "Pass",
-    notes: "Retrieved ~300 to ~2,000 DAU scale within ~3 months."
+    notes: "Retrieved ~300 to 3,200+ DAU scale within ~3 months."
   },
   {
     id: 6,
@@ -1145,7 +1330,7 @@ export const BEHIND_COPILOT_CASE_STUDY: CaseStudyDetail = {
   id: 'behind-ai-copilot',
   slug: 'behind-ai-copilot',
   number: '06',
-  title: 'Behind the AI Copilot: Transparent In-Memory RAG',
+  title: 'Behind Dipa: Transparent In-Memory RAG',
   subtitle:
     'Why vector databases are often premature optimization: Building a zero-latency, 100% grounded portfolio assistant with Gemini Flash Lite, build-time embeddings, and confidence gating.',
   description:
@@ -1159,6 +1344,38 @@ export const BEHIND_COPILOT_CASE_STUDY: CaseStudyDetail = {
   category: 'Applied AI & Systems Architecture',
   role: 'Product Architect & Engineer',
   timeline: '2025',
+
+  // ---------------------------------------------------------------------
+  // SCOPE — fill these in. They are the three facts hiring managers look for
+  // and that the prose below never states. Empty fields are not rendered.
+  // ---------------------------------------------------------------------
+  scope: {
+    team: '',            // e.g. '9 people - 4 engineering, 2 design, 3 field ops'
+    reportedTo: '',      // e.g. 'Reported to the CPO'
+    ownership: '',       // the commercial surface you were accountable for
+    collaborators: '',   // e.g. 'Engineering, design, field ops, finance'
+  },
+
+  // ---------------------------------------------------------------------
+  // DECISION SPINE — Behind the Copilot
+  // Renders only once `decision` and `outcome` are both written, so it is
+  // safe to draft the rest in place. Individual empty blocks are skipped.
+  // Pivotal calls worth writing up here:
+  //   - In-memory RAG vs. a hosted vector DB — what did you give up?
+  //   - The ChatGPT fallback: why a fallback at all rather than failing closed?
+  //   - Why you chose to publish the evaluation table, including the failures.
+  // ---------------------------------------------------------------------
+  decisionSpine: {
+    context: '',      // 2-3 sentences. Where things stood when you arrived.
+    constraint: '',   // The ONE binding limit everything else had to bend around.
+    optionsRejected: [
+      // { option: 'The alternative in a short phrase', why: 'Why it lost.' },
+    ],
+    decision: '',     // One sentence. Active voice, first person.
+    rationale: '',    // The reasoning, including what you traded away.
+    outcome: '',      // At least one number and a time frame.
+    retrospect: '',   // A real one. No regret anywhere reads as marketing.
+  },
   tags: ['Applied AI', 'RAG', 'Gemini', 'Zero Hallucination', 'Systems Design'],
   proofPoints: [
     '<2ms retrieval latency',
@@ -1507,7 +1724,7 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
       'Owned end-to-end subscription strategy, consumer AI initiatives, and connected product experiences for a digital fitness platform across iOS and Android.',
     focus: ['AI Coach (0→1)', 'Subscription & Monetization', 'Connected Products', 'Growth & Retention'],
     highlights: [
-      'Spearheaded 0→1 development of conversational in-app AI Coach (Gemini primary, ChatGPT fallback); scaled adoption from ~300 to ~2,000 DAU within roughly 3 months.',
+      'Spearheaded 0→1 development of conversational in-app AI Coach (Gemini primary, ChatGPT fallback); scaled adoption from ~300 to 3,200+ DAU within roughly 3 months.',
       'Managed subscription strategy across 174,180 freemium and 12,401 paying users; drove 81.9% YoY subscriber growth and 96.8% yearly-plan retention (€659K FY25 subscription revenue).',
       'Architected comprehensive development-ready P0 strategy for Performance Score (0–100 Athletic Reliability) uniting mobile, Smart Gym, and wearable telemetry.',
       'Designed AI-assisted content localization pipeline shipping 200+ workout videos in ~3 weeks (~10× faster) across Italian, French, and Spanish.',

@@ -194,8 +194,3 @@ name-fill idea and was the only reference actually seen.
 4. Retire the 11 "Case Study" strings.
 5. One shared-element transition from a work row into its detail page.
 
-## Repo note
-
-`.claude/skills/ui-ux-pro-max/scripts/__pycache__/*.pyc` is tracked, so the working tree
-goes dirty every time that skill runs. Add `__pycache__/` to `.gitignore` and
-`git rm -r --cached` those files.

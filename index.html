@@ -32,10 +32,17 @@
          ran. Naming it here starts the fetch with the document. -->
     <link rel="preload" as="image" href="/deepak_portrait_4x5.jpg" fetchpriority="high" />
 
+    <!-- v3 faces are self-hosted, so the first paint does not wait on a
+         third party. Preloaded because index.css declares them and the
+         browser would otherwise find them only after the CSS parses. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-var-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/jetbrains-mono-var-latin.woff2" crossorigin />
+
+    <!-- Archivo and Outfit are still used by the v2 sections. This link
+         goes when the last of them is replaced. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-    <!-- the only faces the site uses, now that every page is on v2 -->
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

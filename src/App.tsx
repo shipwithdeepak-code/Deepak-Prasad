@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Navigation from "./components/Navigation";
-import SiteFooter from "./components/site/SiteFooter";
+import SiteNavV3 from "./components/site/v3/SiteNavV3";
+import SiteFooterV3 from "./components/site/v3/SiteFooterV3";
 import HomePage from "./components/HomePage";
 import WorkPage from "./components/WorkPage";
 import CaseStudyDetailPage from "./components/CaseStudyDetailPage";
 import AboutPage from "./components/AboutPage";
 import ResumePage from "./components/ResumePage";
 import ContactPage from "./components/ContactPage";
-import CaseStudyModal from "./components/CaseStudyModal";
 import ContactModal from "./components/ContactModal";
 import ResumeModal from "./components/ResumeModal";
 import CopilotWidget from "./components/CopilotWidget";
 import { openCalendly } from "./utils/calendly";
+import { applyPageMeta } from "./utils/pageMeta";
 import {
   ALL_FLAGSHIP_CASE_STUDIES,
   RESHAMANDI_CASE_STUDY,
@@ -27,9 +27,6 @@ export default function App() {
     return "/";
   });
 
-  const [isCaseStudyModalOpen, setIsCaseStudyModalOpen] = useState(false);
-  const [selectedModalCaseStudy, setSelectedModalCaseStudy] =
-    useState<CaseStudyDetail>(RESHAMANDI_CASE_STUDY);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
@@ -68,7 +65,6 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Esc") {
-        if (isCaseStudyModalOpen) setIsCaseStudyModalOpen(false);
         if (isContactModalOpen) setIsContactModalOpen(false);
         if (isResumeModalOpen) setIsResumeModalOpen(false);
       }
@@ -79,7 +75,7 @@ export default function App() {
       document.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [isCaseStudyModalOpen, isContactModalOpen, isResumeModalOpen]);
+  }, [isContactModalOpen, isResumeModalOpen]);
 
   const scrollToHash = (hash: string, attempts = 0) => {
     const el = document.getElementById(hash);
@@ -113,9 +109,16 @@ export default function App() {
     }
   };
 
-  const handleSelectCaseStudy = (caseStudy: CaseStudyDetail) => {
-    setSelectedModalCaseStudy(caseStudy);
-  };
+  /* Selecting a case study used to fill a modal that nothing ever opened.
+     The rows navigate to the full page themselves, so this is now only the
+     hook the pages are passed. */
+  const handleSelectCaseStudy = (_caseStudy: CaseStudyDetail) => {};
+
+  // Every route used to share the homepage title, so the tab, history and
+  // bookmarks all read the same thing wherever you were.
+  useEffect(() => {
+    applyPageMeta(currentPath);
+  }, [currentPath]);
 
   // Resolve current active route
   const renderCurrentView = () => {
@@ -185,23 +188,23 @@ export default function App() {
     );
   };
 
-  /* the v2 homepage carries its own nav and footer, so the shared chrome
-     stands down there rather than framing a page it was not designed for */
+  /* the homepage renders the same nav and footer itself, sequenced with its
+     own sections, so the shared chrome stands down there rather than
+     rendering a second copy of both */
   const isHome = currentPath === "/";
 
   return (
-    <div className="min-h-screen flex flex-col bg-void text-ivory selection:bg-coral selection:text-void">
+    <div className="min-h-screen flex flex-col bg-void-black text-pure-white selection:bg-coral-pulse selection:text-void-black">
       {/* the first stop for a keyboard, so the nav is not re-traversed
           before the content on every page load */}
       <a href="#main" className="dp-skip">Skip to content</a>
 
       {/* Persistent Navigation */}
       {!isHome && (
-      <Navigation
+      <SiteNavV3
         currentPath={currentPath}
         onNavigate={navigate}
-        onOpenResumeModal={() => setIsResumeModalOpen(true)}
-        onOpenContactModal={() => openCalendly()}
+        onOpenContact={() => openCalendly()}
       />
       )}
 
@@ -210,23 +213,10 @@ export default function App() {
 
       {/* Persistent Footer */}
       {!isHome && (
-        <SiteFooter
-          onOpenContact={() => openCalendly()}
-          onAskDipa={() => document.getElementById("copilot-launcher-btn")?.click()}
-        />
+        <SiteFooterV3 onNavigate={navigate} />
       )}
 
       {/* Interactive Modals */}
-      <CaseStudyModal
-        caseStudy={selectedModalCaseStudy}
-        isOpen={isCaseStudyModalOpen}
-        onClose={() => setIsCaseStudyModalOpen(false)}
-        onOpenContact={() => {
-          setIsCaseStudyModalOpen(false);
-          setIsContactModalOpen(true);
-        }}
-      />
-
       <ContactModal
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}
