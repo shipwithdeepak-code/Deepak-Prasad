@@ -349,20 +349,26 @@ html, body {
   outline-offset: 3px;
 }
 
-/* Dipa command/search console: suppress rectangular inner focus ring and
-   delegate accessible focus state to the rounded outer container */
+/* Dipa command/search console: suppress all rectangular inner focus rings,
+   browser-default square outlines, and red/orange boxes; delegate focus
+   strictly to the rounded pill container with a subtle warm-coral treatment */
+.dipa-container,
+.dipa-container *,
+.dipa-container *:focus,
+.dipa-container *:focus-visible,
+.dipa-input,
 .dipa-input:focus,
 .dipa-input:focus-visible {
   outline: none !important;
   outline-offset: 0 !important;
   box-shadow: none !important;
-  border: none !important;
+  border-color: transparent;
 }
 
-.dipa-container:focus,
-.dipa-container:focus-visible {
+.dipa-container:focus-within {
+  border-color: rgba(240, 151, 122, 0.65) !important;
+  box-shadow: 0 0 0 1px rgba(240, 151, 122, 0.35), 0 0 16px rgba(240, 151, 122, 0.12) !important;
   outline: none !important;
-  outline-offset: 0 !important;
 }
 
 /* A principle card. The lit state is a coral hairline rather than a fill: it

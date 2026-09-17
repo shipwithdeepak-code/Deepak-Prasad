@@ -93,62 +93,56 @@ export default function HeroConsole({
       />
 
       {/* 
-        LAYER 2: Oversized DEEPAK Masthead
-        Spans high across the viewport in low-contrast warm ivory/graphite.
-        Positioned behind main content and portrait.
+        LAYER 2: Oversized DEEPAK PRASAD Masthead
+        Spans high across the viewport on ONE SINGLE LINE in low-contrast warm ivory/graphite.
+        Connected naturally with the content grid: left edge sits ~90–105px to the
+        right of the headline's left edge on desktop, extending horizontally across
+        and partially behind the portrait on the right without splitting.
       */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-4 sm:top-6 md:top-8 lg:top-10 left-1/2 -translate-x-1/2 w-full select-none text-center z-10 overflow-hidden"
+        className="pointer-events-none absolute top-3 sm:top-5 md:top-6 lg:top-8 inset-x-0 mx-auto w-full max-w-[1360px] px-4 sm:px-8 lg:px-14 z-10 overflow-hidden select-none"
       >
-        <span className="hero-wordmark inline-block text-[clamp(4.8rem,18vw,15.5rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.04em] text-[#F5F5F0]/[0.075] whitespace-nowrap">
-          DEEPAK
-        </span>
+        <div className="pl-0 sm:pl-6 md:pl-12 lg:pl-[92px] xl:pl-[102px]">
+          <span className="hero-wordmark inline-block text-[clamp(2.35rem,7.8vw,7.6rem)] font-extrabold uppercase leading-[0.85] tracking-[-0.035em] text-[#F5F5F0]/[0.07] whitespace-nowrap">
+            DEEPAK PRASAD
+          </span>
+        </div>
       </div>
 
       {/* 
         LAYER 3: Real Portrait Integration (/deepak-hero-sharp.jpg)
-        Strong, cinematic monochrome portrait anchored to the far-right side:
-        - Desktop Composition:
-          * Hero content: left ~58–62% of the width
-          * Portrait: right ~28–33% of the width (md:w-[38%] lg:w-[35%] xl:w-[33%] 2xl:w-[31%] max-w-[560px] 2xl:max-w-[600px])
-          * Right edge: anchored close to viewport edge (md:right-0 lg:right-[-1%] xl:right-[-1.5%] 2xl:right-[-1%])
-          * Left edge: begins around the right third of the hero, leaving a generous visual gap to headline and Dipa bar
-          * Face occupies the rightmost visual area (~85-87% across screen)
-        - Edge-Only Blending:
-          * Face itself is 100% solid, crisp, and readable (zero radial mask, zero dark overlay over face)
-          * Both eyes, nose, mouth, chin, hairline, cheeks, and jaw remain bright and clearly visible
-          * Subtle top hair entrance (0% - 10%)
-          * Soft shoulder/chest dissolve into obsidian ground (70% - 94%)
-          * Soft left lateral feather (0% - 22%) dissolving into the background gap
-          * Soft right edge feather (86% - 98%)
-        - Filter: grayscale contrast-[1.15] brightness-[1.08] for crisp, natural monochrome presence
+        Bright, high-key editorial monochrome portrait matching reference image:
+        - High-Key Illumination: Lifted brightness and open midtones (contrast-[1.08] brightness-[1.26]) for radiant skin, clear eyes, and zero murky shadows
+        - 100% Solid Subject: Generous solid mask core (72%) keeps hair, forehead, eyes, cheeks, jaw, and neck completely solid and unshadowed
+        - Clean Seamless Perimeter: Natural falloff at outer corners with zero box, zero drop-shadow, and zero dark overlay
+        - Prominent Editorial Scale: Bold presence on the right edge (md:w-[38%] lg:w-[35%] xl:w-[34%] 2xl:w-[32%])
       */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1 sm:top-2 md:top-3 lg:top-4 bottom-4 md:bottom-8 right-1/2 translate-x-1/2 md:translate-x-0 md:right-0 lg:right-[-1%] xl:right-[-1.5%] 2xl:right-[-1%] z-20 flex items-center justify-center w-[84%] sm:w-[70%] md:w-[38%] lg:w-[35%] xl:w-[33%] 2xl:w-[31%] max-w-[560px] 2xl:max-w-[600px]"
+        className="pointer-events-none absolute top-1 sm:top-2 md:top-3 lg:top-4 bottom-2 md:bottom-6 right-1/2 translate-x-1/2 md:translate-x-0 md:right-2 lg:right-4 xl:right-5 2xl:right-6 z-20 flex items-center justify-center w-[84%] sm:w-[70%] md:w-[38%] lg:w-[35%] xl:w-[34%] 2xl:w-[32%] max-w-[540px] 2xl:max-w-[600px]"
       >
         {imageLoaded && !imageError && (
           <div
-            className="relative size-full max-h-[720px] 2xl:max-h-[780px] aspect-square transition-opacity duration-700 opacity-60 sm:opacity-75 md:opacity-100"
+            className="relative size-full max-h-[740px] 2xl:max-h-[800px] aspect-square transition-opacity duration-700 opacity-90 sm:opacity-95 md:opacity-100"
             style={{
-              /* Vertical edge fade: subtle hair entrance (0% - 10%), 100% solid face & neck (10% - 70%), soft lower shoulder dissolve (70% - 94%) */
-              maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 70%, transparent 94%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 70%, transparent 94%, transparent 100%)",
+              /* Solid core through 72% keeps the full face, eyes, hair, cheeks, and neck 100% solid & illuminated without masking shadows */
+              maskImage: "radial-gradient(ellipse 52% 56% at 54% 46%, black 72%, rgba(0, 0, 0, 0.85) 84%, transparent 98%)",
+              WebkitMaskImage: "radial-gradient(ellipse 52% 56% at 54% 46%, black 72%, rgba(0, 0, 0, 0.85) 84%, transparent 98%)",
             }}
           >
-            {/* Horizontal edge fade: soft left lateral dissolve (0% - 22%), 100% solid face & hair (22% - 86%), soft right edge feather (86% - 98%) */}
+            {/* Lower torso melt: softly dissolves lower jacket into obsidian ground with no abrupt cutoff */}
             <div
               className="size-full"
               style={{
-                maskImage: "linear-gradient(to right, transparent 0%, black 22%, black 86%, transparent 98%, transparent 100%)",
-                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 22%, black 86%, transparent 98%, transparent 100%)",
+                maskImage: "linear-gradient(to bottom, black 78%, transparent 98%)",
+                WebkitMaskImage: "linear-gradient(to bottom, black 78%, transparent 98%)",
               }}
             >
               <img
                 src="/deepak-hero-sharp.jpg"
                 alt="Deepak Prasad"
-                className="size-full object-cover filter grayscale contrast-[1.15] brightness-[1.08]"
+                className="size-full object-cover filter grayscale contrast-[1.08] brightness-[1.26]"
                 draggable={false}
               />
             </div>
@@ -241,6 +235,7 @@ export default function HeroConsole({
                   ask(query);
                 }}
                 className="flex flex-1 items-center gap-2 min-w-0"
+                style={{ outline: "none", boxShadow: "none", border: "none" }}
               >
                 <input
                   ref={inputRef}
@@ -255,7 +250,7 @@ export default function HeroConsole({
                   }
                   aria-label="Ask Dipa about my products, decisions, and systems"
                   className="dipa-input min-w-0 flex-1 bg-transparent text-[13.5px] sm:text-[14px] text-[#F5F5F0] placeholder:text-[#B8B8B2] border-none outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 caret-[#F0977A] font-normal selection:bg-[#F0977A]/30"
-                  style={{ outline: "none", boxShadow: "none" }}
+                  style={{ outline: "none", boxShadow: "none", border: "none" }}
                 />
 
                 {/* Enter indicator & compact submit button: hidden below 400px to keep field spacious */}
