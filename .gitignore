@@ -15,3 +15,6 @@ __pycache__/
 /*.mjs
 # impeccable critique snapshots: local design records, not app code
 .impeccable/
+
+# graphify knowledge graph (regenerate with /graphify .)
+graphify-out/
