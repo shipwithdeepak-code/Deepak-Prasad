@@ -318,6 +318,50 @@ html, body {
   .v3-cta:hover { transform: none; }
 }
 
+/* ============================================================
+   Hero palette.
+   The deployed hero runs a warmer ramp than the v3 tokens below it:
+   #0A0A0B rather than #040506, #F5F5F0 rather than pure white, and
+   #F0977A rather than #ff6363. Two palettes in one page is a real
+   inconsistency, but it is a site-wide decision, not a hero-local one.
+   Naming them here means that decision is one edit when it is made,
+   instead of a hunt through hex literals.
+   ============================================================ */
+:root {
+  --hero-canvas: #0A0A0B;
+  --hero-ink: #F5F5F0;
+  --hero-soft: #E5E5DF;
+  --hero-muted: #9E9E98;
+  --hero-accent: #F0977A;
+}
+
+/* The wordmark. Set with a line box shorter than the type size so the
+   letterforms sit tight, which is the intent, but that also lets the caps
+   escape the box and get clipped by the hero's overflow:hidden. The padding
+   gives the ascenders their room back without changing the optical position. */
+.hero-wordmark {
+  display: inline-block;
+  padding-top: .18em;
+  /* The wordmark is decoration at 1.14:1 against the canvas. It is invisible
+     to a sighted reader and was being read aloud to everyone else, so it is
+     hidden from the accessibility tree in the markup. */
+}
+
+/* The ask bar. The input and its Enter key had no focus indicator at all:
+   `outline: none` with nothing put back. This is the same ring the rest of
+   the site uses, scoped so it reads against the warm hero ramp. */
+.hero-ask:focus-within {
+  box-shadow:
+    rgba(240, 151, 122, .55) 0 0 0 1px,
+    rgba(240, 151, 122, .22) 0 0 24px -4px;
+}
+.hero-ask input:focus-visible,
+.hero-ask button:focus-visible {
+  outline: 2px solid var(--hero-accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
 /* A slot for artwork that has not been supplied yet. Hatched rather than
    flat, so it reads as a deliberate placeholder in a screenshot and not as a
    card that failed to load. */
