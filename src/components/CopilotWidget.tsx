@@ -56,7 +56,7 @@ export function openCopilot(initialText?: string) {
 
 const STARTER_PROMPTS = [
   "What was Deepak's impact at ReshaMandi?",
-  "Why choose RAG over fine-tuning for this site?",
+  "Why did you build Dipa on RAG, not fine-tuning?",
   "How did the Sportstech AI Coach handle latency?",
   "Explain Deepak's first operating principle",
 ];
@@ -93,7 +93,7 @@ export default function CopilotWidget({
     {
       id: "welcome",
       sender: "copilot",
-      text: "Hi! I'm Deepak’s AI Copilot. I'm a custom Retrieval-Augmented Generation (RAG) assistant running on Gemini Flash Lite and an in-memory cosine similarity engine.\n\nAsk me anything about Deepak’s work, metrics, operating principles, or the architecture of this portfolio copilot.",
+      text: "I'm Dipa. Deepak built me: a retrieval assistant over 45 chunks of his own record, scored in memory and generated with Gemini Flash Lite.\n\nAsk me about his work, a number, a decision he got wrong, or how I am put together. Every answer shows the sources it came from, and I will say so when something is outside the record.",
       timestamp: "Just now",
     },
   ]);
@@ -339,8 +339,8 @@ export default function CopilotWidget({
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
-        aria-label={isOpen ? "Close Deepak's AI Copilot" : "Open Deepak's AI Copilot"}
-        title={isOpen ? "Close Deepak's AI Copilot" : "Open Deepak's AI Copilot"}
+        aria-label={isOpen ? "Close Dipa" : "Open Dipa, Deepak's retrieval assistant"}
+        title={isOpen ? "Close Dipa" : "Open Dipa, Deepak's retrieval assistant"}
         aria-expanded={isOpen}
         aria-controls="copilot-window"
       >
@@ -371,7 +371,7 @@ export default function CopilotWidget({
         inert={!isOpen}
         role="dialog"
         aria-modal="false"
-        aria-label="Deepak's AI Copilot"
+        aria-label="Dipa, Deepak's retrieval assistant"
       >
         {/* Header */}
         {/* Header. Every child that can shrink does, and the one line that
@@ -382,10 +382,10 @@ export default function CopilotWidget({
             <BreathingOrb size={30} className="shrink-0" />
             <div className="min-w-0">
               <h3 className="truncate text-sm font-medium text-pure-white">
-                Deepak's AI Copilot
+                Dipa
               </h3>
               <p className="truncate text-[10.5px] text-smoke font-mono uppercase tracking-[.05em]">
-                45 chunks / gemini flash lite
+                Deepak's archive / 45 chunks
               </p>
             </div>
           </div>
@@ -394,8 +394,8 @@ export default function CopilotWidget({
             <button
               type="button"
               onClick={() => setIsHowItWorksOpen(!isHowItWorksOpen)}
-              title="How this works"
-              aria-label="How this works"
+              title="How Dipa works"
+              aria-label="How Dipa works"
               className={`min-w-[44px] min-h-[44px] px-2 rounded-lg text-[10.5px] font-mono uppercase tracking-[.05em] flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                 isHowItWorksOpen
                   ? "bg-white/[.06] text-pure-white"
@@ -409,8 +409,8 @@ export default function CopilotWidget({
             <button
               type="button"
               onClick={handleResetChat}
-              title="Reset conversation"
-              aria-label="Reset conversation"
+              title="Start over"
+              aria-label="Start over"
               className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-smoke hover:text-pure-white hover:bg-white/[.06] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse cursor-pointer"
             >
               <RotateCcw size={15} />
@@ -437,7 +437,7 @@ export default function CopilotWidget({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-coral-pulse uppercase tracking-[0.14em]">
                   <Cpu size={14} />
-                  <span>How This Custom RAG Works</span>
+                  <span>How Dipa works</span>
                 </div>
                 <button
                   onClick={() => {

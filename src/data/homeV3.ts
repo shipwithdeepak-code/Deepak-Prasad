@@ -55,7 +55,7 @@ export const RAIL_ENTRIES: Record<string, RailEntry> = {
   'ai-coach': { family: 'ai', metric: '300 to 3,200+ DAU in 3 months', years: '2024-26' },
   'ai-localization': { family: 'ai', metric: '200+ videos in 3 languages', years: '2025' },
   'performance-score': { family: 'hardware', metric: 'Five surfaces, one number', years: '2025' },
-  'behind-ai-copilot': { family: 'ai', metric: '45 chunks, cites its sources', years: '2025' },
+  'behind-ai-copilot': { family: 'ai', metric: 'Dipa, 45 chunks, cites its sources', years: '2025' },
 };
 
 /**
@@ -73,7 +73,7 @@ export interface AIBuild {
    *  how finished it is. */
   coverSlug?: string;
   /** Where the card goes. The copilot opens itself; the jury has no page yet,
-   *  so its card asks the copilot about it instead of linking nowhere. */
+   *  so its card asks Dipa about it instead of linking nowhere. */
   action: { kind: 'copilot'; question: string } | { kind: 'navigate'; path: string };
 }
 
@@ -87,10 +87,10 @@ export const AI_BUILDS: AIBuild[] = [
     action: { kind: 'copilot', question: 'What is Product Jury?' },
   },
   {
-    name: 'The Copilot',
+    name: 'Dipa',
     status: 'Live on this page',
     description:
-      'Transparent in-memory retrieval over my own record. No vector database, and the evaluation set is published with its failures.',
+      'Transparent in-memory retrieval over my own record, and the assistant answering questions at the top of this page. No vector database, and the evaluation set is published with its failures.',
     facts: ['45 chunks', '0 external DBs', '19/20 golden set'],
     coverSlug: 'behind-ai-copilot',
     action: { kind: 'navigate', path: '/work/behind-ai-copilot' },

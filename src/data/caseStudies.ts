@@ -1330,7 +1330,7 @@ export const BEHIND_COPILOT_CASE_STUDY: CaseStudyDetail = {
   id: 'behind-ai-copilot',
   slug: 'behind-ai-copilot',
   number: '06',
-  title: 'Behind the AI Copilot: Transparent In-Memory RAG',
+  title: 'Behind Dipa: Transparent In-Memory RAG',
   subtitle:
     'Why vector databases are often premature optimization: Building a zero-latency, 100% grounded portfolio assistant with Gemini Flash Lite, build-time embeddings, and confidence gating.',
   description:

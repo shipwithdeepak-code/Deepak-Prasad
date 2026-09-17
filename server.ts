@@ -138,6 +138,19 @@ async function startServer() {
       }
 
       const cleanQuestion = question.trim();
+
+      /* The assistant is called Dipa. The knowledge base was embedded before
+         it had a name, so the word "Dipa" is in none of the 45 chunks and a
+         question that uses it retrieves nothing. Expanding the name into the
+         words the chunks were actually written in fixes that without
+         re-embedding the corpus. The expansion is for retrieval only: the
+         visitor's own wording is what is displayed and what the model
+         answers. */
+      const retrievalQuery = cleanQuestion.replace(
+        /\bdipa('s)?\b/gi,
+        "the AI portfolio copilot",
+      );
+
       let queryVector: number[] = [];
       let usedEmbeddingApi = false;
 
@@ -146,7 +159,7 @@ async function startServer() {
         const ai = getGeminiClient();
         const embedRes = await ai.models.embedContent({
           model: "gemini-embedding-2-preview",
-          contents: cleanQuestion,
+          contents: retrievalQuery,
           config: { outputDimensionality: 512 },
         });
 
@@ -169,7 +182,7 @@ async function startServer() {
         // Lexical heuristic fallback
         scoredChunks = knowledgeBase.map((item) => ({
           ...item,
-          similarity: keywordFallbackScore(cleanQuestion, item),
+          similarity: keywordFallbackScore(retrievalQuery, item),
         }));
       }
 
@@ -215,12 +228,12 @@ async function startServer() {
         )
         .join("\n\n");
 
-      const systemInstruction = `You are the AI Portfolio Copilot for Deepak Prasad, a Senior Product Manager.
-Your job is to answer user questions about Deepak's experience, case studies, principles, methodology, and this AI Copilot's architecture.
+      const systemInstruction = `You are Dipa, the retrieval assistant on Deepak Prasad's portfolio. Deepak is a Senior Product Manager, and he built you.
+Your job is to answer user questions about Deepak's experience, case studies, principles, methodology, and your own architecture. Some of the context below calls you "the AI portfolio copilot"; that is you.
 
 CRITICAL GROUNDING RULES:
 1. Answer strictly using ONLY the information provided in the context below.
-2. If the context contains relevant metrics, numbers, or frameworks (e.g., 80K+ farmers, ₹20–25 Cr monthly, 99.9% reliability, 300 to 2000 DAU, 48-hour perishable window, etc.), cite them accurately.
+2. If the context contains relevant metrics, numbers, or frameworks (e.g., 80K+ farmers, ₹20–25 Cr monthly, 99.9% reliability, 300 to 3,200+ DAU, 48-hour perishable window, etc.), cite them accurately.
 3. If the context does not contain sufficient details to answer the question, state honestly what is known and politely recommend clicking "Book Chat" to discuss with Deepak directly.
 4. Keep answers crisp, professional, and well-structured (1-3 brief paragraphs or focused bullet points).
 5. Never hallucinate previous employers, unmentioned technologies, or speculative claims.`;

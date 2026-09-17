@@ -6,13 +6,13 @@ import ShaderBackground from "../visuals/ShaderBackground";
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
-  /** Hands the question to the real copilot. The hero does not answer
+  /** Hands the question to Dipa. The hero does not answer
    *  anything itself: it is the entry point to the RAG, not a copy of it. */
   onAsk: (question?: string) => void;
 }
 
 /** Real questions, rotated through the bar so it reads as something you type
- *  into. Each one is answerable from the knowledge base behind the copilot. */
+ *  into. Each one is answerable from the knowledge base behind Dipa. */
 const QUESTIONS = [
   "What did you decide at ReshaMandi?",
   "Have you managed people?",
@@ -24,13 +24,13 @@ const QUESTIONS = [
 /** The chips ask what the rotating bar does not, so the two sets never show
  *  the same string twice within one screen. */
 const CHIPS = [
-  "How does this copilot work?",
+  "How does Dipa work?",
   "What are you looking for next?",
   "Where have you led a team?",
 ];
 
 /** Capability facts, not per-query claims. 45 is the real chunk count in
- *  ragKnowledgeBase.json, and the copilot really does cite the chunks it
+ *  ragKnowledgeBase.json, and Dipa really does cite the chunks it
  *  used. Nothing here asserts a latency the hero never measured. */
 const COPILOT_FACTS = ["45 sources", "Cites every answer", "Built by me"];
 
@@ -137,7 +137,7 @@ export default function HeroConsole({
         <div className="grid gap-6">
           <h1 className="max-w-[24ch] text-[clamp(1.75rem,3.4vw,2.625rem)] font-normal leading-[1.17] tracking-[.22px] text-pure-white">
             Eleven products shipped. Ask{" "}
-            <span className="text-coral-pulse">the archive</span> anything.
+            <span className="text-coral-pulse">Dipa</span> anything.
           </h1>
           <p className="max-w-[38ch] text-base leading-relaxed text-mist/90">
             Marketplaces, subscription, connected hardware and applied AI. Two
@@ -184,7 +184,7 @@ export default function HeroConsole({
                   onChange={(e) => setQuery(e.target.value)}
                   type="text"
                   autoComplete="off"
-                  aria-label="Ask the copilot about my work"
+                  aria-label="Ask Dipa about my work"
                   className="w-full bg-transparent text-[15.5px] text-pure-white caret-coral-pulse outline-none"
                 />
                 {/* The rotating question sits behind a real input rather than
@@ -201,7 +201,7 @@ export default function HeroConsole({
               </div>
               <button
                 type="submit"
-                aria-label="Ask the copilot"
+                aria-label="Ask Dipa"
                 className="rounded-md bg-coral-pulse px-2 py-1.5 text-void-black transition-opacity duration-200 hover:opacity-90"
               >
                 <CornerDownLeft className="size-3" strokeWidth={1.7} aria-hidden="true" />
@@ -210,7 +210,8 @@ export default function HeroConsole({
 
             <div className="grid gap-3 px-[18px] pb-4 pt-5">
               <p className="text-[19px] leading-[1.32] tracking-[.2px] text-pure-white">
-                A retrieval copilot over everything I have shipped.
+                Dipa is a retrieval assistant over everything I have
+                shipped.
               </p>
               <p className="text-[14.5px] leading-relaxed text-ash">
                 Ask it about a decision, a number, or something I got wrong. It

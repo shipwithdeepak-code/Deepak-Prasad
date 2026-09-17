@@ -107,7 +107,7 @@ export default function AIBuilds({ onNavigate, onAsk }: AIBuildsProps) {
                   className="mt-1 justify-self-start text-[13px] font-medium text-coral-pulse underline-offset-4 hover:underline"
                 >
                   {build.action.kind === "copilot"
-                    ? "Ask the copilot about it"
+                    ? "Ask Dipa about it"
                     : "Read how it was built"}
                 </button>
               </article>
@@ -117,7 +117,7 @@ export default function AIBuilds({ onNavigate, onAsk }: AIBuildsProps) {
 
         <div className="v3-key-quiet mt-4 rounded-2xl bg-obsidian p-5">
           <p className="mb-3.5 font-mono text-[11px] uppercase leading-[.91] tracking-[.8px] text-smoke">
-            How the copilot works
+            How Dipa works
           </p>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11.5px] text-ash">
             {COPILOT_PIPELINE.map((step, i) => (
@@ -134,8 +134,9 @@ export default function AIBuilds({ onNavigate, onAsk }: AIBuildsProps) {
             ))}
           </div>
           <p className="mt-3.5 max-w-[76ch] text-sm leading-relaxed text-ash">
-            No vector database. The chunks are my own case studies, embedded
-            once at build time and scored in memory on every question.
+            No vector database. Dipa's chunks are my own case studies,
+            embedded once at build time and scored in memory on every
+            question.
             Retrieval time is measured per query and shown with the answer. If a
             question falls outside what the record covers, it says so rather
             than inventing one.

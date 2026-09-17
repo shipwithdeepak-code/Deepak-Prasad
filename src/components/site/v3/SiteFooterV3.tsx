@@ -4,6 +4,7 @@ import {
   GITHUB_URL,
   LINKEDIN_URL,
 } from "../../../utils/contact";
+import { openCopilot } from "../../CopilotWidget";
 
 interface SiteFooterV3Props {
   onNavigate: (path: string) => void;
@@ -43,6 +44,12 @@ export default function SiteFooterV3({ onNavigate }: SiteFooterV3Props) {
         >
           Work
         </a>
+        {/* The last line of the page is still a way in. Someone who read to
+            the bottom and did not find their answer should not have to scroll
+            back up to ask for it. */}
+        <button type="button" className={link} onClick={() => openCopilot()}>
+          Ask Dipa
+        </button>
       </div>
     </footer>
   );

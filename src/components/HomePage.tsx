@@ -22,7 +22,7 @@ interface HomePageProps {
 /**
  * Portfolio v3 homepage.
  *
- * The order is an argument: the copilot is the claim, the strip is the
+ * The order is an argument: Dipa is the claim, the strip is the
  * evidence, the rail is the record, the builds are the proof that I write the
  * things I talk about, the principles are how, and the track record is where.
  * Each section is one idea, and nothing repeats a number another one already
