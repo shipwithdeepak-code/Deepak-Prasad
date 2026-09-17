@@ -182,18 +182,9 @@ export default function HeroFullFace({
         </p>
       </div>
 
-      {/* the page ground, cut to his outline, above the letters and below
-          the photograph: nothing can surface on his face */}
-      <div
-        aria-hidden
-        className="dp-figure-mask dp-hero-portrait absolute z-[2] overflow-hidden pointer-events-none bg-void"
-        style={{ right: "2%", top: 0, width: "46cqw", height: "84%" }}
-      />
-
-      {/* the photograph, masked to the same outline. full hair, both sides
-          of the face, and a soft edge that dissolves into the page */}
+      {/* the photograph. full hair, both sides of the face, and a soft edge that dissolves into the page */}
       <figure
-        className="dp-hero-portrait absolute z-[3] overflow-hidden pointer-events-none m-0"
+        className="dp-hero-portrait absolute z-[3] pointer-events-none m-0"
         style={{ right: "2%", top: 0, width: "46cqw", height: "84%" }}
       >
         <img
@@ -201,7 +192,7 @@ export default function HeroFullFace({
           alt="Deepak Prasad"
           fetchPriority="high"
           decoding="async"
-          className="dp-figure-mask block w-full h-full object-cover"
+          className="block w-full h-full object-cover"
           style={{
             objectPosition: "50% 14%",
             filter: "grayscale(1) contrast(1.18) brightness(1.04)",

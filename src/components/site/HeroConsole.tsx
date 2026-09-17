@@ -50,9 +50,12 @@ export default function HeroConsole({
 
   useEffect(() => {
     const img = new Image();
-    img.src = "/deepak-hero-sharp.jpg";
+    img.src = "/deepak-hero-transparent.png";
     img.onload = () => setImageLoaded(true);
     img.onerror = () => setImageError(true);
+    if (img.complete) {
+      setImageLoaded(true);
+    }
 
     const checkWidth = () => {
       setIsNarrowMobile(window.innerWidth < 400);
@@ -111,44 +114,33 @@ export default function HeroConsole({
       </div>
 
       {/* 
-        LAYER 3: Real Portrait Integration (/deepak-hero-sharp.jpg)
-        Bright, high-key editorial monochrome portrait matching reference image:
-        - High-Key Illumination: Lifted brightness and open midtones (contrast-[1.08] brightness-[1.26]) for radiant skin, clear eyes, and zero murky shadows
-        - 100% Solid Subject: Generous solid mask core (72%) keeps hair, forehead, eyes, cheeks, jaw, and neck completely solid and unshadowed
-        - Clean Seamless Perimeter: Natural falloff at outer corners with zero box, zero drop-shadow, and zero dark overlay
-        - Prominent Editorial Scale: Bold presence on the right edge (md:w-[38%] lg:w-[35%] xl:w-[34%] 2xl:w-[32%])
+        LAYER 3: Real Transparent Portrait Integration (/deepak-hero-transparent.png)
+        - Scaled up 10–15% for prominent, natural framing in the right third
+        - Positioned slightly further toward the right edge with a small safe margin
+        - Soft multi-directional CSS mask on <img> softly dissolves top hair, outer sides, and bottom hoodie
+        - True alpha transparency over obsidian shader background; zero rectangular container or dark box
       */}
-      <div
+      <img
+        src="/deepak-hero-transparent.png"
+        alt="Deepak Prasad"
         aria-hidden="true"
-        className="pointer-events-none absolute top-1 sm:top-2 md:top-3 lg:top-4 bottom-2 md:bottom-6 right-1/2 translate-x-1/2 md:translate-x-0 md:right-2 lg:right-4 xl:right-5 2xl:right-6 z-20 flex items-center justify-center w-[84%] sm:w-[70%] md:w-[38%] lg:w-[35%] xl:w-[34%] 2xl:w-[32%] max-w-[540px] 2xl:max-w-[600px]"
-      >
-        {imageLoaded && !imageError && (
-          <div
-            className="relative size-full max-h-[740px] 2xl:max-h-[800px] aspect-square transition-opacity duration-700 opacity-90 sm:opacity-95 md:opacity-100"
-            style={{
-              /* Solid core through 72% keeps the full face, eyes, hair, cheeks, and neck 100% solid & illuminated without masking shadows */
-              maskImage: "radial-gradient(ellipse 52% 56% at 54% 46%, black 72%, rgba(0, 0, 0, 0.85) 84%, transparent 98%)",
-              WebkitMaskImage: "radial-gradient(ellipse 52% 56% at 54% 46%, black 72%, rgba(0, 0, 0, 0.85) 84%, transparent 98%)",
-            }}
-          >
-            {/* Lower torso melt: softly dissolves lower jacket into obsidian ground with no abrupt cutoff */}
-            <div
-              className="size-full"
-              style={{
-                maskImage: "linear-gradient(to bottom, black 78%, transparent 98%)",
-                WebkitMaskImage: "linear-gradient(to bottom, black 78%, transparent 98%)",
-              }}
-            >
-              <img
-                src="/deepak-hero-sharp.jpg"
-                alt="Deepak Prasad"
-                className="size-full object-cover filter grayscale contrast-[1.08] brightness-[1.26]"
-                draggable={false}
-              />
-            </div>
-          </div>
-        )}
-      </div>
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setImageError(true)}
+        className={`pointer-events-none absolute right-0 sm:right-[0.5%] md:right-[0.5%] lg:right-[0.8%] xl:right-[1%] 2xl:right-[1.2%] top-[100px] sm:top-[90px] md:top-[82px] lg:top-[74px] xl:top-[68px] z-20 w-[70vw] sm:w-[54vw] md:w-[400px] md:max-w-[425px] lg:w-[490px] lg:max-w-[520px] xl:w-[clamp(480px,44vw,635px)] xl:max-w-[635px] h-auto object-contain object-bottom filter grayscale contrast-[1.08] brightness-[1.18] transition-opacity duration-700 bg-transparent select-none ${
+          imageLoaded && !imageError
+            ? "opacity-25 sm:opacity-35 md:opacity-100"
+            : "opacity-0"
+        }`}
+        style={{
+          maskImage:
+            "radial-gradient(ellipse 68% 72% at 52% 44%, black 50%, rgba(0, 0, 0, 0.9) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 66%, transparent 95%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 68% 72% at 52% 44%, black 50%, rgba(0, 0, 0, 0.9) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 66%, transparent 95%)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "destination-in",
+        }}
+        draggable={false}
+      />
 
       {/* Main Foreground Container: Layers 5, 6 */}
       <div className="relative z-30 mx-auto w-full max-w-[1360px] flex-1 flex flex-col justify-end px-4 sm:px-8 lg:px-14 pt-20 sm:pt-24 lg:pt-28 pb-6 sm:pb-8 md:pb-10">
