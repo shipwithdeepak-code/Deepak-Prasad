@@ -71,7 +71,7 @@ export default function WorkRail({
   };
 
   return (
-    <section id="selected-work" className="py-[104px]">
+    <section id="selected-work" className="v3-atmos v3-atmos-blue py-[104px]">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="mb-10 grid max-w-[60ch] gap-3.5">
           <p className="font-mono text-[11px] uppercase leading-[.91] tracking-[.8px] text-smoke">

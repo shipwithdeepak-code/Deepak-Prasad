@@ -17,7 +17,7 @@ export default function TrackRecord({ onNavigate }: TrackRecordProps) {
   return (
     <section
       id="track-record"
-      className="border-y border-hairline bg-ink py-[104px]"
+      className="v3-atmos v3-atmos-blue border-y border-hairline bg-ink py-[104px]"
     >
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="mb-10 grid max-w-[60ch] gap-3.5">

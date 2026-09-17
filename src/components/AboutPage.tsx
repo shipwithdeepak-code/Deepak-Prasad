@@ -1,383 +1,279 @@
 import React from "react";
-import {
-  ArrowRight,
-  CheckCircle2,
-  FileDown,
-  Compass,
-  Users2,
-  Briefcase,
-  Layers,
-} from "lucide-react";
+import { ArrowUpRight, Download } from "lucide-react";
 import {
   EXPERIENCE_ROLES,
   LEADERSHIP_SECTION,
   HOW_I_WORK_PRINCIPLES,
   CAPABILITY_GROUPS,
 } from "../data/caseStudies";
+import {
+  ImageSlot,
+  PageHeader,
+  Panel,
+  SectionHeader,
+  Tag,
+} from "./site/v3/primitives";
 
 interface AboutPageProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
 }
 
+/** The shape of the seven years, in six steps. Each one names the thing that
+ *  changed, not the job title, because the titles repeat and the problems do
+ *  not. */
+const CAREER_STEPS = [
+  { title: "Hardware and IoT", context: "LionCircuits, APM" },
+  { title: "B2B marketplace", context: "ReshaMandi, 80,000+ farmers" },
+  { title: "Workflow and payments", context: "Instant payouts and KYC" },
+  { title: "Subscription and growth", context: "Sportstech, 12,401 paying" },
+  { title: "Connected products", context: "Performance Score, P0" },
+  { title: "AI products", context: "Conversational coach, localisation" },
+];
+
+/**
+ * About.
+ *
+ * The record in full: how the work changed shape over seven years, every seat
+ * with what was actually achieved in it, how a cross-border pod was run, the
+ * five principles, and what I can be handed.
+ */
 export default function AboutPage({
   onNavigate,
   onOpenResumeModal,
 }: AboutPageProps) {
-  React.useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash === "#experience") {
-      const scrollToSection = (retries = 0) => {
-        const el = document.getElementById("experience");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        } else if (retries < 15) {
-          setTimeout(() => scrollToSection(retries + 1), 60);
-        }
-      };
-      requestAnimationFrame(() => {
-        setTimeout(scrollToSection, 50);
-      });
-    }
-  }, []);
-
-  const careerEvolutionSteps = [
-    { title: "Hardware / IoT", context: "LionCircuits APM" },
-    { title: "B2B Marketplace", context: "ReshaMandi 80K+ farmers" },
-    { title: "Workflow & Payments", context: "Instant Payouts & KYC" },
-    { title: "Subscription & Growth", context: "Sportstech 12K+ subscribers" },
-    { title: "Connected Products", context: "Performance Score P0" },
-    { title: "AI Products", context: "Conversational Coach & Localization" },
-  ];
-
   return (
-    <div className="w-full bg-void text-ivory py-12 md:py-20">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Hero with Portrait */}
-        <div className="mb-16 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-center">
-          <div className="md:col-span-7 flex flex-col justify-center">
-            <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.18em] text-mute mb-4 w-fit">
-            <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
-              <span>About Deepak Prasad</span>
-            </div>
-            <h1
-              className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-ivory leading-[1.15] mb-6"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              I like solving problems where the answer isn’t obvious.
-            </h1>
-            <p className="font-body text-base sm:text-lg text-mute leading-relaxed font-normal mb-4">
-              I turn complex customer, business and operational problems into products people use, from AI-powered experiences and subscription businesses to B2B marketplaces and connected ecosystems.
+    <div className="v3-atmos v3-atmos-coral bg-void-black py-16 md:py-24">
+      <div className="mx-auto max-w-[1100px] px-6">
+        <div className="mb-20 grid items-center gap-12 md:grid-cols-[1.2fr_.8fr]">
+          <PageHeader
+            eyebrow="About"
+            title="I like problems where the answer is not obvious."
+            lede="I turn complex customer, business and operational problems into products people use: applied AI, subscription businesses, B2B marketplaces and connected ecosystems."
+          >
+            <p className="text-[15px] leading-relaxed text-smoke">
+              Over seven years I have worked across Indian and European markets,
+              built 0 to 1 products from concept to scale, run cross-border
+              pods, and designed systems that join hardware, software and the
+              people operating them.
             </p>
-            <p className="font-body text-sm sm:text-base text-mute/80 leading-relaxed font-normal">
-              Over the past 7+ years, I’ve operated across both India and European markets, building 0→1 products from concept to scale, managing cross-border pods, and designing systems that connect hardware, software, and human operations.
-            </p>
-          </div>
+          </PageHeader>
 
-          <div className="md:col-span-5 flex justify-center md:justify-end">
-            <div className="relative w-full max-w-[340px] sm:max-w-[380px] md:max-w-full aspect-[4/5] rounded-[20px] overflow-hidden border border-[var(--rule-strong)] shadow-xl bg-ghost group">
-              <img
-                src="/deepak_portrait_4x5.jpg"
-                alt="Deepak Prasad - Senior Product Manager"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = "none";
-                  const fallback = target.parentElement?.querySelector(".about-portrait-fallback");
-                  if (fallback) (fallback as HTMLElement).style.display = "flex";
-                }}
-              />
-              <div className="about-portrait-fallback hidden w-full h-full flex-col items-center justify-center p-6 text-center bg-void text-ivory">
-                <div className="w-16 h-16 rounded-full bg-ghost border border-[var(--rule-strong)] flex items-center justify-center font-display font-bold text-2xl text-coral mb-3">
-                  DP
-                </div>
-                <p className="font-display font-bold text-base text-ivory">Deepak Prasad</p>
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-mute mt-1">Senior Product Manager</p>
-              </div>
-              <div className="absolute bottom-3 left-3 right-3 px-3.5 py-2.5 rounded-xl bg-void/90 backdrop-blur-md text-ivory flex items-center justify-between text-xs font-mono uppercase tracking-[0.12em] border border-[var(--rule)] shadow-xs">
-                <span className="font-semibold tracking-tight text-ivory">Deepak Prasad</span>
-                <span className="text-coral font-medium text-[11px]">
-                  Available for PM roles
-                </span>
-              </div>
-            </div>
-          </div>
+          <Panel className="relative overflow-hidden bg-ink" loud>
+            <img
+              src="/deepak_portrait_4x5.jpg"
+              alt="Deepak Prasad"
+              className="aspect-[4/5] w-full object-cover object-top"
+            />
+            <span className="v3-glass absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5">
+              <span className="text-[13px] font-medium text-pure-white">
+                Deepak Prasad
+              </span>
+              <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-coral-pulse">
+                Open to senior roles
+              </span>
+            </span>
+          </Panel>
         </div>
 
-        {/* =========================================================================
-            CAREER EVOLUTION DIAGRAM
-            ========================================================================= */}
-        <div className="mb-20 p-6 sm:p-8 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs">
-          <span className="text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral block mb-2">
-            Career Journey & Evolution
-          </span>
-          <h2
-            className="font-display text-xl sm:text-2xl font-bold text-ivory mb-6"
-            style={{ fontVariationSettings: '"wdth" 92' }}
-          >
-            From physical hardware and rural mandis to consumer AI platforms
-          </h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {careerEvolutionSteps.map((step, idx) => (
+        <Panel className="mb-20 bg-ink p-6 sm:p-8">
+          <SectionHeader
+            eyebrow="Career journey"
+            title="From rural mandis and circuit boards to consumer AI."
+          />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+            {CAREER_STEPS.map((step, i) => (
               <div
-                key={idx}
-                className="flex flex-col p-3.5 rounded-xl bg-void/60 border border-[var(--rule)]"
+                key={step.title}
+                className="v3-key-quiet grid content-start gap-1.5 rounded-xl p-3.5"
               >
-                <span className="text-[10px] font-mono font-bold text-coral">
-                  0{idx + 1}
+                <span className="font-mono text-[10px] text-coral-pulse">
+                  0{i + 1}
                 </span>
-                <span
-                  className="font-display text-xs font-bold text-ivory mt-1 leading-snug"
-                  style={{ fontVariationSettings: '"wdth" 92' }}
-                >
+                <span className="text-xs font-medium leading-snug text-pure-white">
                   {step.title}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-mute mt-1">
+                <span className="font-mono text-[10px] uppercase tracking-[.05em] text-smoke">
                   {step.context}
                 </span>
               </div>
             ))}
           </div>
-        </div>
+        </Panel>
 
-        {/* =========================================================================
-            EXPERIENCE TIMELINE (STRICTLY ACCURATE, NO MUDRA)
-            ========================================================================= */}
-        <section id="experience" className="mb-20 scroll-mt-28">
-          <div className="flex items-center gap-3 mb-2">
-            <Briefcase size={20} className="text-coral" />
-            <h2
-              className="font-display text-2xl sm:text-3xl font-bold text-ivory"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              Experience & Roles
-            </h2>
-          </div>
-          <p className="font-body text-sm sm:text-base text-mute mb-8">
-            Product ownership across early-stage ventures, high-growth consumer apps, and scaled B2B platforms.
-          </p>
+        <section id="experience" className="mb-20 scroll-mt-24">
+          <SectionHeader
+            eyebrow="Experience"
+            title="Every seat, and what actually happened in it."
+            lede="Product ownership across early-stage ventures, high-growth consumer apps and scaled B2B platforms."
+          />
 
-          <div className="flex flex-col gap-8">
-            {EXPERIENCE_ROLES.map((role, idx) => (
-              <div
-                key={idx}
-                className="bg-ghost rounded-[20px] border border-[var(--rule)] p-6 sm:p-8 shadow-2xs"
+          <div className="grid gap-4">
+            {EXPERIENCE_ROLES.map((role) => (
+              <Panel
+                key={`${role.company}-${role.period}`}
+                className="bg-ink p-6 sm:p-8"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                  <div>
-                    <h3
-                      className="font-display text-xl sm:text-2xl font-bold text-ivory"
-                      style={{ fontVariationSettings: '"wdth" 92' }}
-                    >
+                <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+                  <div className="grid gap-1">
+                    <h3 className="text-xl font-normal text-pure-white">
                       {role.title}
                     </h3>
-                    <div className="font-mono text-xs uppercase tracking-[0.14em] font-semibold text-coral mt-0.5">
+                    <span className="text-[13.5px] text-coral-pulse">
                       {role.company}
-                    </div>
+                    </span>
                   </div>
-                  <div className="text-left sm:text-right">
-                    <span className="inline-block font-mono text-xs uppercase tracking-[0.14em] font-medium text-mute">
+                  <div className="grid gap-1 text-left sm:text-right">
+                    <span className="font-mono text-[11px] text-smoke">
                       {role.period}
                     </span>
-                    <span className="block font-mono text-[11px] uppercase tracking-[0.1em] text-mute mt-1">
+                    <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-smoke">
                       {role.type}
                     </span>
                   </div>
                 </div>
 
-                <p className="font-body text-sm text-mute leading-relaxed mb-6">
+                <p className="mb-5 max-w-[76ch] text-sm leading-relaxed text-ash">
                   {role.description}
                 </p>
 
                 {role.focus && (
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {role.focus.map((f, fIdx) => (
-                      <span
-                        key={fIdx}
-                        className="text-[11px] font-mono uppercase tracking-[0.1em] px-2.5 py-0.5 rounded-full bg-ghost text-mute border border-[var(--rule)]"
-                      >
-                        {f}
-                      </span>
+                  <div className="mb-5 flex flex-wrap gap-2">
+                    {role.focus.map((f) => (
+                      <Tag key={f}>{f}</Tag>
                     ))}
                   </div>
                 )}
 
-                <div className="pt-4 border-t border-[var(--rule)]">
-                  <h4 className="font-mono text-xs font-bold uppercase tracking-[0.16em] text-mute mb-3">
-                    Key Achievements
-                  </h4>
-                  <ul className="flex flex-col gap-2.5">
-                    {role.highlights.map((h, hIdx) => (
+                <div className="border-t border-hairline pt-5">
+                  <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[.05em] text-smoke">
+                    What happened
+                  </p>
+                  <ul className="grid gap-2.5">
+                    {role.highlights.map((h) => (
                       <li
-                        key={hIdx}
-                        className="flex items-start gap-2.5 text-xs sm:text-sm font-body text-ivory/85 leading-relaxed"
+                        key={h}
+                        className="grid grid-cols-[auto_1fr] items-start gap-2.5 text-sm leading-relaxed text-mist/90"
                       >
-                        <CheckCircle2 size={15} className="text-coral mt-0.5 shrink-0" />
+                        <span
+                          aria-hidden="true"
+                          className="mt-2 block size-1 rounded-full bg-coral-pulse"
+                        />
                         <span>{h}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-              </div>
+              </Panel>
             ))}
           </div>
         </section>
 
-        {/* =========================================================================
-            CROSS-BORDER PRODUCT LEADERSHIP (SECTION 16)
-            ========================================================================= */}
-        <section className="mb-20 p-8 rounded-[20px] bg-ghost border border-[var(--rule)]">
-          <div className="flex items-center gap-3 mb-3">
-            <Users2 size={20} className="text-coral" />
-            <h2
-              className="font-display text-2xl sm:text-3xl font-bold text-ivory"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              {LEADERSHIP_SECTION.title}
-            </h2>
-          </div>
-          <p className="font-body text-base text-mute mb-6">
-            {LEADERSHIP_SECTION.description}
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {LEADERSHIP_SECTION.details.map((d, dIdx) => (
-              <div
-                key={dIdx}
-                className="p-5 rounded-[20px] bg-void/60 border border-[var(--rule)] shadow-2xs"
-              >
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-coral block mb-2">
-                  PILLAR 0{dIdx + 1}
-                </span>
-                <p className="font-body text-xs sm:text-sm text-mute leading-relaxed">
-                  {d}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* =========================================================================
-            HOW I WORK (SECTION 17)
-            ========================================================================= */}
         <section className="mb-20">
-          <div className="flex items-center gap-3 mb-2">
-            <Compass size={20} className="text-coral" />
-            <h2
-              className="font-display text-2xl sm:text-3xl font-bold text-ivory"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              How I approach product problems
-            </h2>
+          <SectionHeader
+            eyebrow="Leadership"
+            title={LEADERSHIP_SECTION.title}
+            lede={LEADERSHIP_SECTION.description}
+          />
+          <div className="grid gap-3 md:grid-cols-3">
+            {LEADERSHIP_SECTION.details.map((detail, i) => (
+              <Panel key={detail} className="bg-ink p-5">
+                <span className="mb-2 block font-mono text-[10.5px] uppercase tracking-[.05em] text-coral-pulse">
+                  Pillar 0{i + 1}
+                </span>
+                <p className="text-[13.5px] leading-relaxed text-ash">
+                  {detail}
+                </p>
+              </Panel>
+            ))}
           </div>
-          <p className="font-body text-sm sm:text-base text-mute mb-8">
-            Five core principles governing discovery, architecture, and technology execution.
-          </p>
+          <ImageSlot
+            className="mt-4"
+            ratio="21 / 9"
+            label="The pod, or the Germany HQ working session. A wide shot of the team the leadership section describes."
+          />
+        </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <section className="mb-20">
+          <SectionHeader
+            eyebrow="How I work"
+            title="Five principles, and the argument under each."
+          />
+          <div className="grid gap-3 sm:grid-cols-2">
             {HOW_I_WORK_PRINCIPLES.map((principle) => (
-              <div
-                key={principle.number}
-                className="bg-ghost rounded-[20px] p-6 border border-[var(--rule)] shadow-2xs"
-              >
-                <span className="font-mono text-xs uppercase tracking-[0.18em] font-bold text-coral block mb-2">
+              <Panel key={principle.number} className="bg-ink p-6">
+                <span className="mb-2 block font-mono text-[10.5px] text-coral-pulse">
                   {principle.number}
                 </span>
-                <h3
-                  className="font-display text-base sm:text-lg font-bold text-ivory mb-2"
-                  style={{ fontVariationSettings: '"wdth" 92' }}
-                >
+                <h3 className="mb-2 text-[17px] font-medium text-pure-white">
                   {principle.title}
                 </h3>
-                <p className="font-body text-xs sm:text-sm text-mute leading-relaxed">
+                <p className="mb-3 text-[13.5px] leading-relaxed text-ash">
                   {principle.description}
                 </p>
-              </div>
+                <p className="border-t border-hairline pt-3 text-[13px] leading-relaxed text-smoke">
+                  {principle.detail}
+                </p>
+              </Panel>
             ))}
           </div>
         </section>
 
-        {/* =========================================================================
-            CAPABILITIES (SECTION 18)
-            ========================================================================= */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-2">
-            <Layers size={20} className="text-coral" />
-            <h2
-              className="font-display text-2xl sm:text-3xl font-bold text-ivory"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              Core Capabilities
-            </h2>
-          </div>
-          <p className="font-body text-sm sm:text-base text-mute mb-8">
-            Domain proficiency across the full product lifecycle.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {CAPABILITY_GROUPS.map((group, idx) => (
-              <div
-                key={idx}
-                className="p-5 rounded-[20px] bg-ghost border border-[var(--rule)] shadow-2xs"
-              >
-                <h3
-                  className="font-display text-base font-bold text-ivory mb-3"
-                  style={{ fontVariationSettings: '"wdth" 92' }}
-                >
+          <SectionHeader
+            eyebrow="Capabilities"
+            title="What you can hand me."
+            lede="Domain proficiency across the full product lifecycle."
+          />
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+            {CAPABILITY_GROUPS.map((group) => (
+              <Panel key={group.category} className="bg-ink p-5">
+                <h3 className="mb-3 text-base font-medium text-pure-white">
                   {group.category}
                 </h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {group.skills.map((skill, sIdx) => (
-                    <span
-                      key={sIdx}
-                      className="text-xs font-mono uppercase tracking-[0.1em] px-2.5 py-1 rounded-md bg-void/50 text-mute border border-[var(--rule)]"
-                    >
-                      {skill}
-                    </span>
+                <div className="flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <Tag key={skill}>{skill}</Tag>
                   ))}
                 </div>
-              </div>
+              </Panel>
             ))}
           </div>
         </section>
 
-        {/* Resume & Contact Callout Footer */}
-        <div className="p-8 rounded-[20px] bg-ghost border border-[var(--rule-strong)] text-ivory flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <h3
-              className="font-display text-xl sm:text-2xl font-bold mb-1 text-ivory"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
+        <Panel
+          loud
+          className="flex flex-wrap items-center justify-between gap-6 bg-ink p-8"
+        >
+          <div className="grid gap-1.5">
+            <h3 className="text-xl font-normal text-pure-white">
               Want the full career history?
             </h3>
-            <p className="font-body text-sm text-mute">
-              Download my official PDF resume or review career milestones.
+            <p className="text-sm text-ash">
+              The PDF has every role, dated, with the numbers attached.
             </p>
           </div>
-
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => {
-                if (onOpenResumeModal) onOpenResumeModal();
-                else onNavigate("/resume");
-              }}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-coral hover:bg-[#F6AE96] text-void font-mono uppercase text-xs tracking-[0.14em] font-semibold transition-colors cursor-pointer active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              onClick={() =>
+                onOpenResumeModal ? onOpenResumeModal() : onNavigate("/resume")
+              }
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-mist px-[18px] py-3 text-sm font-medium text-iron transition-all duration-200 hover:-translate-y-px hover:bg-white"
             >
-              <FileDown size={16} />
-              <span>Download resume</span>
+              Download CV
+              <Download className="size-3.5" strokeWidth={1.7} aria-hidden="true" />
             </button>
             <button
               type="button"
               onClick={() => onNavigate("/contact")}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-ghost hover:bg-ghost-active border border-[var(--rule)] text-ivory font-mono uppercase text-xs tracking-[0.14em] font-semibold transition-colors cursor-pointer active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+              className="v3-key-quiet inline-flex min-h-11 items-center gap-2 rounded-lg px-[18px] py-3 text-sm font-medium text-ash transition-colors duration-200 hover:text-pure-white"
             >
-              <span>Contact</span>
-              <ArrowRight size={15} />
+              Contact
+              <ArrowUpRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
             </button>
           </div>
-        </div>
+        </Panel>
       </div>
     </div>
   );

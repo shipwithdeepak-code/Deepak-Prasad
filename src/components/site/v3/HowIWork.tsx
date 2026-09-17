@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import BreathingOrb from "../../visuals/BreathingOrb";
 import { HOW_I_WORK_PRINCIPLES } from "../../../data/caseStudies";
 
 /**
@@ -43,7 +42,7 @@ export default function HowIWork() {
   );
 
   return (
-    <section id="principles" className="py-[104px]">
+    <section id="principles" className="v3-atmos v3-atmos-mint py-[104px]">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="mb-10 grid max-w-[60ch] gap-3.5">
           <p className="font-mono text-[11px] uppercase leading-[.91] tracking-[.8px] text-smoke">
@@ -52,16 +51,13 @@ export default function HowIWork() {
           <h2 className="text-[clamp(1.6rem,3.2vw,2.25rem)] font-normal leading-[1.17] tracking-[.22px] text-pure-white">
             Five rules I have actually been held to.
           </h2>
+          <p className="text-base leading-relaxed text-ash">
+            Press one to open the argument behind it.
+          </p>
         </div>
 
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
+        <div className="grid items-start gap-4 lg:grid-cols-2">
           {column(HOW_I_WORK_PRINCIPLES.slice(0, 3))}
-          <div className="order-first grid justify-items-center gap-4 lg:order-none">
-            <BreathingOrb />
-            <p className="max-w-[220px] text-center text-[11px] leading-normal text-smoke">
-              Press a principle to open the argument behind it.
-            </p>
-          </div>
           {column(HOW_I_WORK_PRINCIPLES.slice(3))}
         </div>
       </div>

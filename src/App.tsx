@@ -7,7 +7,6 @@ import CaseStudyDetailPage from "./components/CaseStudyDetailPage";
 import AboutPage from "./components/AboutPage";
 import ResumePage from "./components/ResumePage";
 import ContactPage from "./components/ContactPage";
-import CaseStudyModal from "./components/CaseStudyModal";
 import ContactModal from "./components/ContactModal";
 import ResumeModal from "./components/ResumeModal";
 import CopilotWidget from "./components/CopilotWidget";
@@ -28,9 +27,6 @@ export default function App() {
     return "/";
   });
 
-  const [isCaseStudyModalOpen, setIsCaseStudyModalOpen] = useState(false);
-  const [selectedModalCaseStudy, setSelectedModalCaseStudy] =
-    useState<CaseStudyDetail>(RESHAMANDI_CASE_STUDY);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
@@ -69,7 +65,6 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Esc") {
-        if (isCaseStudyModalOpen) setIsCaseStudyModalOpen(false);
         if (isContactModalOpen) setIsContactModalOpen(false);
         if (isResumeModalOpen) setIsResumeModalOpen(false);
       }
@@ -80,7 +75,7 @@ export default function App() {
       document.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [isCaseStudyModalOpen, isContactModalOpen, isResumeModalOpen]);
+  }, [isContactModalOpen, isResumeModalOpen]);
 
   const scrollToHash = (hash: string, attempts = 0) => {
     const el = document.getElementById(hash);
@@ -114,9 +109,10 @@ export default function App() {
     }
   };
 
-  const handleSelectCaseStudy = (caseStudy: CaseStudyDetail) => {
-    setSelectedModalCaseStudy(caseStudy);
-  };
+  /* Selecting a case study used to fill a modal that nothing ever opened.
+     The rows navigate to the full page themselves, so this is now only the
+     hook the pages are passed. */
+  const handleSelectCaseStudy = (_caseStudy: CaseStudyDetail) => {};
 
   // Every route used to share the homepage title, so the tab, history and
   // bookmarks all read the same thing wherever you were.
@@ -221,16 +217,6 @@ export default function App() {
       )}
 
       {/* Interactive Modals */}
-      <CaseStudyModal
-        caseStudy={selectedModalCaseStudy}
-        isOpen={isCaseStudyModalOpen}
-        onClose={() => setIsCaseStudyModalOpen(false)}
-        onOpenContact={() => {
-          setIsCaseStudyModalOpen(false);
-          setIsContactModalOpen(true);
-        }}
-      />
-
       <ContactModal
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}

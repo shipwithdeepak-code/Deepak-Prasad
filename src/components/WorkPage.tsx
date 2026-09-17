@@ -1,267 +1,221 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Layers,
-  Terminal,
-  Activity,
-  Cpu,
-  Database,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
   ALL_FLAGSHIP_CASE_STUDIES,
   MORE_WORK_CATEGORIES,
 } from "../data/caseStudies";
 import { CaseStudyDetail } from "../types";
 import { coverFor } from "../utils/covers";
+import { PageHeader, Panel, SectionHeader, Tag } from "./site/v3/primitives";
+import { RAIL_ENTRIES, WORK_FAMILY_LABELS, WorkFamily } from "../data/homeV3";
 
 interface WorkPageProps {
   onNavigate: (path: string) => void;
   onSelectCaseStudy: (caseStudy: CaseStudyDetail) => void;
 }
 
+const FILTERS: { label: string; family: WorkFamily | null }[] = [
+  { label: "All", family: null },
+  { label: WORK_FAMILY_LABELS.ai, family: "ai" },
+  { label: WORK_FAMILY_LABELS.marketplace, family: "marketplace" },
+  { label: WORK_FAMILY_LABELS.growth, family: "growth" },
+  { label: WORK_FAMILY_LABELS.hardware, family: "hardware" },
+];
+
+/**
+ * The work index.
+ *
+ * The homepage rail is a browse; this is the read. One wide row per product,
+ * cover on the left, the decision and the proof on the right, and the whole
+ * row is the link. Families here are the same four the homepage filters by,
+ * because two vocabularies for one set of products is one too many.
+ */
 export default function WorkPage({
   onNavigate,
   onSelectCaseStudy,
 }: WorkPageProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [family, setFamily] = useState<WorkFamily | null>(null);
 
-  const categories = [
-    { id: "all", label: "All Flagships" },
-    { id: "b2b", label: "B2B & Platforms" },
-    { id: "ai", label: "AI & Consumer" },
-    { id: "monetization", label: "Monetization & Growth" },
-    { id: "connected", label: "Connected Products" },
-  ];
+  const visible = ALL_FLAGSHIP_CASE_STUDIES.filter(
+    (study) => !family || RAIL_ENTRIES[study.slug]?.family === family,
+  );
 
-  const filteredStudies = ALL_FLAGSHIP_CASE_STUDIES.filter((study) => {
-    if (selectedCategory === "all") return true;
-    if (selectedCategory === "b2b") return study.tags.includes("B2B") || study.tags.includes("Marketplace");
-    if (selectedCategory === "ai") return study.tags.includes("AI") || study.tags.includes("Conversational AI");
-    if (selectedCategory === "monetization") return study.tags.includes("Growth") || study.tags.includes("Monetization");
-    if (selectedCategory === "connected") return study.tags.includes("Connected Products") || study.tags.includes("Product Strategy");
-    return true;
-  });
-
-  const getCategoryIcon = (category: string) => {
-    if (category.includes("B2B")) return <Database size={16} className="text-coral" />;
-    if (category.includes("Sports")) return <Activity size={16} className="text-coral" />;
-    if (category.includes("Automation")) return <Terminal size={16} className="text-coral" />;
-    return <Cpu size={16} className="text-coral" />;
+  const open = (study: CaseStudyDetail) => {
+    onSelectCaseStudy(study);
+    onNavigate(`/work/${study.slug}`);
   };
 
   return (
-    <div className="w-full bg-void text-ivory py-12 md:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div className="max-w-3xl mb-12">
-          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.18em] text-mute mb-4">
-            <i className="flex-none" style={{ width: 44, height: 1, background: "var(--color-coral)" }} />
-            <span>Portfolio & Product Case Studies</span>
-          </div>
-          <h1
-            className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-ivory leading-[1.15] mb-4"
-            style={{ fontVariationSettings: '"wdth" 92' }}
-          >
-            Selected Work & Case Studies
-          </h1>
-          <p className="font-body text-base sm:text-lg text-mute leading-relaxed font-normal">
-            A comprehensive record of products I’ve taken from ambiguity to launch, scale or development-ready strategy. Click any case study to read the deep-dive narrative.
-          </p>
+    <div className="v3-atmos v3-atmos-blue bg-void-black py-16 md:py-24">
+      <div className="mx-auto max-w-[1200px] px-6">
+        <PageHeader
+          eyebrow="Products shipped"
+          title="Everything that went live, and what it moved."
+          lede="Six of these have a page of their own: the decision, what it cost, and the number it changed. The rest are listed underneath."
+        />
+
+        <div className="mb-8 flex flex-wrap items-center gap-2">
+          {FILTERS.map((filter) => {
+            const pressed = filter.family === family;
+            return (
+              <button
+                key={filter.label}
+                type="button"
+                aria-pressed={pressed}
+                onClick={() => setFamily(filter.family)}
+                className={
+                  pressed
+                    ? "min-h-9 rounded-full bg-mist px-3.5 py-2 text-[13px] font-medium text-iron"
+                    : "v3-key-quiet min-h-9 rounded-full px-3.5 py-2 text-[13px] font-medium text-ash transition-colors duration-200 hover:text-pure-white"
+                }
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+          <span aria-live="polite" className="ml-1.5 font-mono text-[11px] text-smoke">
+            {visible.length} of {ALL_FLAGSHIP_CASE_STUDIES.length}
+          </span>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 mb-12 border-b border-[var(--rule)] pb-6">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`relative bg-transparent border-0 px-0 text-xs font-mono uppercase tracking-[0.16em] cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-coral focus-visible:outline-offset-4 active:scale-[.97] ${
-                selectedCategory === cat.id ? "text-coral" : "text-mute hover:text-ivory"
-              }`}
-              style={{ minHeight: 44, borderBottom: selectedCategory === cat.id ? "1px solid var(--color-coral)" : "1px solid transparent" }}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Flagship Case Studies List */}
-        <div className="flex flex-col gap-8 mb-24">
-          {filteredStudies.map((study, idx) => (
-            <motion.article
-              key={study.id}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
-              onClick={() => {
-                onSelectCaseStudy(study);
-                onNavigate(`/work/${study.slug}`);
-              }}
-              className="group cursor-pointer rounded-[20px] overflow-hidden bg-ghost border border-[var(--rule)] transition-all duration-300 hover:border-coral/40 hover:bg-ghost-active grid grid-cols-1 lg:grid-cols-[minmax(0,288px)_minmax(0,1fr)] relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
-            >
-              {/* Cover. Decorative: the title sits beside it, so alt is empty. */}
-              {coverFor(study.slug) && (
-                <div className="relative overflow-hidden bg-void">
-                  <img
-                    src={coverFor(study.slug)}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-44 sm:h-56 lg:h-full lg:absolute lg:inset-0 object-cover opacity-75 group-hover:opacity-100 transition-opacity duration-300"
-                  />
-                  <div
-                    className="absolute inset-0 pointer-events-none"
+        <div className="mb-24 grid gap-4">
+          {visible.map((study) => {
+            const cover = coverFor(study.slug);
+            const entry = RAIL_ENTRIES[study.slug];
+            return (
+              <Panel
+                key={study.id}
+                role="link"
+                tabIndex={0}
+                onClick={() => open(study)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    open(study);
+                  }
+                }}
+                className="group grid cursor-pointer overflow-hidden bg-ink transition-transform duration-300 hover:-translate-y-0.5 lg:grid-cols-[300px_1fr]"
+              >
+                <div className="relative min-h-[180px] overflow-hidden bg-void-black">
+                  {cover && (
+                    <img
+                      src={cover}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="size-full object-cover opacity-70 transition-opacity duration-300 group-hover:opacity-100 lg:absolute lg:inset-0"
+                    />
+                  )}
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(180deg,rgba(10,10,11,0) 55%,rgba(10,10,11,.75) 100%)",
+                        "linear-gradient(180deg, rgba(4,5,6,0) 52%, rgba(4,5,6,.8) 100%)",
                     }}
                   />
                 </div>
-              )}
 
-              <div className="p-6 sm:p-10 flex flex-col justify-between min-w-0">
-              <div>
-                {/* Header row */}
-                <div className="flex items-center justify-between gap-4 mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs uppercase tracking-[0.16em] text-coral font-medium">
-                      {study.category}
-                    </span>
+                <div className="grid content-between gap-6 p-6 sm:p-8">
+                  <div className="grid gap-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-ash">
+                        {entry
+                          ? WORK_FAMILY_LABELS[entry.family]
+                          : study.category}
+                      </span>
+                      <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-smoke">
+                        {study.isStrategyOnly
+                          ? "Development ready strategy"
+                          : study.timeline}
+                      </span>
+                    </div>
+                    <h2 className="text-2xl font-normal leading-[1.17] text-pure-white">
+                      {study.title}
+                    </h2>
+                    <p className="max-w-[68ch] text-[15px] leading-relaxed text-mist/90">
+                      {study.subtitle}
+                    </p>
+                    <p className="max-w-[72ch] text-sm leading-relaxed text-ash">
+                      {study.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {study.tags.map((tag) => (
+                        <Tag key={tag}>{tag}</Tag>
+                      ))}
+                    </div>
                   </div>
 
-                  {study.isStrategyOnly ? (
-                    <span className="text-coral text-xs font-mono uppercase tracking-[0.14em]">
-                      Development-Ready Strategy
-                    </span>
-                  ) : (
-                    <span className="font-mono text-xs uppercase tracking-[0.14em] text-mute">
-                      {study.timeline}
-                    </span>
-                  )}
-                </div>
-
-                {/* Title and Subtitle */}
-                <h2
-                  className="font-display text-2xl sm:text-3xl font-bold text-ivory group-hover:text-coral transition-colors leading-snug mb-2"
-                  style={{ fontVariationSettings: '"wdth" 92' }}
-                >
-                  {study.title}
-                </h2>
-                <p className="font-body text-sm sm:text-base font-medium text-ivory/80 mb-4 max-w-3xl">
-                  {study.subtitle}
-                </p>
-
-                {/* Description */}
-                <p className="font-body text-sm text-mute leading-relaxed mb-6 max-w-3xl">
-                  {study.description}
-                </p>
-
-                {/* Tags */}
-                <div
-                  className="flex flex-wrap items-center font-mono uppercase text-mute mb-6"
-                  style={{ gap: "6px 18px", fontSize: 11, letterSpacing: ".14em" }}
-                >
-                  {study.tags.map((tag, tIdx) => (
-                    <span key={tIdx}>{tag}</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Footer Proof & CTA */}
-              <div className="pt-6 border-t border-[var(--rule)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs sm:text-[13px] font-body">
-                  {study.proofPoints.map((proof, pIdx) => (
-                    <div key={pIdx} className="flex items-center gap-1.5 text-ivory/80 font-medium">
-                      <CheckCircle2 size={14} className="text-coral shrink-0" />
-                      <span>{proof}</span>
+                  <div className="flex flex-wrap items-center justify-between gap-4 border-t border-hairline pt-5">
+                    <div className="flex flex-wrap gap-x-6 gap-y-1.5">
+                      {study.proofPoints.map((proof) => (
+                        <span
+                          key={proof}
+                          className="font-mono text-[11px] text-mist"
+                        >
+                          {proof}
+                        </span>
+                      ))}
                     </div>
-                  ))}
+                    <span className="inline-flex shrink-0 items-center gap-2 text-[13px] font-medium text-coral-pulse">
+                      Read it
+                      <ArrowUpRight
+                        className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                        strokeWidth={2}
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
                 </div>
-
-                <div className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.16em] font-semibold text-coral group-hover:translate-x-1 transition-transform shrink-0">
-                  <span>Read full case study</span>
-                  <ArrowRight size={14} />
-                </div>
-              </div>
-              </div>
-            </motion.article>
-          ))}
+              </Panel>
+            );
+          })}
         </div>
 
-        {/* =========================================================================
-            MORE WORK (SECTION 13)
-            ========================================================================= */}
-        <section id="more-work" className="pt-8 border-t border-[var(--rule)]">
-          <div className="max-w-3xl mb-12">
-            <div className="inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-coral mb-2">
-              <Layers size={14} className="text-coral" />
-              <span>Secondary & Systems Work</span>
-            </div>
-            <h2
-              className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-ivory"
-              style={{ fontVariationSettings: '"wdth" 92' }}
-            >
-              More work
-            </h2>
-            <p className="font-body text-base text-mute mt-2">
-              A record of platform extensions, operational pipelines, CRM/ERP integrations, and earlier hardware product initiatives.
-            </p>
-          </div>
+        <section id="more-work" className="border-t border-hairline pt-16">
+          <SectionHeader
+            eyebrow="Secondary and systems work"
+            title="The rest of the record."
+            lede="Platform extensions, operational pipelines, CRM and ERP integrations, and the earlier hardware work. No separate page each; the scope line is the summary."
+          />
 
-          <div className="flex flex-col gap-12">
-            {MORE_WORK_CATEGORIES.map((cat, cIdx) => (
-              <div key={cIdx} className="bg-ghost rounded-[20px] border border-[var(--rule)] p-6 sm:p-8 shadow-2xs">
-                <div className="flex items-center gap-3 mb-2">
-                  {getCategoryIcon(cat.category)}
-                  <h3
-                    className="font-display text-xl sm:text-2xl font-bold text-ivory"
-                    style={{ fontVariationSettings: '"wdth" 92' }}
-                  >
+          <div className="grid gap-10">
+            {MORE_WORK_CATEGORIES.map((cat) => (
+              <div key={cat.category} className="grid gap-4">
+                <div className="grid gap-1.5">
+                  <h3 className="text-xl font-normal text-pure-white">
                     {cat.category}
                   </h3>
+                  <p className="max-w-[72ch] text-sm leading-relaxed text-ash">
+                    {cat.description}
+                  </p>
                 </div>
-                <p className="font-body text-xs sm:text-sm text-mute mb-6">
-                  {cat.description}
-                </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {cat.items.map((item, iIdx) => (
-                    <div
-                      key={iIdx}
-                      className="rounded-[20px] bg-void/60 hover:bg-ghost border border-[var(--rule)] p-5 transition-colors flex flex-col justify-between"
+                <div className="grid gap-3 md:grid-cols-2">
+                  {cat.items.map((item) => (
+                    <Panel
+                      key={item.title}
+                      className="grid content-between gap-4 bg-ink p-5"
                     >
-                      <div>
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <h4
-                            className="font-display text-base font-bold text-ivory"
-                            style={{ fontVariationSettings: '"wdth" 92' }}
-                          >
+                      <div className="grid gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <h4 className="text-base font-medium text-pure-white">
                             {item.title}
                           </h4>
-                          <span className="text-[11px] font-mono font-semibold text-coral px-2 py-0.5 rounded-full bg-ghost border border-[var(--rule-strong)] shrink-0 uppercase tracking-[0.12em]">
+                          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[.05em] text-coral-pulse">
                             {item.scope}
                           </span>
                         </div>
-                        <p className="font-body text-xs sm:text-[13px] text-mute leading-relaxed mb-4">
+                        <p className="text-[13px] leading-relaxed text-ash">
                           {item.description}
                         </p>
                       </div>
-
-                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[var(--rule)]">
-                        {item.tags.map((t, tIdx) => (
-                          <span
-                            key={tIdx}
-                            className="text-[10px] font-mono uppercase tracking-[0.1em] px-2 py-0.5 rounded bg-ghost text-mute border border-[var(--rule)]"
-                          >
-                            {t}
-                          </span>
+                      <div className="flex flex-wrap gap-2 border-t border-hairline pt-3">
+                        {item.tags.map((t) => (
+                          <Tag key={t}>{t}</Tag>
                         ))}
                       </div>
-                    </div>
+                    </Panel>
                   ))}
                 </div>
               </div>

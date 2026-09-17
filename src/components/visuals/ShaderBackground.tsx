@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 
 /**
- * Fluted glass, in black and white.
+ * Fluted glass, in the hero's two colours.
  *
  * Adapted from the 21st.dev Shader Builder "Fluted Glass" preset, which is
  * itself derived from Paper Shaders (Apache-2.0):
@@ -10,9 +10,12 @@ import { useReducedMotion } from "framer-motion";
  *
  * Three things were changed from the preset for this site.
  *
- * Saturation is zero, so the output is greyscale by construction rather than
- * by a CSS filter laid over a colour shader. The palette is a four-stop grey
- * ramp for the same reason.
+ * The palette is four stops of the hero artwork colours from DESIGN.md:
+ * coral, cobalt, deep space and electric sky. That file reserves these for
+ * the hero composition and nothing else, and it says the hero is the one
+ * place the system is allowed to break its own rules. The grey ramp this
+ * started from was faithful to the rest of the page and made the top of the
+ * site read as switched off.
  *
  * Time runs at an eighth of the preset's speed. At the original rate the
  * flutes read as a screensaver behind the headline; this slow it reads as a
@@ -177,10 +180,10 @@ void main(){
 
 const CONFIG = {
   colors: [
-    [0.86, 0.86, 0.87],
-    [0.3, 0.3, 0.31],
-    [0.045, 0.05, 0.055],
-    [0.93, 0.93, 0.92],
+    [1.0, 0.388, 0.388],   // coral pulse   #ff6363
+    [0.078, 0.235, 0.639], // cobalt edge   #143ca3
+    [0.008, 0.098, 0.231], // deep space    #02193b
+    [0.388, 0.631, 1.0],   // electric sky  #63a1ff
   ],
   colorCount: 4,
   scale: 1.92,
@@ -189,8 +192,8 @@ const CONFIG = {
   warp: 0.084,
   detail: 2.624,
   contrast: 1.06,
-  brightness: -0.04,
-  saturation: 0,
+  brightness: -0.12,
+  saturation: 1,
   seed: 1,
   vignette: 0.28,
   blur: 0.0012,

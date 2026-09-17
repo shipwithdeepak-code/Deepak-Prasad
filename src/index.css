@@ -56,10 +56,15 @@
   --color-coral-pulse: #ff6363;
   --color-ember-hush: #452324;
 
-  /* hero artwork only, never interface controls */
+  /* hero artwork and atmospheric washes, never interface controls */
   --color-electric-sky: #63a1ff;
   --color-cobalt-edge: #143ca3;
   --color-deep-space: #02193b;
+
+  /* supporting washes. DESIGN.md is explicit that these are decorative
+     bands and soft emphasis behind content, never status colours. */
+  --color-info-blue: #56c2ff;
+  --color-success-green: #59d499;
 
   --color-hairline: #363739;
 }
@@ -197,6 +202,103 @@
   backdrop-filter: blur(24px) saturate(1.2);
   box-shadow: rgba(255, 255, 255, .08) 0 1px 0 0 inset,
               rgba(255, 255, 255, .14) 0 0 0 1px;
+}
+
+/* The document background. Every page sets its own, but the area a short
+   page leaves below the footer belongs to the root, and it was unpainted. */
+html, body {
+  background-color: var(--color-void-black);
+}
+
+/* ============================================================
+   Atmosphere.
+   DESIGN.md rations colour in the interface and spends all of it on the
+   surfaces behind: multi-layer radial gradients, heavy blur, coral and
+   blue geometry. Without this the palette is 100% grey and the page reads
+   as austere rather than cinematic. None of it touches a control: the
+   washes sit behind content at z-index -1 and the text on top is the same
+   white, ash and smoke it was.
+   ============================================================ */
+.v3-atmos {
+  position: relative;
+  isolation: isolate;
+}
+.v3-atmos::before {
+  content: "";
+  position: absolute;
+  /* Flush, not bled. At -12% the wash painted past the last section and
+     showed under the footer as a band of loose colour. */
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.v3-atmos-coral::before {
+  background:
+    radial-gradient(46% 40% at 10% 16%, rgba(255, 99, 99, .17), transparent 68%),
+    radial-gradient(42% 38% at 90% 84%, rgba(69, 35, 36, .62), transparent 72%);
+}
+.v3-atmos-blue::before {
+  background:
+    radial-gradient(52% 44% at 84% 12%, rgba(86, 194, 255, .13), transparent 68%),
+    radial-gradient(46% 42% at 6% 88%, rgba(20, 60, 163, .3), transparent 72%);
+}
+.v3-atmos-mint::before {
+  background:
+    radial-gradient(44% 40% at 16% 84%, rgba(89, 212, 153, .1), transparent 68%),
+    radial-gradient(48% 42% at 88% 14%, rgba(255, 99, 99, .11), transparent 70%);
+}
+
+/* The hero's cinematic moment. DESIGN.md calls for coral geometry at 40px+
+   blur cutting across a blue radial wash, and says outright that this is the
+   one place the system breaks its own rules. */
+.v3-hero-geo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.v3-hero-geo span {
+  position: absolute;
+  display: block;
+  filter: blur(46px);
+  will-change: transform;
+}
+.v3-hero-geo .bar-a {
+  width: 62%;
+  height: 128px;
+  left: -8%;
+  top: 34%;
+  transform: rotate(-14deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 99, 99, .5), transparent);
+}
+.v3-hero-geo .bar-b {
+  width: 46%;
+  height: 92px;
+  right: -6%;
+  top: 12%;
+  transform: rotate(-22deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 99, 99, .3), transparent);
+}
+.v3-hero-geo .wash {
+  inset: -20% -10% auto -10%;
+  height: 120%;
+  filter: blur(38px);
+  background:
+    radial-gradient(58% 52% at 50% 26%, rgba(4, 63, 150, .58), rgba(6, 18, 37, .22) 72%, transparent 88%);
+}
+
+/* A slot for artwork that has not been supplied yet. Hatched rather than
+   flat, so it reads as a deliberate placeholder in a screenshot and not as a
+   card that failed to load. */
+.v3-slot {
+  box-shadow: var(--key-quiet);
+  background-color: var(--color-ink);
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 99, 99, .05) 0 10px,
+    transparent 10px 20px
+  );
 }
 
 /* One visible focus ring for the whole site. There was none: every focusable

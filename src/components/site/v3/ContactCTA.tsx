@@ -1,6 +1,5 @@
 import React from "react";
 import { ArrowUpRight, Download } from "lucide-react";
-import BreathingOrb from "../../visuals/BreathingOrb";
 import { LOCATION, RESPONSE_TIME } from "../../../utils/contact";
 
 interface ContactCTAProps {
@@ -30,7 +29,6 @@ export default function ContactCTA({
               "radial-gradient(70% 90% at 50% 6%, rgba(255,99,99,.16), transparent 62%), #07080a",
           }}
         >
-          <BreathingOrb size={110} className="mb-2" />
           <h2 className="max-w-[16ch] text-[clamp(1.9rem,4.4vw,3rem)] font-normal leading-[1.17] tracking-[.22px] text-pure-white">
             Tell me what you are hiring for.
           </h2>

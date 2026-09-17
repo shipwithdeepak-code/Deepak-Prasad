@@ -80,20 +80,30 @@ export default function HeroConsole({
       {/* Fluted glass, greyscale, moving slowly enough to be noticed rather
           than watched. It sits under the portrait so the face stays the
           subject and the glass stays the surface. */}
-      <ShaderBackground className="pointer-events-none absolute inset-0 z-0 block size-full opacity-[.32]" />
+      <ShaderBackground className="pointer-events-none absolute inset-0 z-0 block size-full opacity-[.5]" />
+
+      {/* The cinematic moment DESIGN.md asks for: coral geometry at heavy blur
+          cutting across a blue radial wash. It is the one composition on the
+          site that is allowed to be loud, and it is why the page does not open
+          on a grey rectangle. */}
+      <div aria-hidden="true" className="v3-hero-geo">
+        <span className="wash" />
+        <span className="bar-a" />
+        <span className="bar-b" />
+      </div>
 
       {/* Portrait as atmosphere. Greyscale and blurred in the asset itself,
           not at runtime: a large CSS blur repaints on every frame the hero
           animates, and this one never changes. */}
       <div
         aria-hidden="true"
-        className="v3-hero-photo pointer-events-none absolute inset-0 z-[1] bg-cover mix-blend-screen"
+        className="v3-hero-photo pointer-events-none absolute inset-0 z-[2] bg-cover mix-blend-screen"
       />
       {/* One sharp band of the real photograph. A blurred portrait on its own
           reads as a stock background; a single crisp edge says it is a person. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-[34%] bg-cover opacity-55 md:block"
+        className="pointer-events-none absolute inset-y-0 left-0 z-[2] hidden w-[34%] bg-cover opacity-55 md:block"
         style={{
           backgroundImage: "url('/deepak-hero-sharp.jpg')",
           backgroundPosition: "60% 16%",
@@ -105,10 +115,21 @@ export default function HeroConsole({
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[2]"
+        className="pointer-events-none absolute inset-0 z-[3]"
         style={{
           background:
             "radial-gradient(132% 98% at 44% 32%, transparent 26%, rgba(4,5,6,.78) 74%, #040506 100%)",
+        }}
+      />
+      {/* A scrim over the left column only. The blue wash is bright exactly
+          where the headline and its supporting line sit, and colour behind
+          type is worth nothing if the type stops being readable. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[3]"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(4,5,6,.72) 0%, rgba(4,5,6,.34) 38%, transparent 58%)",
         }}
       />
 
@@ -118,7 +139,7 @@ export default function HeroConsole({
             Eleven products shipped. Ask{" "}
             <span className="text-coral-pulse">the archive</span> anything.
           </h1>
-          <p className="max-w-[38ch] text-base leading-relaxed text-ash">
+          <p className="max-w-[38ch] text-base leading-relaxed text-mist/90">
             Marketplaces, subscription, connected hardware and applied AI. Two
             of them I designed and wrote myself.
           </p>

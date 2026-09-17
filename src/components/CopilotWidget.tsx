@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
+import BreathingOrb from "./visuals/BreathingOrb";
 import {
   Sparkles,
   Send,
@@ -358,11 +359,9 @@ export default function CopilotWidget({
         id="copilot-launcher-btn"
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group flex items-center justify-center w-14 h-14 rounded-full bg-void text-ivory active:scale-[.97] border-2 ${
-          isOpen ? "border-coral" : "border-coral/40 hover:border-coral"
-        } cursor-pointer ${
-          shouldReduceMotion || isOpen ? "" : "animate-copilot-breathe"
-        } overflow-visible transition-opacity duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group flex items-center justify-center w-14 h-14 rounded-full bg-void text-ivory active:scale-[.97] ${
+          isOpen ? "border-2 border-coral" : ""
+        } cursor-pointer overflow-visible transition-opacity duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral ${
           isOpen || launcherVisible
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -375,14 +374,10 @@ export default function CopilotWidget({
         {isOpen ? (
           <X size={20} className="text-ivory group-hover:text-coral transition-colors" />
         ) : (
-          <>
-            {/* Avatar container */}
-            <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-void">
-              <div className="w-full h-full flex items-center justify-center font-mono font-bold text-sm text-ivory select-none group-hover:scale-105 transition-transform bg-void">
-                DP
-              </div>
-            </div>
-          </>
+          /* Dipa itself: the breathing orb, at launcher size. The initials
+             that used to sit here read as an avatar, which promised a person
+             rather than an assistant. */
+          <BreathingOrb size={52} />
         )}
       </button>
 
