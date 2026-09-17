@@ -84,8 +84,7 @@ function keywordFallbackScore(query: string, chunk: KnowledgeChunk): number {
 
 async function startServer() {
   const app = express();
-  // Cloud Run hands the port to the container; 3000 is the local default.
-  const PORT = Number(process.env.PORT) || 3000;
+  const PORT = 3000;
 
   app.use(express.json());
 
