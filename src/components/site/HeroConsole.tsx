@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowUpRight, CornerDownLeft, Download, Search } from "lucide-react";
 import { NAV_LINKS } from "../../data/nav";
+import ShaderBackground from "../visuals/ShaderBackground";
 
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
@@ -39,18 +40,23 @@ export default function HeroConsole({
 }: HeroConsoleProps) {
   return (
     <header className="relative isolate overflow-hidden bg-void-black">
+      {/* Fluted glass, greyscale, moving slowly enough to be noticed rather
+          than watched. It sits under the portrait so the face stays the
+          subject and the glass stays the surface. */}
+      <ShaderBackground className="pointer-events-none absolute inset-0 z-0 block size-full opacity-[.32]" />
+
       {/* Portrait as atmosphere. Greyscale and blurred in the asset itself,
           not at runtime: a large CSS blur repaints on every frame the hero
           animates, and this one never changes. */}
       <div
         aria-hidden="true"
-        className="v3-hero-photo pointer-events-none absolute inset-0 z-0 bg-cover mix-blend-screen"
+        className="v3-hero-photo pointer-events-none absolute inset-0 z-[1] bg-cover mix-blend-screen"
       />
       {/* One sharp band of the real photograph. A blurred portrait on its own
           reads as a stock background; a single crisp edge says it is a person. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 z-0 hidden w-[34%] bg-cover opacity-55 md:block"
+        className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-[34%] bg-cover opacity-55 md:block"
         style={{
           backgroundImage: "url('/deepak-hero-sharp.jpg')",
           backgroundPosition: "60% 16%",
@@ -62,7 +68,7 @@ export default function HeroConsole({
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[1]"
+        className="pointer-events-none absolute inset-0 z-[2]"
         style={{
           background:
             "radial-gradient(132% 98% at 44% 32%, transparent 26%, rgba(4,5,6,.78) 74%, #040506 100%)",
