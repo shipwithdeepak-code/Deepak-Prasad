@@ -85,6 +85,50 @@
 .v3-key { box-shadow: var(--key); }
 .v3-key-quiet { box-shadow: var(--key-quiet); }
 
+/* The ask bar. A slow highlight travels the top edge, which is the one
+   piece of perpetual motion on the page: this input is the site's primary
+   instrument and the thing no other portfolio has, so it has to read as
+   something you type into rather than a label. It stops on focus, because
+   once someone is typing the invitation has done its job. */
+.v3-ask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding-top: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 99, 99, 0) 35%,
+    rgba(255, 99, 99, .55) 50%,
+    rgba(255, 99, 99, 0) 65%,
+    transparent 100%);
+  background-size: 220% 1px;
+  background-repeat: no-repeat;
+  background-position: -60% 0;
+  animation: v3-sweep 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.v3-ask:focus-within::after { animation: none; opacity: 0; }
+
+@keyframes v3-sweep {
+  0%   { background-position: -60% 0; }
+  55%  { background-position: 160% 0; }
+  100% { background-position: 160% 0; }
+}
+
+/* The rotating question. Crossfaded rather than typed: a typewriter on a
+   placeholder reflows the line on every character. */
+.v3-hint { animation: v3-hint-in .5s var(--ease-v3) both; }
+@keyframes v3-hint-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-ask::after { animation: none; opacity: 0; }
+  .v3-hint { animation: none; }
+}
+
 /* The hero portrait. Framed differently on a phone: at one column the
    face has to sit behind the type from the top down, not off to one side,
    or it reads as an empty dark panel. */

@@ -1,25 +1,32 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, CornerDownLeft, Download, Search } from "lucide-react";
 import { NAV_LINKS } from "../../data/nav";
+import { useReducedMotion } from "framer-motion";
 import ShaderBackground from "../visuals/ShaderBackground";
 
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
   onOpenContact?: () => void;
+  /** Hands the question to the real copilot. The hero does not answer
+   *  anything itself: it is the entry point to the RAG, not a copy of it. */
+  onAsk: (question?: string) => void;
 }
 
-/** The one answer the console shows before anyone types. A visitor who never
- *  touches the input still gets the strongest thing the archive can say.
- *  The rest of the set, and the typing that reaches it, lands with the
- *  interaction step. */
-const DEFAULT_ANSWER = {
-  question: "What have you shipped?",
-  claim: "Eleven products across marketplaces, subscription, hardware and applied AI.",
-  context:
-    "A B2B trading marketplace moving ₹20-25 Cr a month, a subscription business at €659K FY2025, an AI coach, and the workflow automation underneath all of it.",
-  facts: ["11 products", "5 categories", "2018 to 2026"],
-};
+/** Real questions, rotated through the bar so it reads as something you type
+ *  into. Each one is answerable from the knowledge base behind the copilot. */
+const QUESTIONS = [
+  "What did you decide at ReshaMandi?",
+  "Have you managed people?",
+  "Show me a decision you got wrong",
+  "What have you built yourself?",
+  "Which of these moved a real number?",
+];
+
+/** Capability facts, not per-query claims. 45 is the real chunk count in
+ *  ragKnowledgeBase.json, and the copilot really does cite the chunks it
+ *  used. Nothing here asserts a latency the hero never measured. */
+const COPILOT_FACTS = ["45 sources", "Cites every answer", "Built by me"];
 
 /**
  * v3 hero.
@@ -37,7 +44,32 @@ export default function HeroConsole({
   onNavigate,
   onOpenResumeModal,
   onOpenContact,
+  onAsk,
 }: HeroConsoleProps) {
+  const reduceMotion = useReducedMotion();
+  const [query, setQuery] = useState("");
+  const [hint, setHint] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const id = window.setInterval(
+      () => setHint((i) => (i + 1) % QUESTIONS.length),
+      3800,
+    );
+    return () => window.clearInterval(id);
+  }, [reduceMotion]);
+
+  const ask = (question: string) => {
+    const text = question.trim();
+    if (!text) {
+      inputRef.current?.focus();
+      return;
+    }
+    onAsk(text);
+    setQuery("");
+  };
+
   return (
     <header className="relative isolate overflow-hidden bg-void-black">
       {/* Fluted glass, greyscale, moving slowly enough to be noticed rather
@@ -159,36 +191,64 @@ export default function HeroConsole({
           </div>
         </div>
 
-        <div>
+        <div className="grid gap-3">
           <div className="v3-key overflow-hidden rounded-2xl bg-ink/[.62] backdrop-blur-2xl">
-            <div className="flex items-center gap-3 border-b border-white/[.08] px-4 py-[15px]">
+            <form
+              className="v3-ask relative flex items-center gap-3 border-b border-white/[.08] px-4 py-[15px]"
+              onSubmit={(e) => {
+                e.preventDefault();
+                ask(query);
+              }}
+            >
               <Search
                 className="size-[17px] shrink-0 text-coral-pulse"
                 strokeWidth={1.7}
                 aria-hidden="true"
               />
-              <span className="min-w-0 flex-1 truncate text-[15.5px] text-ash">
-                {DEFAULT_ANSWER.question}
-              </span>
-              <span className="rounded-md bg-graphite px-1.5 py-1 font-mono text-[10px] text-smoke">
+              <div className="relative min-w-0 flex-1">
+                <input
+                  ref={inputRef}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  type="text"
+                  autoComplete="off"
+                  aria-label="Ask the copilot about my work"
+                  className="w-full bg-transparent text-[15.5px] text-pure-white caret-coral-pulse outline-none"
+                />
+                {/* The rotating question sits behind a real input rather than
+                    in its placeholder, because a placeholder cannot crossfade. */}
+                {query === "" && (
+                  <span
+                    key={hint}
+                    aria-hidden="true"
+                    className="v3-hint pointer-events-none absolute inset-y-0 left-0 flex items-center truncate text-[15.5px] text-ash"
+                  >
+                    {QUESTIONS[hint]}
+                  </span>
+                )}
+              </div>
+              <button
+                type="submit"
+                aria-label="Ask the copilot"
+                className="rounded-md bg-graphite px-1.5 py-1 text-smoke transition-colors duration-200 hover:text-mist"
+              >
                 <CornerDownLeft className="size-3" strokeWidth={1.7} aria-hidden="true" />
-              </span>
-            </div>
+              </button>
+            </form>
 
-            <div className="grid min-h-[150px] content-start gap-3 px-[18px] pb-4 pt-5">
+            <div className="grid gap-3 px-[18px] pb-4 pt-5">
               <p className="text-[19px] leading-[1.32] tracking-[.2px] text-pure-white">
-                {DEFAULT_ANSWER.claim}
+                A retrieval copilot over everything I have shipped.
               </p>
               <p className="text-[14.5px] leading-relaxed text-ash">
-                {DEFAULT_ANSWER.context}
+                Ask it about a decision, a number, or something I got wrong. It
+                answers from my own case studies and shows you the sources it
+                used. I built it.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 border-t border-white/[.07] bg-white/[.015] px-[18px] py-3">
-              <span className="rounded-md px-1.5 py-1 font-mono text-[10.5px] tracking-[.05em] text-smoke ring-1 ring-inset ring-white/10">
-                FROM THE ARCHIVE
-              </span>
-              {DEFAULT_ANSWER.facts.map((fact) => (
+              {COPILOT_FACTS.map((fact) => (
                 <span
                   key={fact}
                   className="rounded-md bg-graphite px-1.5 py-1 font-mono text-[10.5px] tracking-[.05em] text-mist"
@@ -197,6 +257,19 @@ export default function HeroConsole({
                 </span>
               ))}
             </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {QUESTIONS.slice(0, 3).map((question) => (
+              <button
+                key={question}
+                type="button"
+                onClick={() => ask(question)}
+                className="v3-key-quiet min-h-9 rounded-full px-3.5 py-2 text-[12.5px] font-medium text-ash transition-all duration-200 hover:-translate-y-px hover:text-pure-white"
+              >
+                {question}
+              </button>
+            ))}
           </div>
         </div>
       </div>

@@ -34,6 +34,7 @@ export default function HomePage({
         onNavigate={onNavigate}
         onOpenResumeModal={onOpenResumeModal}
         onOpenContact={onOpenContact}
+        onAsk={(question) => openCopilot(question)}
       />
       <KineticStrip />
       <WorkFan
