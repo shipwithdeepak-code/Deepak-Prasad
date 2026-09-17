@@ -1,5 +1,5 @@
 import React from "react";
-import HeroFullFace from "./site/HeroFullFace";
+import HeroConsole from "./site/HeroConsole";
 import KineticStrip from "./site/KineticStrip";
 import WorkFan from "./site/WorkFan";
 import PrinciplesFloat from "./site/PrinciplesFloat";
@@ -30,11 +30,10 @@ export default function HomePage({
 }: HomePageProps) {
   return (
     <div className="bg-void">
-      <HeroFullFace
+      <HeroConsole
         onNavigate={onNavigate}
         onOpenResumeModal={onOpenResumeModal}
         onOpenContact={onOpenContact}
-        onAskDipa={(initialText) => openCopilot(initialText)}
       />
       <KineticStrip />
       <WorkFan
