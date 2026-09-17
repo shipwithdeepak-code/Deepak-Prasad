@@ -418,9 +418,9 @@ export const AI_COACH_CASE_STUDY: CaseStudyDetail = {
     retrospect: '',   // A real one. No regret anywhere reads as marketing.
   },
   tags: ['AI', 'Conversational AI', '0→1', 'Consumer'],
-  proofPoints: ['~300 → ~2,000 DAU', 'in ~3 months', 'Gemini + ChatGPT Fallback'],
+  proofPoints: ['~300 → 3,200+ DAU', 'in ~3 months', 'Gemini + ChatGPT Fallback'],
   keyStats: [
-    { label: 'Active User Scale', value: '~300 → ~2,000 DAU', detail: 'Achieved within ~3 months of launch' },
+    { label: 'Active User Scale', value: '~300 → 3,200+ DAU', detail: 'Achieved within ~3 months of launch' },
     { label: 'Primary LLM', value: 'Gemini', detail: 'Cost-efficient & high-speed reasoning' },
     { label: 'Fallback LLM', value: 'ChatGPT', detail: 'High-availability failover architecture' },
     { label: 'Core Principle', value: 'Safety First', detail: 'Deterministic guardrails over open generation' },
@@ -557,15 +557,15 @@ export const AI_COACH_CASE_STUDY: CaseStudyDetail = {
       id: 'outcome',
       number: '06',
       title: 'Adoption Outcome & Key Product Takeaways',
-      subtitle: 'Scaling from ~300 to ~2,000 DAU within roughly 3 months',
+      subtitle: 'Scaling from ~300 to 3,200+ DAU within roughly 3 months',
       content: [
-        'Within approximately 3 months of launch, daily active usage of the AI Coach scaled from ~300 DAU to ~2,000 DAU, becoming a primary discovery surface for workouts and nutrition guides.',
+        'Within approximately 3 months of launch, daily active usage of the AI Coach scaled from ~300 DAU to 3,200+ DAU, becoming a primary discovery surface for workouts and nutrition guides.',
         'Importantly, we maintain disciplined attribution: while overall platform engagement and subscriber numbers grew during this period, we do not make unsubstantiated claims that the AI Coach alone drove company-wide subscription revenue.',
         'The primary achievement was transforming an ambiguous AI novelty into a dependable, safe, and heavily utilized product utility.',
       ],
       highlights: [
         {
-          title: '~300 → ~2,000 DAU',
+          title: '~300 → 3,200+ DAU',
           desc: 'Achieved through organic discovery, in-app workout integration, and word-of-mouth trust.',
         },
         {
@@ -1172,7 +1172,7 @@ export const COPILOT_GOLDEN_EVALUATION_SET: EvaluationRow[] = [
     retrievalHitTop3: true,
     similarity: 0.87,
     status: "Pass",
-    notes: "Retrieved ~300 to ~2,000 DAU scale within ~3 months."
+    notes: "Retrieved ~300 to 3,200+ DAU scale within ~3 months."
   },
   {
     id: 6,
@@ -1724,7 +1724,7 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
       'Owned end-to-end subscription strategy, consumer AI initiatives, and connected product experiences for a digital fitness platform across iOS and Android.',
     focus: ['AI Coach (0→1)', 'Subscription & Monetization', 'Connected Products', 'Growth & Retention'],
     highlights: [
-      'Spearheaded 0→1 development of conversational in-app AI Coach (Gemini primary, ChatGPT fallback); scaled adoption from ~300 to ~2,000 DAU within roughly 3 months.',
+      'Spearheaded 0→1 development of conversational in-app AI Coach (Gemini primary, ChatGPT fallback); scaled adoption from ~300 to 3,200+ DAU within roughly 3 months.',
       'Managed subscription strategy across 174,180 freemium and 12,401 paying users; drove 81.9% YoY subscriber growth and 96.8% yearly-plan retention (€659K FY25 subscription revenue).',
       'Architected comprehensive development-ready P0 strategy for Performance Score (0–100 Athletic Reliability) uniting mobile, Smart Gym, and wearable telemetry.',
       'Designed AI-assisted content localization pipeline shipping 200+ workout videos in ~3 weeks (~10× faster) across Italian, French, and Spanish.',
