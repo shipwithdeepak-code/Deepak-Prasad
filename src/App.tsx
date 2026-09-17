@@ -235,6 +235,7 @@ export default function App() {
       <CopilotWidget
         onOpenBookChat={() => openCalendly()}
         onNavigate={navigate}
+        currentPath={currentPath}
       />
     </div>
   );

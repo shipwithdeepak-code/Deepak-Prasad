@@ -76,7 +76,7 @@ export default function HeroConsole({
   };
 
   return (
-    <header className="relative isolate overflow-hidden bg-[#0A0A0B] w-full min-h-[100svh] flex flex-col justify-between">
+    <header id="hero" className="relative isolate overflow-hidden bg-[#0A0A0B] w-full min-h-[100svh] flex flex-col justify-between">
       {/* 
         LAYER 1: Full-Screen Edge-to-Edge Shader Background
         Exact order: Swirl -> ChromaFlow -> FlutedGlass -> FilmGrain

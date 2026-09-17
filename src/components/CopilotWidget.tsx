@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
 import BreathingOrb from "./visuals/BreathingOrb";
+import PlasmaRing from "./visuals/PlasmaRing";
 import {
   Send,
   X,
@@ -39,6 +40,7 @@ interface Message {
 interface CopilotWidgetProps {
   onOpenBookChat: () => void;
   onNavigate: (path: string) => void;
+  currentPath?: string;
 }
 
 type OpenCopilotHandler = (initialText?: string) => void;
@@ -64,27 +66,74 @@ const STARTER_PROMPTS = [
 export default function CopilotWidget({
   onOpenBookChat,
   onNavigate,
+  currentPath = "/",
 }: CopilotWidgetProps) {
   const shouldReduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
 
-  /* The hero carries the assistant as its front door, so the floating
-     launcher stands down while the hero is on screen and fades up once the
-     reader is past it. On pages with no hero it is always available. */
-  const [launcherVisible, setLauncherVisible] = useState(false);
+  /* The hero carries the assistant search bar as its front door, so the floating
+     Plasma Ring launcher stands down while the hero is visible on screen and fades up
+     once the reader is past it. On non-Hero pages and routes, it is always available. */
+  const isHomePage = currentPath === "/";
+  const [launcherVisible, setLauncherVisible] = useState(!isHomePage);
+
   useEffect(() => {
-    const hero = document.getElementById("hero");
-    if (!hero || typeof IntersectionObserver === "undefined") {
+    // If not on homepage, launcher is unconditionally visible everywhere
+    if (currentPath !== "/") {
       setLauncherVisible(true);
       return;
     }
-    const io = new IntersectionObserver(
-      ([entry]) => setLauncherVisible(!entry.isIntersecting),
-      { threshold: 0.12 }
-    );
-    io.observe(hero);
-    return () => io.disconnect();
-  }, []);
+
+    let io: IntersectionObserver | null = null;
+    let timer: NodeJS.Timeout | null = null;
+
+    const checkHeroVisibility = () => {
+      const hero = document.getElementById("hero");
+      if (!hero) {
+        // If hero is not in DOM, keep visible
+        setLauncherVisible(true);
+        return;
+      }
+
+      const rect = hero.getBoundingClientRect();
+      const heroHeight = rect.height || window.innerHeight;
+
+      // The hero is only "active" if its bottom is well below the top of the viewport
+      // and scrollY is small. As soon as the user scrolls past the hero into Work,
+      // rect.bottom drops below 160px or scrollY exceeds 35% of the hero height.
+      const isPastHero = rect.bottom <= 160 || window.scrollY > heroHeight * 0.35;
+      setLauncherVisible(isPastHero);
+    };
+
+    // Run initial check immediately
+    checkHeroVisibility();
+
+    // Attach scroll and resize listeners for immediate real-time response across all sections
+    window.addEventListener("scroll", checkHeroVisibility, { passive: true });
+    window.addEventListener("resize", checkHeroVisibility, { passive: true });
+
+    // Also attach an IntersectionObserver as a complementary trigger
+    const hero = document.getElementById("hero");
+    if (hero && typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        () => {
+          checkHeroVisibility();
+        },
+        { threshold: [0, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0] }
+      );
+      io.observe(hero);
+    }
+
+    // Re-check after brief timeouts to handle layout settles or image/font loads
+    timer = setTimeout(checkHeroVisibility, 150);
+
+    return () => {
+      window.removeEventListener("scroll", checkHeroVisibility);
+      window.removeEventListener("resize", checkHeroVisibility);
+      if (timer) clearTimeout(timer);
+      if (io) io.disconnect();
+    };
+  }, [currentPath]);
   const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
   const [selectedChunk, setSelectedChunk] = useState<RetrievedChunk | null>(null);
   const [input, setInput] = useState("");
@@ -329,7 +378,7 @@ export default function CopilotWidget({
       <div
         ref={drawerRef}
         id="copilot-window"
-        className={`fixed bottom-[76px] right-4 sm:bottom-[88px] sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[460px] h-[600px] max-h-[calc(100vh-96px)] flex flex-col rounded-2xl bg-void-black v3-key overflow-hidden text-pure-white transition-[transform,opacity] duration-300 ease-[var(--ease-out-soft)] ${
+        className={`fixed z-[70] right-5 bottom-[92px] sm:right-8 sm:bottom-[116px] max-sm:[bottom:max(92px,calc(env(safe-area-inset-bottom,20px)+72px))] max-sm:[right:max(20px,env(safe-area-inset-right,20px))] sm:[bottom:max(116px,calc(env(safe-area-inset-bottom,32px)+84px))] sm:[right:max(32px,env(safe-area-inset-right,32px))] w-[calc(100vw-32px)] sm:w-[460px] h-[600px] max-h-[calc(100vh-136px)] flex flex-col rounded-2xl bg-[#0D0D10]/95 backdrop-blur-2xl border border-white/[0.08] shadow-[0_24px_60px_rgba(0,0,0,0.85)] overflow-hidden text-[#F5F5F0] transition-[transform,opacity] duration-300 ease-[var(--ease-out-soft)] ${
           isOpen
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-90 pointer-events-none"
@@ -348,14 +397,14 @@ export default function CopilotWidget({
         {/* Header. Every child that can shrink does, and the one line that
             cannot be shortened truncates, because the drawer is 460px and
             three actions plus a model name do not fit at any width. */}
-        <div className="p-3 bg-obsidian border-b border-hairline text-pure-white flex items-center justify-between gap-2 shrink-0 select-none">
+        <div className="p-3.5 bg-[#121216]/95 border-b border-[#222227] text-pure-white flex items-center justify-between gap-2 shrink-0 select-none">
           <div className="flex min-w-0 items-center gap-2.5">
-            <BreathingOrb size={30} className="shrink-0" />
+            <BreathingOrb size={28} className="shrink-0" />
             <div className="min-w-0">
-              <h3 className="truncate text-sm font-medium text-pure-white">
+              <h3 className="truncate text-sm font-medium text-[#F5F5F0]">
                 Dipa
               </h3>
-              <p className="truncate text-[10.5px] text-smoke font-mono uppercase tracking-[.05em]">
+              <p className="truncate text-[10.5px] text-[#8E8E93] font-mono uppercase tracking-[.06em]">
                 Deepak's archive / 45 chunks
               </p>
             </div>
@@ -369,8 +418,8 @@ export default function CopilotWidget({
               aria-label="How Dipa works"
               className={`min-w-[44px] min-h-[44px] px-2 rounded-lg text-[10.5px] font-mono uppercase tracking-[.05em] flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
                 isHowItWorksOpen
-                  ? "bg-white/[.06] text-pure-white"
-                  : "text-smoke hover:text-pure-white hover:bg-white/[.06]"
+                  ? "bg-white/[.08] text-[#F5F5F0]"
+                  : "text-[#8E8E93] hover:text-[#F5F5F0] hover:bg-white/[.06]"
               }`}
             >
               <Info size={15} strokeWidth={1.7} />
@@ -382,7 +431,7 @@ export default function CopilotWidget({
               onClick={handleResetChat}
               title="Start over"
               aria-label="Start over"
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-smoke hover:text-pure-white hover:bg-white/[.06] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse cursor-pointer"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-[#8E8E93] hover:text-[#F5F5F0] hover:bg-white/[.06] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse cursor-pointer"
             >
               <RotateCcw size={15} />
             </button>
@@ -393,9 +442,9 @@ export default function CopilotWidget({
                 setIsOpen(false);
                 returnFocusToLauncher();
               }}
-              title="Close Copilot"
-              aria-label="Close Copilot"
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-pure-white hover:text-coral-pulse hover:bg-white/[.06] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse cursor-pointer"
+              title="Close Dipa assistant"
+              aria-label="Close Dipa assistant"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-[#8E8E93] hover:text-coral-pulse hover:bg-white/[.06] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse cursor-pointer"
             >
               <X size={18} />
             </button>
@@ -647,7 +696,7 @@ export default function CopilotWidget({
 
           {/* Quick Starter Chips */}
           {messages.length <= 2 && !isLoading && (
-            <div className="p-3 bg-obsidian border-t border-hairline">
+            <div className="p-3 bg-[#121216]/95 border-t border-[#222227]">
               <div className="text-[10px] font-mono font-medium text-coral-pulse uppercase tracking-[0.16em] mb-2">
                 Suggested Questions
               </div>
@@ -656,7 +705,7 @@ export default function CopilotWidget({
                   <button
                     key={idx}
                     onClick={() => handleSend(prompt)}
-                    className="text-left text-[11px] px-2.5 py-1.5 rounded-full bg-void-black hover:bg-white/[.06] v3-key-quiet hover:border-coral-pulse/40 text-pure-white transition-colors cursor-pointer active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse"
+                    className="text-left text-[11px] px-2.5 py-1.5 rounded-full bg-[#18181D] hover:bg-white/[.08] border border-[#26262C] hover:border-coral-pulse/40 text-[#F5F5F0] transition-colors cursor-pointer active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse"
                   >
                     "{prompt}"
                   </button>
@@ -666,7 +715,7 @@ export default function CopilotWidget({
           )}
 
           {/* Input Bar */}
-          <div className="p-3 bg-obsidian border-t border-hairline flex items-center gap-2 shrink-0">
+          <div className="p-3 bg-[#121216]/95 border-t border-[#222227] flex items-center gap-2 shrink-0">
             <input
               ref={inputRef}
               type="text"
@@ -675,18 +724,50 @@ export default function CopilotWidget({
               onKeyDown={handleKeyDown}
               placeholder="Ask about Deepak's metrics, case studies, RAG..."
               disabled={isLoading}
-              className="flex-1 px-3.5 py-2.5 rounded-xl bg-void-black v3-key-quiet focus:outline-none focus:border-coral-pulse text-xs sm:text-sm text-pure-white placeholder:text-smoke focus-visible:ring-2 focus-visible:ring-coral-pulse"
+              className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#09090B] border border-[#24242A] focus:outline-none focus:border-coral-pulse text-xs sm:text-sm text-[#F5F5F0] placeholder:text-[#6E6E73] focus-visible:ring-2 focus-visible:ring-coral-pulse"
             />
             <button
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-coral-pulse hover:opacity-90 disabled:bg-obsidian text-void disabled:text-smoke transition-colors shrink-0 shadow-xs cursor-pointer disabled:cursor-not-allowed active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-coral-pulse hover:opacity-90 disabled:bg-[#1A1A1F] text-void disabled:text-[#55555B] transition-colors shrink-0 shadow-xs cursor-pointer disabled:cursor-not-allowed active:scale-[.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse"
               aria-label="Send query"
             >
               <Send size={16} />
             </button>
           </div>
         </div>
+
+      {/* Global Plasma Assistant Trigger */}
+      <div
+        className={`fixed z-[60] right-5 bottom-5 sm:right-8 sm:bottom-8 max-sm:[bottom:max(20px,env(safe-area-inset-bottom,20px))] max-sm:[right:max(20px,env(safe-area-inset-right,20px))] sm:[bottom:max(32px,env(safe-area-inset-bottom,32px))] sm:[right:max(32px,env(safe-area-inset-right,32px))] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          launcherVisible
+            ? "opacity-100 scale-100 pointer-events-auto"
+            : "opacity-0 scale-75 pointer-events-none"
+        }`}
+      >
+        <button
+          ref={launcherRef}
+          id="dipa-plasma-trigger"
+          type="button"
+          onClick={() => {
+            setIsOpen(true);
+            requestAnimationFrame(() => inputRef.current?.focus());
+          }}
+          aria-label="Open Dipa assistant"
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          title="Open Dipa assistant"
+          className="group relative flex items-center justify-center w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] p-0 m-0 bg-transparent border-0 outline-none shadow-none cursor-pointer hover:scale-[1.04] transition-transform duration-300 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0B] focus-visible:rounded-full"
+        >
+          {/* Fluid Plasma Orb Container (60px mobile, 72px desktop) — no circular frame or ring */}
+          <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
+            <PlasmaRing
+              shouldReduceMotion={shouldReduceMotion}
+              className="w-full h-full"
+            />
+          </div>
+        </button>
+      </div>
     </>
   );
 }
