@@ -1,7 +1,6 @@
 import React from "react";
 import HeroConsole from "./site/HeroConsole";
 import SiteNavV3 from "./site/v3/SiteNavV3";
-import ProofStrip from "./site/v3/ProofStrip";
 import WorkRail from "./site/v3/WorkRail";
 import AIBuilds from "./site/v3/AIBuilds";
 import HowIWork from "./site/v3/HowIWork";
@@ -42,7 +41,6 @@ export default function HomePage({
         onOpenResumeModal={onOpenResumeModal}
         onAsk={(question) => openCopilot(question)}
       />
-      <ProofStrip />
       <WorkRail
         caseStudies={ALL_FLAGSHIP_CASE_STUDIES}
         onSelectCaseStudy={onSelectCaseStudy}

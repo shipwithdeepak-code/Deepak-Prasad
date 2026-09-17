@@ -178,39 +178,53 @@ void main(){
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }`;
 
+// Theme palettes: dark portfolio theme (warm obsidian, warm charcoal, restrained coral)
+// and light studio theme.
+const DARK_THEME_COLORS = [
+  [0.039, 0.039, 0.043], // obsidian base #0A0A0B
+  [0.094, 0.094, 0.106], // warm charcoal #18181B
+  [0.063, 0.063, 0.071], // graphite      #101012
+  [0.941, 0.592, 0.478], // restrained coral #F0977A
+];
+
+const LIGHT_THEME_COLORS = [
+  [1.0, 1.0, 1.0],       // pure white
+  [0.94, 0.94, 0.94],    // light gray
+  [0.88, 0.88, 0.92],    // subtle cool tint
+  [0.941, 0.592, 0.478], // restrained coral
+];
+
 const CONFIG = {
-  colors: [
-    [1.0, 0.388, 0.388],   // coral pulse   #ff6363
-    [0.078, 0.235, 0.639], // cobalt edge   #143ca3
-    [0.008, 0.098, 0.231], // deep space    #02193b
-    [0.388, 0.631, 1.0],   // electric sky  #63a1ff
-  ],
+  colors: DARK_THEME_COLORS,
   colorCount: 4,
-  scale: 1.92,
-  intensity: 0.62,
-  flutes: 0.32,
-  warp: 0.084,
-  detail: 2.624,
-  contrast: 1.06,
-  brightness: -0.12,
-  saturation: 1,
+  scale: 2.1,
+  intensity: 0.36,
+  flutes: 0.28,
+  warp: 0.06,
+  detail: 2.2,
+  contrast: 0.98,
+  brightness: -0.04,
+  saturation: 0.65,
   seed: 1,
-  vignette: 0.28,
-  blur: 0.0012,
-  grain: 0.085,
+  vignette: 0.32,
+  blur: 0.0015,
+  grain: 0.065,
   rotate: 1.9373,
-  /** An eighth of the preset's 1.316. Slow enough that the movement is
-   *  noticed rather than watched. */
-  timeScale: 0.16,
-  /** Well under the preset's 0.65. The drift should be felt at the edge of
-   *  attention, not followed. */
-  cursorStrength: 0.34,
+  /** Slow, subtle organic refraction that follows the cursor declaration */
+  timeScale: 0.14,
+  cursorStrength: 0.38,
 };
 
 /** Above this the canvas stops gaining detail and starts costing fill rate. */
 const PIXEL_BUDGET = 2_000_000;
 
-export default function ShaderBackground({ className }: { className?: string }) {
+export default function ShaderBackground({
+  className,
+  theme = "dark",
+}: {
+  className?: string;
+  theme?: "dark" | "light";
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduceMotion = useReducedMotion();
 
@@ -220,6 +234,8 @@ export default function ShaderBackground({ className }: { className?: string }) 
 
     const gl = canvas.getContext("webgl", { antialias: false });
     if (!gl) return; // no context: the hero keeps its portrait and gradients
+
+    const activeColors = theme === "light" ? LIGHT_THEME_COLORS : DARK_THEME_COLORS;
 
     const compile = (type: number, src: string) => {
       const shader = gl.createShader(type)!;
@@ -247,7 +263,7 @@ export default function ShaderBackground({ className }: { className?: string }) 
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
 
     const at = (name: string) => gl.getUniformLocation(program, name);
-    gl.uniform3fv(at("u_colors"), new Float32Array(CONFIG.colors.flat()));
+    gl.uniform3fv(at("u_colors"), new Float32Array(activeColors.flat()));
     gl.uniform4f(at("u_shape"), CONFIG.scale, CONFIG.intensity, CONFIG.flutes, CONFIG.warp);
     gl.uniform4f(at("u_surface"), CONFIG.detail, CONFIG.contrast, CONFIG.brightness, CONFIG.saturation);
     gl.uniform4f(at("u_finish"), CONFIG.seed, CONFIG.vignette, CONFIG.blur, CONFIG.grain);

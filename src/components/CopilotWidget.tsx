@@ -325,35 +325,6 @@ export default function CopilotWidget({
 
   return (
     <>
-
-      {/* Floating Circular Photo Trigger Button */}
-      <button
-        ref={launcherRef}
-        id="copilot-launcher-btn"
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group flex items-center justify-center w-14 h-14 rounded-full bg-void-black text-pure-white active:scale-[.97] ${
-          isOpen ? "border-2 border-coral-pulse" : ""
-        } cursor-pointer overflow-visible transition-opacity duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-pulse ${
-          isOpen || launcherVisible
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-        aria-label={isOpen ? "Close Dipa" : "Open Dipa, Deepak's retrieval assistant"}
-        title={isOpen ? "Close Dipa" : "Open Dipa, Deepak's retrieval assistant"}
-        aria-expanded={isOpen}
-        aria-controls="copilot-window"
-      >
-        {isOpen ? (
-          <X size={20} className="text-pure-white group-hover:text-coral-pulse transition-colors" />
-        ) : (
-          /* Dipa itself: the breathing orb, at launcher size. The initials
-             that used to sit here read as an avatar, which promised a person
-             rather than an assistant. */
-          <BreathingOrb size={52} />
-        )}
-      </button>
-
       {/* Main Copilot Drawer */}
       <div
         ref={drawerRef}

@@ -1,69 +1,66 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, CornerDownLeft, Download, Search } from "lucide-react";
-import { useReducedMotion } from "framer-motion";
-import ShaderBackground from "../visuals/ShaderBackground";
+import { CornerDownLeft, Download, Search } from "lucide-react";
+import HeroShader from "../visuals/HeroShader";
 
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
   onOpenResumeModal?: () => void;
-  /** Hands the question to Dipa. The hero does not answer
-   *  anything itself: it is the entry point to the RAG, not a copy of it. */
+  /** Hands the question to Dipa. */
   onAsk: (question?: string) => void;
 }
 
-/** Real questions, rotated through the bar so it reads as something you type
- *  into. Each one is answerable from the knowledge base behind Dipa. */
-const QUESTIONS = [
-  "What did you decide at ReshaMandi?",
-  "Have you managed people?",
-  "Show me a decision you got wrong",
-  "What have you built yourself?",
-  "Which of these moved a real number?",
+const SUGGESTED_PROMPTS = [
+  "Explore my marketplace work",
+  "See my hardware experience",
+  "Ask about my AI builds",
 ];
 
-/** The chips ask what the rotating bar does not, so the two sets never show
- *  the same string twice within one screen. */
-const CHIPS = [
-  "How does Dipa work?",
-  "What are you looking for next?",
-  "Where have you led a team?",
+const PROOF_ITEMS = [
+  "MARKETPLACES",
+  "CONNECTED HARDWARE",
+  "APPLIED AI",
+  "0→1 BUILDS",
 ];
-
-/** Capability facts, not per-query claims. 45 is the real chunk count in
- *  ragKnowledgeBase.json, and Dipa really does cite the chunks it
- *  used. Nothing here asserts a latency the hero never measured. */
-const COPILOT_FACTS = ["45 sources", "Cites every answer", "Built by me"];
 
 /**
- * v3 hero.
+ * Editorial Hero Console
  *
- * Two columns rather than one centred stack: the headline holds the left over
- * the sharp sliver of the portrait, the console holds the right. The hero is
- * sized to its content instead of the viewport so the proof strip below it is
- * always reachable without scrolling.
- *
- * The input and the answer share one surface on purpose. Floating them apart
- * reads as a search box with some text under it; joined, it reads as one
- * instrument.
+ * Implements the approved Hero specification:
+ * - Near-black obsidian background: #0A0A0B
+ * - Full-Screen Shader: Swirl -> ChromaFlow -> FlutedGlass -> FilmGrain (declarative pointer momentum)
+ * - Oversized DEEPAK masthead in low-contrast warm ivory/graphite
+ * - Real portrait asset (/deepak-hero-sharp.jpg) with multi-point seamless feathering
+ *   (28% visual width at 1024px; progressive atmospheric opacity on mobile: 428px -> 0.45, 375px -> 0.28, 320px -> 0.15)
+ * - Availability signal: "AVAILABLE FOR SENIOR & LEAD ROLES" (compact "OPEN TO SENIOR ROLES" below 360px)
+ * - Exact headline with "intelligent systems." highlighted in warm coral #F0977A
+ * - Raycast-inspired CTAs (warm coral "View Work →", neutral outlined "Download CV")
+ * - Dipa long search bar with suggestions and responsive placeholder
+ * - Proof strip with edge-to-edge background shader
  */
 export default function HeroConsole({
   onNavigate,
   onOpenResumeModal,
   onAsk,
 }: HeroConsoleProps) {
-  const reduceMotion = useReducedMotion();
   const [query, setQuery] = useState("");
-  const [hint, setHint] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [isNarrowMobile, setIsNarrowMobile] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (reduceMotion) return;
-    const id = window.setInterval(
-      () => setHint((i) => (i + 1) % QUESTIONS.length),
-      3800,
-    );
-    return () => window.clearInterval(id);
-  }, [reduceMotion]);
+    const img = new Image();
+    img.src = "/deepak-hero-sharp.jpg";
+    img.onload = () => setImageLoaded(true);
+    img.onerror = () => setImageError(true);
+
+    const checkWidth = () => {
+      setIsNarrowMobile(window.innerWidth < 400);
+    };
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
+  }, []);
 
   const ask = (question: string) => {
     const text = question.trim();
@@ -76,173 +73,260 @@ export default function HeroConsole({
   };
 
   return (
-    <header className="relative isolate overflow-hidden bg-void-black">
-      {/* Fluted glass, greyscale, moving slowly enough to be noticed rather
-          than watched. It sits under the portrait so the face stays the
-          subject and the glass stays the surface. */}
-      <ShaderBackground className="pointer-events-none absolute inset-0 z-0 block size-full opacity-[.5]" />
+    <header className="relative isolate overflow-hidden bg-[#0A0A0B] w-full min-h-[100svh] flex flex-col justify-between">
+      {/* 
+        LAYER 1: Full-Screen Edge-to-Edge Shader Background
+        Exact order: Swirl -> ChromaFlow -> FlutedGlass -> FilmGrain
+        Declarative cursor reactivity via ChromaFlow (no manual mouse listeners).
+        Obsidian base (#0A0A0B), warm charcoal, restrained coral (#F0977A).
+      */}
+      <HeroShader className="z-0 opacity-80" />
 
-      {/* The cinematic moment DESIGN.md asks for: coral geometry at heavy blur
-          cutting across a blue radial wash. It is the one composition on the
-          site that is allowed to be loud, and it is why the page does not open
-          on a grey rectangle. */}
-      <div aria-hidden="true" className="v3-hero-geo">
-        <span className="wash" />
-        <span className="bar-a" />
-        <span className="bar-b" />
+      {/* Atmospheric depth & text legibility vignettes */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#0A0A0B] via-transparent to-[#0A0A0B]/40 opacity-70"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1] bg-radial-[circle_at_25%_65%] from-transparent via-[#0A0A0B]/25 to-[#0A0A0B]/75"
+      />
+
+      {/* 
+        LAYER 2: Oversized DEEPAK Masthead
+        Spans high across the viewport in low-contrast warm ivory/graphite.
+        Positioned behind main content and portrait.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-4 sm:top-6 md:top-8 lg:top-10 left-1/2 -translate-x-1/2 w-full select-none text-center z-10 overflow-hidden"
+      >
+        <span className="hero-wordmark inline-block text-[clamp(4.8rem,18vw,15.5rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.04em] text-[#F5F5F0]/[0.075] whitespace-nowrap">
+          DEEPAK
+        </span>
       </div>
 
-      {/* Portrait as atmosphere. Greyscale and blurred in the asset itself,
-          not at runtime: a large CSS blur repaints on every frame the hero
-          animates, and this one never changes. */}
+      {/* 
+        LAYER 3: Real Portrait Integration (/deepak-hero-sharp.jpg)
+        Strong, cinematic monochrome portrait anchored to the far-right side:
+        - Desktop Composition:
+          * Hero content: left ~58–62% of the width
+          * Portrait: right ~28–33% of the width (md:w-[38%] lg:w-[35%] xl:w-[33%] 2xl:w-[31%] max-w-[560px] 2xl:max-w-[600px])
+          * Right edge: anchored close to viewport edge (md:right-0 lg:right-[-1%] xl:right-[-1.5%] 2xl:right-[-1%])
+          * Left edge: begins around the right third of the hero, leaving a generous visual gap to headline and Dipa bar
+          * Face occupies the rightmost visual area (~85-87% across screen)
+        - Edge-Only Blending:
+          * Face itself is 100% solid, crisp, and readable (zero radial mask, zero dark overlay over face)
+          * Both eyes, nose, mouth, chin, hairline, cheeks, and jaw remain bright and clearly visible
+          * Subtle top hair entrance (0% - 10%)
+          * Soft shoulder/chest dissolve into obsidian ground (70% - 94%)
+          * Soft left lateral feather (0% - 22%) dissolving into the background gap
+          * Soft right edge feather (86% - 98%)
+        - Filter: grayscale contrast-[1.15] brightness-[1.08] for crisp, natural monochrome presence
+      */}
       <div
         aria-hidden="true"
-        className="v3-hero-photo pointer-events-none absolute inset-0 z-[2] bg-cover mix-blend-screen"
-      />
-      {/* One sharp band of the real photograph. A blurred portrait on its own
-          reads as a stock background; a single crisp edge says it is a person. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 z-[2] hidden w-[34%] bg-cover opacity-55 md:block"
-        style={{
-          backgroundImage: "url('/deepak-hero-sharp.jpg')",
-          backgroundPosition: "60% 16%",
-          maskImage:
-            "linear-gradient(90deg, #000 0%, #000 34%, transparent 98%)",
-          WebkitMaskImage:
-            "linear-gradient(90deg, #000 0%, #000 34%, transparent 98%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[3]"
-        style={{
-          background:
-            "radial-gradient(132% 98% at 44% 32%, transparent 26%, rgba(4,5,6,.78) 74%, #040506 100%)",
-        }}
-      />
-      {/* A scrim over the left column only. The blue wash is bright exactly
-          where the headline and its supporting line sit, and colour behind
-          type is worth nothing if the type stops being readable. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[3]"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(4,5,6,.72) 0%, rgba(4,5,6,.34) 38%, transparent 58%)",
-        }}
-      />
-
-      <div className="relative z-10 mx-auto grid max-w-[1200px] items-center gap-14 px-6 pb-18 pt-20 md:grid-cols-2 md:pb-20 md:pt-24">
-        <div className="grid gap-6">
-          <h1 className="max-w-[24ch] text-[clamp(1.75rem,3.4vw,2.625rem)] font-normal leading-[1.17] tracking-[.22px] text-pure-white">
-            Eleven products shipped. Ask{" "}
-            <span className="text-coral-pulse">Dipa</span> anything.
-          </h1>
-          <p className="max-w-[38ch] text-base leading-relaxed text-mist/90">
-            Marketplaces, subscription, connected hardware and applied AI. Two
-            of them I designed and wrote myself.
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onNavigate("/work")}
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-mist px-[18px] py-3 text-sm font-medium text-iron transition-all duration-200 hover:-translate-y-px hover:bg-white"
-            >
-              See the work
-              <ArrowUpRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              onClick={onOpenResumeModal}
-              className="v3-key-quiet inline-flex min-h-11 items-center gap-2 rounded-lg px-[18px] py-3 text-sm font-medium text-ash transition-colors duration-200 hover:text-pure-white"
-            >
-              Download CV
-              <Download className="size-3.5" strokeWidth={1.7} aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-
-        <div className="grid gap-3">
-          <div className="v3-key overflow-hidden rounded-2xl bg-ink/[.62] backdrop-blur-2xl">
-            <form
-              className="v3-ask relative flex items-center gap-3 border-b border-white/[.08] px-4 py-[15px]"
-              onSubmit={(e) => {
-                e.preventDefault();
-                ask(query);
+        className="pointer-events-none absolute top-1 sm:top-2 md:top-3 lg:top-4 bottom-4 md:bottom-8 right-1/2 translate-x-1/2 md:translate-x-0 md:right-0 lg:right-[-1%] xl:right-[-1.5%] 2xl:right-[-1%] z-20 flex items-center justify-center w-[84%] sm:w-[70%] md:w-[38%] lg:w-[35%] xl:w-[33%] 2xl:w-[31%] max-w-[560px] 2xl:max-w-[600px]"
+      >
+        {imageLoaded && !imageError && (
+          <div
+            className="relative size-full max-h-[720px] 2xl:max-h-[780px] aspect-square transition-opacity duration-700 opacity-60 sm:opacity-75 md:opacity-100"
+            style={{
+              /* Vertical edge fade: subtle hair entrance (0% - 10%), 100% solid face & neck (10% - 70%), soft lower shoulder dissolve (70% - 94%) */
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 70%, transparent 94%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 10%, black 70%, transparent 94%, transparent 100%)",
+            }}
+          >
+            {/* Horizontal edge fade: soft left lateral dissolve (0% - 22%), 100% solid face & hair (22% - 86%), soft right edge feather (86% - 98%) */}
+            <div
+              className="size-full"
+              style={{
+                maskImage: "linear-gradient(to right, transparent 0%, black 22%, black 86%, transparent 98%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 22%, black 86%, transparent 98%, transparent 100%)",
               }}
             >
+              <img
+                src="/deepak-hero-sharp.jpg"
+                alt="Deepak Prasad"
+                className="size-full object-cover filter grayscale contrast-[1.15] brightness-[1.08]"
+                draggable={false}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Main Foreground Container: Layers 5, 6 */}
+      <div className="relative z-30 mx-auto w-full max-w-[1360px] flex-1 flex flex-col justify-end px-4 sm:px-8 lg:px-14 pt-20 sm:pt-24 lg:pt-28 pb-6 sm:pb-8 md:pb-10">
+        <div className="flex flex-col gap-6 sm:gap-8 md:gap-9">
+          {/* Headline, Role & Action CTAs */}
+          <div className="flex flex-col items-start max-w-[720px] lg:max-w-[780px] xl:max-w-[840px]">
+            {/* Main Headline: Exactly two lines on desktop, keeping "intelligent systems." intact */}
+            <h1 className="text-[clamp(1.85rem,3.8vw,3.35rem)] font-medium leading-[1.14] tracking-[-0.025em] text-[#F5F5F0]">
+              I build products where complex workflows{" "}
+              <span className="block sm:inline">
+                meet <span className="text-[#F0977A] whitespace-nowrap">intelligent systems.</span>
+              </span>
+            </h1>
+
+            {/* Supporting Role Line */}
+            <p className="mt-3.5 sm:mt-4 max-w-[48ch] text-[15px] sm:text-[16.5px] leading-relaxed text-[#9E9E98]">
+              Senior Product Manager building marketplaces,{" "}
+              <span className="hidden sm:inline">connected </span>hardware, and{" "}
+              <span className="hidden sm:inline">applied </span>AI.
+            </p>
+
+            {/* Action CTAs (Raycast-inspired polish) */}
+            <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => onNavigate("/work")}
+                className="group inline-flex min-h-[48px] sm:min-h-[46px] items-center justify-center gap-2 rounded-lg bg-[#F0977A] px-6 py-3 text-sm font-semibold text-[#0A0A0B] transition-all duration-200 hover:-translate-y-px hover:bg-[#E28468] hover:shadow-[0_0_20px_rgba(240,151,122,0.22)] cursor-pointer"
+              >
+                <span>View Work</span>
+                <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                  →
+                </span>
+              </button>
+              <a
+                href="/Deepak_Prasad_Senior_Product_Manager_Resume.pdf"
+                download="Deepak_Prasad_Senior_Product_Manager_Resume.pdf"
+                onClick={(e) => {
+                  if (onOpenResumeModal) {
+                    e.preventDefault();
+                    onOpenResumeModal();
+                  }
+                }}
+                className="group inline-flex min-h-[48px] sm:min-h-[46px] items-center justify-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.02] px-6 py-3 text-sm font-medium text-[#F5F5F0] transition-all duration-200 hover:-translate-y-px hover:border-[#F0977A]/50 hover:text-white cursor-pointer"
+              >
+                <span>Download CV</span>
+                <Download className="size-3.5 text-[#9E9E98] group-hover:text-[#F0977A] transition-colors" strokeWidth={1.8} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+
+          {/* 
+            LAYER 6: Interactive Dipa Horizontal Search Bar
+            Desktop: Long horizontal bar positioned comfortably in lower section.
+            Structure: ● ASK DIPA  |  search icon  Ask Dipa about my products, decisions, and systems...  Enter ↵
+            Mobile: Full-width bar, enter indicator hidden on narrow screens to keep input readable.
+          */}
+          <div className="w-full max-w-[700px] xl:max-w-[740px]">
+            <div
+              role="search"
+              onClick={() => inputRef.current?.focus()}
+              className="dipa-container group relative flex items-center gap-2.5 sm:gap-3 rounded-full border border-white/[0.14] bg-[#121316] hover:bg-[#15161A] hover:border-white/[0.28] px-3.5 sm:px-4 py-2.5 sm:py-3 transition-all duration-200 focus-within:border-[#F0977A]/70 focus-within:bg-[#16171B] focus-within:ring-1 focus-within:ring-[#F0977A]/35 cursor-text"
+            >
+              {/* Dipa label badge: ASK DIPA with coral status dot */}
+              <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-white/[0.10] bg-white/[0.05] px-2.5 py-1 text-[10.5px] sm:text-[11px] font-mono font-semibold tracking-wider text-[#E5E5DF] uppercase select-none transition-colors group-hover:border-white/[0.16] group-focus-within:border-[#F0977A]/40">
+                <span className="size-2 rounded-full bg-[#F0977A]" aria-hidden="true" />
+                <span className="hidden min-[380px]:inline">ASK DIPA</span>
+                <span className="min-[380px]:hidden">DIPA</span>
+              </div>
+
+              {/* Subtle divider on larger screens */}
+              <span className="hidden min-[480px]:block h-4 w-px bg-white/[0.12]" aria-hidden="true" />
+
+              {/* Search icon */}
               <Search
-                className="size-[17px] shrink-0 text-coral-pulse"
-                strokeWidth={1.7}
+                className="size-4 shrink-0 text-[#E5E5DF]/75 group-hover:text-[#F0977A] group-focus-within:text-[#F0977A] transition-colors"
+                strokeWidth={2}
                 aria-hidden="true"
               />
-              <div className="relative min-w-0 flex-1">
+
+              {/* Form & Input field with prominent invitation */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  ask(query);
+                }}
+                className="flex flex-1 items-center gap-2 min-w-0"
+              >
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   type="text"
                   autoComplete="off"
-                  aria-label="Ask Dipa about my work"
-                  className="w-full bg-transparent text-[15.5px] text-pure-white caret-coral-pulse outline-none"
+                  placeholder={
+                    isNarrowMobile
+                      ? "Ask Dipa about my products..."
+                      : "Ask Dipa about my products, decisions, and systems..."
+                  }
+                  aria-label="Ask Dipa about my products, decisions, and systems"
+                  className="dipa-input min-w-0 flex-1 bg-transparent text-[13.5px] sm:text-[14px] text-[#F5F5F0] placeholder:text-[#B8B8B2] border-none outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 caret-[#F0977A] font-normal selection:bg-[#F0977A]/30"
+                  style={{ outline: "none", boxShadow: "none" }}
                 />
-                {/* The rotating question sits behind a real input rather than
-                    in its placeholder, because a placeholder cannot crossfade. */}
-                {query === "" && (
-                  <span
-                    key={hint}
-                    aria-hidden="true"
-                    className="v3-hint pointer-events-none absolute inset-y-0 left-0 flex items-center truncate text-[15.5px] text-ash"
-                  >
-                    {QUESTIONS[hint]}
-                  </span>
-                )}
-              </div>
-              <button
-                type="submit"
-                aria-label="Ask Dipa"
-                className="rounded-md bg-coral-pulse px-2 py-1.5 text-void-black transition-opacity duration-200 hover:opacity-90"
-              >
-                <CornerDownLeft className="size-3" strokeWidth={1.7} aria-hidden="true" />
-              </button>
-            </form>
 
-            <div className="grid gap-3 px-[18px] pb-4 pt-5">
-              <p className="text-[19px] leading-[1.32] tracking-[.2px] text-pure-white">
-                Dipa is a retrieval assistant over everything I have
-                shipped.
-              </p>
-              <p className="text-[14.5px] leading-relaxed text-ash">
-                Ask it about a decision, a number, or something I got wrong. It
-                answers from my own case studies and shows you the sources it
-                used. I built it.
-              </p>
+                {/* Enter indicator & compact submit button: hidden below 400px to keep field spacious */}
+                <button
+                  type="submit"
+                  aria-label="Ask Dipa (Press Enter)"
+                  className="hidden min-[400px]:inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.05] px-2.5 py-1 text-[11px] font-mono text-[#E5E5DF] transition-all duration-150 group-hover:border-white/30 group-focus-within:border-[#F0977A]/50 group-focus-within:text-[#F0977A] hover:bg-white/[0.09] hover:text-[#F5F5F0] cursor-pointer"
+                >
+                  <span className="hidden sm:inline font-medium">Enter</span>
+                  <CornerDownLeft className="size-3" strokeWidth={2} aria-hidden="true" />
+                </button>
+              </form>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 border-t border-white/[.07] bg-white/[.015] px-[18px] py-3">
-              {COPILOT_FACTS.map((fact) => (
-                <span
-                  key={fact}
-                  className="rounded-md bg-graphite px-1.5 py-1 font-mono text-[10.5px] tracking-[.05em] text-mist"
+            {/* Actionable prompt text links below the bar */}
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 px-2 text-[12px] sm:text-[12.5px] text-[#9E9E98]">
+              <span className="text-[11px] font-mono text-[#9E9E98]/65 uppercase tracking-wider select-none">
+                Try:
+              </span>
+              {SUGGESTED_PROMPTS.map((prompt) => (
+                <button
+                  key={prompt}
+                  type="button"
+                  onClick={() => ask(prompt)}
+                  className="group/btn inline-flex items-center gap-1 text-[#E5E5DF]/85 hover:text-[#F0977A] focus-visible:text-[#F0977A] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F0977A] rounded px-1 py-0.5 transition-colors cursor-pointer text-left underline-offset-4 hover:underline"
                 >
-                  {fact}
-                </span>
+                  <span>{prompt}</span>
+                  <span className="text-[10px] opacity-0 group-hover/btn:opacity-100 transition-opacity text-[#F0977A]" aria-hidden="true">
+                    →
+                  </span>
+                </button>
               ))}
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="flex flex-wrap gap-2">
-            {CHIPS.map((question) => (
-              <button
-                key={question}
-                type="button"
-                onClick={() => ask(question)}
-                className="v3-key-quiet min-h-9 rounded-full px-3.5 py-2 text-[12.5px] font-medium text-ash transition-all duration-200 hover:-translate-y-px hover:text-pure-white"
-              >
-                {question}
-              </button>
-            ))}
+      {/* 
+        LAYER 7: Proof Strip
+        Anchored at the base of the Hero with edge-to-edge shader running behind it.
+        Desktop: Single horizontal strip.
+        Mobile: Clean 2-line wrap with comfortable readable font size (never shrunk to micro-text).
+      */}
+      <div className="relative z-30 w-full border-t border-white/[0.06] bg-[#07080a]/50 py-3 sm:py-3.5 px-4 sm:px-6 backdrop-blur-xs">
+        {/* Desktop / Tablet single row */}
+        <div className="hidden sm:flex mx-auto max-w-[1200px] flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[11px] font-mono tracking-widest text-[#9E9E98] uppercase">
+          {PROOF_ITEMS.map((item, index) => (
+            <React.Fragment key={item}>
+              {index > 0 && (
+                <span aria-hidden="true" className="text-white/20 select-none">
+                  ·
+                </span>
+              )}
+              <span className="text-[#E5E5DF]/75 hover:text-[#F5F5F0] transition-colors">
+                {item}
+              </span>
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Mobile clean 2-line wrap with comfortable readable size */}
+        <div className="sm:hidden flex flex-col items-center gap-1 text-[10.5px] font-mono tracking-wider text-[#9E9E98] uppercase text-center">
+          <div className="flex items-center gap-2">
+            <span className="text-[#E5E5DF]/80">MARKETPLACES</span>
+            <span aria-hidden="true" className="text-white/20 select-none">·</span>
+            <span className="text-[#E5E5DF]/80">CONNECTED HARDWARE</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[#E5E5DF]/80">APPLIED AI</span>
+            <span aria-hidden="true" className="text-white/20 select-none">·</span>
+            <span className="text-[#E5E5DF]/80">0→1 BUILDS</span>
           </div>
         </div>
       </div>
