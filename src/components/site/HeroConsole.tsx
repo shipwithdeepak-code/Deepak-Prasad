@@ -23,6 +23,14 @@ const QUESTIONS = [
   "Which of these moved a real number?",
 ];
 
+/** The chips ask what the rotating bar does not, so the two sets never show
+ *  the same string twice within one screen. */
+const CHIPS = [
+  "How does this copilot work?",
+  "What are you looking for next?",
+  "Where have you led a team?",
+];
+
 /** Capability facts, not per-query claims. 45 is the real chunk count in
  *  ragKnowledgeBase.json, and the copilot really does cite the chunks it
  *  used. Nothing here asserts a latency the hero never measured. */
@@ -165,7 +173,8 @@ export default function HeroConsole({
       <div className="relative z-10 mx-auto grid max-w-[1200px] items-center gap-14 px-6 pb-18 pt-20 md:grid-cols-2 md:pb-20 md:pt-24">
         <div className="grid gap-6">
           <h1 className="max-w-[24ch] text-[clamp(1.75rem,3.4vw,2.625rem)] font-normal leading-[1.17] tracking-[.22px] text-pure-white">
-            Eleven products shipped. Ask the archive anything.
+            Eleven products shipped. Ask{" "}
+            <span className="text-coral-pulse">the archive</span> anything.
           </h1>
           <p className="max-w-[38ch] text-base leading-relaxed text-ash">
             Marketplaces, subscription, connected hardware and applied AI. Two
@@ -230,7 +239,7 @@ export default function HeroConsole({
               <button
                 type="submit"
                 aria-label="Ask the copilot"
-                className="rounded-md bg-graphite px-1.5 py-1 text-smoke transition-colors duration-200 hover:text-mist"
+                className="rounded-md bg-coral-pulse px-2 py-1.5 text-void-black transition-opacity duration-200 hover:opacity-90"
               >
                 <CornerDownLeft className="size-3" strokeWidth={1.7} aria-hidden="true" />
               </button>
@@ -260,7 +269,7 @@ export default function HeroConsole({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {QUESTIONS.slice(0, 3).map((question) => (
+            {CHIPS.map((question) => (
               <button
                 key={question}
                 type="button"

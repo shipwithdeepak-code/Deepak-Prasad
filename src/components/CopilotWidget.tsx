@@ -103,20 +103,26 @@ export default function CopilotWidget({
   const drawerRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
 
+  /** The open handler below is registered once, so it cannot close over
+   *  handleSend directly without freezing first-render state. */
+  const sendRef = useRef<(queryText?: string) => void>(() => {});
+
   // Wire external openCopilot handler & custom event
   useEffect(() => {
-    globalOpenCopilotHandler = (initialText?: string) => {
+    /** A question handed over from elsewhere on the site is sent, not just
+     *  typed into the box. Someone who pressed Enter in the hero has already
+     *  asked; making them press send again is a second ask for the same
+     *  question. */
+    const openWith = (initialText?: string) => {
       setIsOpen(true);
-      if (initialText !== undefined) {
-        setInput(initialText);
-      }
+      const text = initialText?.trim();
+      if (!text) return;
+      requestAnimationFrame(() => sendRef.current(text));
     };
+    globalOpenCopilotHandler = openWith;
     const handleCustomEvent = (e: Event) => {
       const custom = e as CustomEvent<{ text?: string }>;
-      setIsOpen(true);
-      if (custom.detail?.text !== undefined) {
-        setInput(custom.detail.text);
-      }
+      openWith(custom.detail?.text);
     };
     window.addEventListener("open-copilot", handleCustomEvent);
     return () => {
@@ -242,6 +248,11 @@ export default function CopilotWidget({
       setIsLoading(false);
     }
   };
+
+  // Keep the handoff pointing at the current closure.
+  useEffect(() => {
+    sendRef.current = handleSend;
+  });
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {

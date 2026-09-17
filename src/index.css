@@ -176,7 +176,9 @@
   --color-ghost: #1A1B1D;
   --color-mute: #8F8F8D;
   --color-ivory: #F2F2F0;
-  --color-coral: #F0977A;
+  /* Points at the v3 accent so the site has ONE coral. The v2
+     components still read this name; they now render the v3 value. */
+  --color-coral: #ff6363;
   --color-live: #57D98A;
 
   --ease-out-soft: cubic-bezier(.16, 1, .3, 1);
