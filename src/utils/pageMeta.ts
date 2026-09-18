@@ -34,6 +34,11 @@ const STATIC_META: Record<string, Meta> = {
     description:
       "Hiring for senior or lead product roles in marketplaces, applied AI or subscription products? Replies within 24 hours.",
   },
+  "/product-jury": {
+    title: `Product Jury: Building a Multi-Agent Product Decision Workspace — ${SITE}`,
+    description:
+      "A product decision workspace that challenges assumptions before you ship. Five specialist seats examine one product decision across UX research, product strategy, evidence quality, engineering feasibility, and business impact.",
+  },
 };
 
 /** Title and description for a route. Case-study pages take theirs from the

@@ -80,17 +80,17 @@ export interface AIBuild {
 export const AI_BUILDS: AIBuild[] = [
   {
     name: 'Product Jury',
-    status: 'In development',
+    status: 'Live product workspace',
     description:
-      'A panel of agents that argues one product decision from five seats, each juror holding a different bias on purpose: skeptic, advocate, user, engineer, finance.',
-    facts: ['Multi-agent', 'Five jurors', 'In development'],
-    action: { kind: 'copilot', question: 'What is Product Jury?' },
+      'A panel of specialist agents examines one product decision from different perspectives — UX research, product strategy, evidence quality, engineering feasibility, and business impact.',
+    facts: ['Multi-agent deliberation', 'Five specialist seats', 'Evidence-led decisions', 'Built with Gemini'],
+    action: { kind: 'navigate', path: '/product-jury' },
   },
   {
     name: 'Dipa',
     status: 'Live on this page',
     description:
-      'Transparent in-memory retrieval over my own record, and the assistant answering questions at the top of this page. No vector database, and the evaluation set is published with its failures.',
+      'Dipa uses in-memory retrieval over my own case studies and product experience to answer questions about my work, decisions, and shipped products.',
     facts: ['45 chunks', '0 external DBs', '19/20 golden set'],
     coverSlug: 'behind-ai-copilot',
     action: { kind: 'navigate', path: '/work/behind-ai-copilot' },

@@ -780,12 +780,20 @@ export default function CopilotWidget({
               isDraggingRef.current = true;
             }
           }}
-          aria-label="Open Dipa assistant"
+          aria-label="Try Dipa — ask about my work"
           aria-haspopup="dialog"
           aria-expanded={isOpen}
-          title="Open Dipa assistant"
-          className="group relative flex items-center justify-center w-full h-full min-w-full min-h-full p-0 m-0 bg-transparent border-0 outline-none shadow-none cursor-grab active:cursor-grabbing hover:scale-[1.03] transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0B] focus-visible:rounded-full pointer-events-auto select-none overflow-visible"
+          title="Try Dipa — ask about my work"
+          className="group relative flex items-center justify-center w-full h-full min-w-full min-h-full p-0 m-0 bg-transparent border-0 outline-none shadow-none cursor-pointer hover:scale-[1.03] hover:brightness-105 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#040506] focus-visible:rounded-full pointer-events-auto select-none overflow-visible"
         >
+          {/* Tooltip on hover & focus */}
+          <span
+            role="tooltip"
+            className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-lg border border-white/[0.12] bg-[#0E0F14]/95 px-3 py-1.5 font-mono text-[11px] font-medium text-[#FAF7F0] shadow-[0_8px_20px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-md transition-opacity duration-200 group-hover:block group-focus-visible:block sm:block sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-visible:opacity-100"
+          >
+            Try Dipa — ask about my work
+          </span>
+
           {/* Authentic PlasmaRing living plasma sphere — no artificial ring, border, outline, or glow flash */}
           <div className="relative w-full h-full min-w-0 min-h-0 overflow-visible bg-transparent pointer-events-auto">
             <PlasmaRing

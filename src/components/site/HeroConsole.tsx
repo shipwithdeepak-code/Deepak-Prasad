@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CornerDownLeft, Download, Search } from "lucide-react";
+import { CornerDownLeft, Search } from "lucide-react";
 import HeroShader from "../visuals/HeroShader";
 
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
-  onOpenResumeModal?: () => void;
   /** Hands the question to Dipa. */
   onAsk: (question?: string) => void;
 }
@@ -33,13 +32,12 @@ const PROOF_ITEMS = [
  *   (28% visual width at 1024px; progressive atmospheric opacity on mobile: 428px -> 0.45, 375px -> 0.28, 320px -> 0.15)
  * - Availability signal: "AVAILABLE FOR SENIOR & LEAD ROLES" (compact "OPEN TO SENIOR ROLES" below 360px)
  * - Exact headline with "intelligent systems." highlighted in warm coral #F0977A
- * - Raycast-inspired CTAs (warm coral "View Work →", neutral outlined "Download CV")
+ * - Focused 2-action CTA hierarchy (warm coral "View Work →", quiet text-based "About Me ↗")
  * - Dipa long search bar with suggestions and responsive placeholder
  * - Proof strip with edge-to-edge background shader
  */
 export default function HeroConsole({
   onNavigate,
-  onOpenResumeModal,
   onAsk,
 }: HeroConsoleProps) {
   const [query, setQuery] = useState("");
@@ -162,32 +160,31 @@ export default function HeroConsole({
               <span className="hidden sm:inline">applied </span>AI.
             </p>
 
-            {/* Action CTAs (Raycast-inspired polish) */}
-            <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5 w-full sm:w-auto">
+            {/* Action CTAs (Focused 2-action hierarchy: View Work → & About Me ↗) */}
+            <div className="mt-6 sm:mt-7 flex flex-row items-center gap-3.5 sm:gap-4.5 w-full sm:w-auto">
+              {/* PRIMARY CTA: View Work */}
               <button
                 type="button"
                 onClick={() => onNavigate("/work")}
-                className="group inline-flex min-h-[48px] sm:min-h-[46px] items-center justify-center gap-2 rounded-lg bg-[#F0977A] px-6 py-3 text-sm font-semibold text-[#0A0A0B] transition-all duration-200 hover:-translate-y-px hover:bg-[#E28468] hover:shadow-[0_0_20px_rgba(240,151,122,0.22)] cursor-pointer"
+                className="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-[#F0977A] px-5 sm:px-6 py-2.5 sm:py-3 text-sm font-semibold text-[#0A0A0B] transition-all duration-200 hover:-translate-y-px hover:bg-[#E28468] hover:shadow-[0_2px_14px_rgba(240,151,122,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0B] cursor-pointer select-none"
               >
                 <span>View Work</span>
-                <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                <span className="transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true">
                   →
                 </span>
               </button>
-              <a
-                href="/Deepak_Prasad_Senior_Product_Manager_Resume.pdf"
-                download="Deepak_Prasad_Senior_Product_Manager_Resume.pdf"
-                onClick={(e) => {
-                  if (onOpenResumeModal) {
-                    e.preventDefault();
-                    onOpenResumeModal();
-                  }
-                }}
-                className="group inline-flex min-h-[48px] sm:min-h-[46px] items-center justify-center gap-2 rounded-lg border border-white/[0.14] bg-white/[0.02] px-6 py-3 text-sm font-medium text-[#F5F5F0] transition-all duration-200 hover:-translate-y-px hover:border-[#F0977A]/50 hover:text-white cursor-pointer"
+
+              {/* SECONDARY CTA: About Me (Quiet, text-based, ivory with warm coral hover & subtle arrow) */}
+              <button
+                type="button"
+                onClick={() => onNavigate("/about")}
+                className="group inline-flex min-h-[44px] items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-[#FAF7F0]/90 transition-colors duration-200 hover:text-[#F0977A] focus-visible:text-[#F0977A] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F0977A] rounded cursor-pointer select-none"
               >
-                <span>Download CV</span>
-                <Download className="size-3.5 text-[#9E9E98] group-hover:text-[#F0977A] transition-colors" strokeWidth={1.8} aria-hidden="true" />
-              </a>
+                <span className="underline underline-offset-4 decoration-white/20 group-hover:decoration-[#F0977A]">About Me</span>
+                <span className="text-[#9E9E98] text-xs transition-transform duration-200 group-hover:text-[#F0977A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
+                  ↗
+                </span>
+              </button>
             </div>
           </div>
 

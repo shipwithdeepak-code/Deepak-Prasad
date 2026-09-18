@@ -1,7 +1,6 @@
 import React from "react";
-import { ArrowUpRight, Download } from "lucide-react";
+import { ArrowUpRight, Download, CheckCircle2 } from "lucide-react";
 import {
-  EXPERIENCE_ROLES,
   LEADERSHIP_SECTION,
   HOW_I_WORK_PRINCIPLES,
   CAPABILITY_GROUPS,
@@ -19,24 +18,39 @@ interface AboutPageProps {
   onOpenResumeModal?: () => void;
 }
 
-/** The shape of the seven years, in six steps. Each one names the thing that
- *  changed, not the job title, because the titles repeat and the problems do
- *  not. */
-const CAREER_STEPS = [
-  { title: "Hardware and IoT", context: "LionCircuits, APM" },
-  { title: "B2B marketplace", context: "ReshaMandi, 80,000+ farmers" },
-  { title: "Workflow and payments", context: "Instant payouts and KYC" },
-  { title: "Subscription and growth", context: "Sportstech, 12,401 paying" },
-  { title: "Connected products", context: "Performance Score, P0" },
-  { title: "AI products", context: "Conversational coach, localisation" },
+const SUPPORTING_THEMES = [
+  {
+    title: "0→1 product discovery and execution",
+    description: "Taking ambiguous charters through discovery, prototyping, validation, and launching systems from scratch.",
+  },
+  {
+    title: "Marketplace and subscription systems",
+    description: "Designing multi-sided economic loops, instant settlement, bidding workflows, paywalls, and retention dynamics.",
+  },
+  {
+    title: "Connected hardware and companion apps",
+    description: "Bridging physical devices, firmware constraints, and consumer digital interfaces into seamless experiences.",
+  },
+  {
+    title: "Applied AI and intelligent workflows",
+    description: "Building production conversational AI features, multi-agent systems, and ML-assisted pricing models with measurable guardrails.",
+  },
+  {
+    title: "Cross-functional product leadership",
+    description: "Aligning distributed cross-border pods, engineering, design, operations, and executive leadership toward verified outcomes.",
+  },
 ];
 
 /**
- * About.
+ * About Deepak Prasad.
  *
- * The record in full: how the work changed shape over seven years, every seat
- * with what was actually achieved in it, how a cross-border pod was run, the
- * five principles, and what I can be handed.
+ * Concise, editorial overview:
+ * - Core product philosophy & cross-system focus
+ * - 5 core supporting themes
+ * - Leadership pod structure
+ * - 5 operational principles
+ * - Domain capabilities
+ * - Direct handoff to the Resume for detailed chronological employment history
  */
 export default function AboutPage({
   onNavigate,
@@ -45,17 +59,18 @@ export default function AboutPage({
   return (
     <div className="v3-atmos v3-atmos-coral bg-void-black py-16 md:py-24">
       <div className="mx-auto max-w-[1100px] px-6">
-        <div className="mb-20 grid items-center gap-12 md:grid-cols-[1.2fr_.8fr]">
+        {/* Editorial Header Section */}
+        <div className="mb-16 grid items-center gap-12 md:grid-cols-[1.2fr_.8fr]">
           <PageHeader
-            eyebrow="About"
-            title="I like problems where the answer is not obvious."
-            lede="I turn complex customer, business and operational problems into products people use: applied AI, subscription businesses, B2B marketplaces and connected ecosystems."
+            eyebrow="ABOUT DEEPAK"
+            title="I build products across complex systems, from zero to something people use."
+            lede="I’m a Senior Product Manager and product builder working across marketplaces, connected hardware, subscriptions, and applied AI."
           >
             <p className="text-[15px] leading-relaxed text-smoke">
-              Over seven years I have worked across Indian and European markets,
-              built 0 to 1 products from concept to scale, run cross-border
-              pods, and designed systems that join hardware, software and the
-              people operating them.
+              My work sits at the intersection of customer problems, business models,
+              engineering constraints, and thoughtful product experiences. Over seven years
+              I have led 0→1 initiatives from concept to production, operated across distributed
+              international pods, and built products grounded in deep user empathy and operational reality.
             </p>
           </PageHeader>
 
@@ -70,105 +85,68 @@ export default function AboutPage({
                 Deepak Prasad
               </span>
               <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-coral-pulse">
-                Open to senior roles
+                Available for Senior Roles
               </span>
             </span>
           </Panel>
         </div>
 
+        {/* Supporting Themes */}
         <Panel className="mb-20 bg-ink p-6 sm:p-8">
           <SectionHeader
-            eyebrow="Career journey"
-            title="From rural mandis and circuit boards to consumer AI."
+            eyebrow="CORE FOCUS"
+            title="What I spend my time building."
+            lede="Areas where my product discovery, technical depth, and execution have shipped real systems."
           />
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-            {CAREER_STEPS.map((step, i) => (
+          <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+            {SUPPORTING_THEMES.map((theme, i) => (
               <div
-                key={step.title}
-                className="v3-key-quiet grid content-start gap-1.5 rounded-xl p-3.5"
+                key={theme.title}
+                className="v3-key-quiet grid content-start gap-2 rounded-xl p-4 sm:p-5"
               >
-                <span className="font-mono text-[10px] text-coral-pulse">
-                  0{i + 1}
-                </span>
-                <span className="text-xs font-medium leading-snug text-pure-white">
-                  {step.title}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[.05em] text-smoke">
-                  {step.context}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10.5px] text-coral-pulse">
+                    0{i + 1}
+                  </span>
+                  <span className="size-1.5 rounded-full bg-coral-pulse/60" />
+                </div>
+                <h3 className="text-[14.5px] font-medium leading-snug text-pure-white">
+                  {theme.title}
+                </h3>
+                <p className="text-[13px] leading-relaxed text-smoke">
+                  {theme.description}
+                </p>
               </div>
             ))}
+
+            {/* Quick Resume Card */}
+            <div className="v3-key-quiet flex flex-col justify-between gap-3 rounded-xl border border-coral-pulse/20 bg-coral-pulse/[0.03] p-4 sm:p-5">
+              <div>
+                <span className="font-mono text-[10.5px] text-coral-pulse uppercase tracking-wider">
+                  Full Career History
+                </span>
+                <h3 className="mt-2 text-[14.5px] font-medium leading-snug text-pure-white">
+                  Chronological Employment Record
+                </h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-smoke">
+                  Every company, role, date, and metric is documented in detail in my verified Resume.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  onOpenResumeModal ? onOpenResumeModal() : onNavigate("/resume")
+                }
+                className="inline-flex min-h-[40px] items-center gap-2 text-xs font-mono tracking-wider text-coral-pulse hover:text-white transition-colors"
+              >
+                <span>OPEN RESUME</span>
+                <ArrowUpRight className="size-3.5" />
+              </button>
+            </div>
           </div>
         </Panel>
 
-        <section id="experience" className="mb-20 scroll-mt-24">
-          <SectionHeader
-            eyebrow="Experience"
-            title="Every seat, and what actually happened in it."
-            lede="Product ownership across early-stage ventures, high-growth consumer apps and scaled B2B platforms."
-          />
-
-          <div className="grid gap-4">
-            {EXPERIENCE_ROLES.map((role) => (
-              <Panel
-                key={`${role.company}-${role.period}`}
-                className="bg-ink p-6 sm:p-8"
-              >
-                <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-                  <div className="grid gap-1">
-                    <h3 className="text-xl font-normal text-pure-white">
-                      {role.title}
-                    </h3>
-                    <span className="text-[13.5px] text-coral-pulse">
-                      {role.company}
-                    </span>
-                  </div>
-                  <div className="grid gap-1 text-left sm:text-right">
-                    <span className="font-mono text-[11px] text-smoke">
-                      {role.period}
-                    </span>
-                    <span className="font-mono text-[10.5px] uppercase tracking-[.05em] text-smoke">
-                      {role.type}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="mb-5 max-w-[76ch] text-sm leading-relaxed text-ash">
-                  {role.description}
-                </p>
-
-                {role.focus && (
-                  <div className="mb-5 flex flex-wrap gap-2">
-                    {role.focus.map((f) => (
-                      <Tag key={f}>{f}</Tag>
-                    ))}
-                  </div>
-                )}
-
-                <div className="border-t border-hairline pt-5">
-                  <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[.05em] text-smoke">
-                    What happened
-                  </p>
-                  <ul className="grid gap-2.5">
-                    {role.highlights.map((h) => (
-                      <li
-                        key={h}
-                        className="grid grid-cols-[auto_1fr] items-start gap-2.5 text-sm leading-relaxed text-mist/90"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="mt-2 block size-1 rounded-full bg-coral-pulse"
-                        />
-                        <span>{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Panel>
-            ))}
-          </div>
-        </section>
-
+        {/* Leadership Section */}
         <section className="mb-20">
           <SectionHeader
             eyebrow="Leadership"
@@ -194,6 +172,7 @@ export default function AboutPage({
           />
         </section>
 
+        {/* How I Work Principles */}
         <section className="mb-20">
           <SectionHeader
             eyebrow="How I work"
@@ -219,6 +198,7 @@ export default function AboutPage({
           </div>
         </section>
 
+        {/* Capabilities */}
         <section className="mb-16">
           <SectionHeader
             eyebrow="Capabilities"
@@ -241,6 +221,7 @@ export default function AboutPage({
           </div>
         </section>
 
+        {/* Detailed Employment History Banner */}
         <Panel
           loud
           className="flex flex-wrap items-center justify-between gap-6 bg-ink p-8"
@@ -250,26 +231,30 @@ export default function AboutPage({
               Want the full career history?
             </h3>
             <p className="text-sm text-ash">
-              The PDF has every role, dated, with the numbers attached.
+              The Resume has every role, dated, with the metrics and achievements attached.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                onOpenResumeModal ? onOpenResumeModal() : onNavigate("/resume")
-              }
-              className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-mist px-[18px] py-3 text-sm font-medium text-iron transition-all duration-200 hover:-translate-y-px hover:bg-white"
+          <div className="flex flex-wrap gap-2.5">
+            <a
+              href="/Deepak_Prasad_Senior_Product_Manager_Resume.pdf"
+              download="Deepak_Prasad_Senior_Product_Manager_Resume.pdf"
+              onClick={(e) => {
+                if (onOpenResumeModal) {
+                  e.preventDefault();
+                  onOpenResumeModal();
+                }
+              }}
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-mist px-5 py-2.5 text-sm font-medium text-iron transition-all duration-200 hover:-translate-y-px hover:bg-white cursor-pointer"
             >
-              Download CV
-              <Download className="size-3.5" strokeWidth={1.7} aria-hidden="true" />
-            </button>
+              Resume
+              <Download className="size-3.5" strokeWidth={1.8} aria-hidden="true" />
+            </a>
             <button
               type="button"
               onClick={() => onNavigate("/contact")}
-              className="v3-key-quiet inline-flex min-h-11 items-center gap-2 rounded-lg px-[18px] py-3 text-sm font-medium text-ash transition-colors duration-200 hover:text-pure-white"
+              className="v3-key-quiet inline-flex min-h-[44px] items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-ash transition-colors duration-200 hover:text-pure-white cursor-pointer"
             >
-              Contact
+              Get in touch
               <ArrowUpRight className="size-3.5" strokeWidth={2} aria-hidden="true" />
             </button>
           </div>

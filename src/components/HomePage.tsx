@@ -4,7 +4,6 @@ import SiteNavV3 from "./site/v3/SiteNavV3";
 import WorkRail from "./site/v3/WorkRail";
 import AIBuilds from "./site/v3/AIBuilds";
 import HowIWork from "./site/v3/HowIWork";
-import TrackRecord from "./site/v3/TrackRecord";
 import ContactCTA from "./site/v3/ContactCTA";
 import SiteFooterV3 from "./site/v3/SiteFooterV3";
 import { openCopilot } from "./CopilotWidget";
@@ -21,11 +20,12 @@ interface HomePageProps {
 /**
  * Portfolio v3 homepage.
  *
- * The order is an argument: Dipa is the claim, the strip is the
- * evidence, the rail is the record, the builds are the proof that I write the
- * things I talk about, the principles are how, and the track record is where.
- * Each section is one idea, and nothing repeats a number another one already
- * made.
+ * Clean, focused narrative:
+ * 1. Hero with focused CTAs (View Work & About Me) and Dipa search
+ * 2. WorkRail (flagship shipped products & deep dives)
+ * 3. AI Builds (Product Jury primary feature & Dipa in-memory retrieval pipeline)
+ * 4. How I Work (core principles)
+ * 5. Contact CTA & Footer
  */
 export default function HomePage({
   onNavigate,
@@ -35,10 +35,13 @@ export default function HomePage({
 }: HomePageProps) {
   return (
     <div className="bg-void-black">
-      <SiteNavV3 onNavigate={onNavigate} onOpenContact={onOpenContact} />
+      <SiteNavV3
+        onNavigate={onNavigate}
+        onOpenContact={onOpenContact}
+        onOpenResumeModal={onOpenResumeModal}
+      />
       <HeroConsole
         onNavigate={onNavigate}
-        onOpenResumeModal={onOpenResumeModal}
         onAsk={(question) => openCopilot(question)}
       />
       <WorkRail
@@ -51,7 +54,6 @@ export default function HomePage({
         onAsk={(question) => openCopilot(question)}
       />
       <HowIWork />
-      <TrackRecord onNavigate={onNavigate} />
       <ContactCTA
         onOpenContact={onOpenContact}
         onOpenResumeModal={onOpenResumeModal}

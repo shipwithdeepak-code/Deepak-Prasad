@@ -7,6 +7,7 @@ import CaseStudyDetailPage from "./components/CaseStudyDetailPage";
 import AboutPage from "./components/AboutPage";
 import ResumePage from "./components/ResumePage";
 import ContactPage from "./components/ContactPage";
+import ProductJuryPage from "./components/ProductJuryPage";
 import ContactModal from "./components/ContactModal";
 import ResumeModal from "./components/ResumeModal";
 import CopilotWidget from "./components/CopilotWidget";
@@ -177,6 +178,11 @@ export default function App() {
       return <ContactPage onNavigate={navigate} />;
     }
 
+    // 6. Product Jury Editorial Article Page: /product-jury
+    if (currentPath === "/product-jury") {
+      return <ProductJuryPage onNavigate={navigate} />;
+    }
+
     // Default: Homepage: /
     return (
       <HomePage
@@ -201,11 +207,12 @@ export default function App() {
 
       {/* Persistent Navigation */}
       {!isHome && (
-      <SiteNavV3
-        currentPath={currentPath}
-        onNavigate={navigate}
-        onOpenContact={() => openCalendly()}
-      />
+        <SiteNavV3
+          currentPath={currentPath}
+          onNavigate={navigate}
+          onOpenContact={() => openCalendly()}
+          onOpenResumeModal={() => setIsResumeModalOpen(true)}
+        />
       )}
 
       {/* Main Page View */}
