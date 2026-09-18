@@ -46,7 +46,7 @@ export default function WorkPage({
   };
 
   return (
-    <div className="v3-atmos v3-atmos-blue bg-void-black py-16 md:py-24">
+    <div className="v3-atmos v3-atmos-coral bg-void-black py-16 md:py-24">
       <div className="mx-auto max-w-[1200px] px-6">
         <PageHeader
           eyebrow="Products shipped"
@@ -54,26 +54,33 @@ export default function WorkPage({
           lede="Six of these have a page of their own: the decision, what it cost, and the number it changed. The rest are listed underneath."
         />
 
-        <div className="mb-8 flex flex-wrap items-center gap-2">
-          {FILTERS.map((filter) => {
-            const pressed = filter.family === family;
-            return (
-              <button
-                key={filter.label}
-                type="button"
-                aria-pressed={pressed}
-                onClick={() => setFamily(filter.family)}
-                className={
-                  pressed
-                    ? "min-h-9 rounded-full bg-mist px-3.5 py-2 text-[13px] font-medium text-iron"
-                    : "v3-key-quiet min-h-9 rounded-full px-3.5 py-2 text-[13px] font-medium text-ash transition-colors duration-200 hover:text-pure-white"
-                }
-              >
-                {filter.label}
-              </button>
-            );
-          })}
-          <span aria-live="polite" className="ml-1.5 font-mono text-[11px] text-smoke">
+        <div className="mb-8 flex flex-wrap items-center gap-3">
+          <div
+            role="tablist"
+            aria-label="Filter products by family"
+            className="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/[0.08] bg-[#111216]/90 p-1 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]"
+          >
+            {FILTERS.map((filter) => {
+              const pressed = filter.family === family;
+              return (
+                <button
+                  key={filter.label}
+                  type="button"
+                  role="tab"
+                  aria-selected={pressed}
+                  onClick={() => setFamily(filter.family)}
+                  className={`min-h-[34px] rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/80 ${
+                    pressed
+                      ? "bg-[#FAF7F0] text-[#0A0B0E] font-medium shadow-xs"
+                      : "text-[#9C9A95] hover:text-[#FAF7F0]"
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              );
+            })}
+          </div>
+          <span aria-live="polite" className="ml-1 font-mono text-[11px] text-smoke">
             {visible.length} of {ALL_FLAGSHIP_CASE_STUDIES.length}
           </span>
         </div>

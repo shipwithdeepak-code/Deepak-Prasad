@@ -31,7 +31,7 @@ export default function ResumePage({
   };
 
   return (
-    <div className="v3-atmos v3-atmos-blue bg-void-black py-16 md:py-24">
+    <div className="v3-atmos v3-atmos-coral bg-void-black py-16 md:py-24">
       <div className="mx-auto max-w-[940px] px-6">
         <PageHeader
           eyebrow="Curriculum vitae"
