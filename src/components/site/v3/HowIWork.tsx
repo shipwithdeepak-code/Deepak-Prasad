@@ -851,7 +851,7 @@ export default function HowIWork() {
 
               {/* Top Navigation & Close Bar */}
               <div className="flex items-center justify-between border-b border-black/15 pb-4 mb-6">
-                <div className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider opacity-70">
+                <div className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-wider opacity-90">
                   <span>NOTE {activeNote.number}</span>
                   <span>·</span>
                   <span>{activeNote.category}</span>
@@ -907,14 +907,14 @@ export default function HowIWork() {
               {/* Detailed Breakdown Sections */}
               <div className="space-y-5 text-[14px] sm:text-[14.5px] leading-relaxed">
                 <div>
-                  <h4 className="font-mono text-[10.5px] font-bold uppercase tracking-wider opacity-60 mb-1.5">
+                  <h4 className="font-mono text-[10.5px] font-bold uppercase tracking-wider opacity-90 mb-1.5">
                     THE REASONING / WHY IT MATTERS
                   </h4>
-                  <p className="opacity-90">{activeNote.whyItMatters}</p>
+                  <p className="opacity-95">{activeNote.whyItMatters}</p>
                 </div>
 
                 <div>
-                  <h4 className="font-mono text-[10.5px] font-bold uppercase tracking-wider opacity-60 mb-2">
+                  <h4 className="font-mono text-[10.5px] font-bold uppercase tracking-wider opacity-90 mb-2">
                     HOW I APPLY IT
                   </h4>
                   <ul className="space-y-2">
@@ -923,7 +923,7 @@ export default function HowIWork() {
                         <span className="mt-1 flex size-3.5 shrink-0 items-center justify-center rounded-full bg-black/15">
                           <Check className="size-2.5 stroke-[2.5]" />
                         </span>
-                        <span className="opacity-90">{item}</span>
+                        <span className="opacity-95">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -934,16 +934,16 @@ export default function HowIWork() {
                     <h4 className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#A32A1C] mb-1">
                       WHAT IT PREVENTS
                     </h4>
-                    <p className="text-[13px] font-medium opacity-90">
+                    <p className="text-[13px] font-medium opacity-95">
                       {activeNote.whatItPrevents}
                     </p>
                   </div>
 
                   <div className="rounded-lg bg-black/[0.06] p-3.5">
-                    <h4 className="font-mono text-[10px] font-bold uppercase tracking-wider opacity-60 mb-1">
+                    <h4 className="font-mono text-[10px] font-bold uppercase tracking-wider opacity-90 mb-1">
                       GROUND CONTEXT
                     </h4>
-                    <p className="text-[13px] leading-snug opacity-90">
+                    <p className="text-[13px] leading-snug opacity-95">
                       {activeNote.example}
                     </p>
                   </div>
@@ -951,7 +951,7 @@ export default function HowIWork() {
               </div>
 
               {/* Footer action */}
-              <div className="mt-8 pt-4 border-t border-black/15 flex items-center justify-between text-xs font-mono opacity-70">
+              <div className="mt-8 pt-4 border-t border-black/15 flex items-center justify-between text-xs font-mono opacity-90">
                 <span>PRESS ESC OR ARROW KEYS</span>
                 <button
                   type="button"
@@ -1037,7 +1037,7 @@ function StickyNoteCard({
         >
           {note.number}
         </span>
-        <span className="font-mono text-[9.5px] uppercase tracking-wider opacity-60">
+        <span className="font-mono text-[9.5px] uppercase tracking-wider font-semibold opacity-90">
           {note.category}
         </span>
       </div>
@@ -1055,17 +1055,17 @@ function StickyNoteCard({
         <div className="w-16 h-0.5 mt-1 border-b border-black/25" />
 
         {/* Clean supporting thought */}
-        <p className="mt-3 text-[13px] sm:text-[13.5px] font-medium leading-snug opacity-85">
+        <p className="mt-3 text-[13px] sm:text-[13.5px] font-medium leading-snug opacity-95">
           {note.supportingThought}
         </p>
       </div>
 
       {/* Bottom affordance: EXPLORE ↗ */}
       <div className="relative z-10 mt-6 pt-2.5 border-t border-black/10 flex items-center justify-between">
-        <span className="font-mono text-[10px] uppercase tracking-[0.1em] font-semibold opacity-75 group-hover:opacity-100 transition-opacity">
+        <span className="font-mono text-[10px] uppercase tracking-[0.1em] font-bold opacity-90 group-hover:opacity-100 transition-opacity">
           EXPLORE
         </span>
-        <ArrowUpRight className="size-3.5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+        <ArrowUpRight className="size-3.5 opacity-85 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
       </div>
     </article>
   );

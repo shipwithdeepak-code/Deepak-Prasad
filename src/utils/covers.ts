@@ -11,7 +11,15 @@ const COVERS = import.meta.glob<string>("../assets/work/*.{jpg,jpeg,png,webp}", 
 
 /** The cover for a case-study slug, or undefined when no file matches. */
 export function coverFor(slug: string): string | undefined {
-  const hit = Object.entries(COVERS).find(
+  const entries = Object.entries(COVERS);
+  const webpHit = entries.find(
+    ([path]) =>
+      path.endsWith(".webp") &&
+      path.split("/").pop()?.replace(/\.[^.]+$/, "") === slug
+  );
+  if (webpHit) return webpHit[1];
+
+  const hit = entries.find(
     ([path]) => path.split("/").pop()?.replace(/\.[^.]+$/, "") === slug
   );
   return hit?.[1];

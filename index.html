@@ -30,7 +30,7 @@
     <!-- the hero portrait is the largest paint on every first view, and
          React renders it, so the browser would not find it until the bundle
          ran. Naming it here starts the fetch with the document. -->
-    <link rel="preload" as="image" href="/deepak-hero-sharp.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="/deepak-hero-transparent.webp" type="image/webp" fetchpriority="high" />
 
     <!-- v3 faces are self-hosted, so the first paint does not wait on a
          third party. Preloaded because index.css declares them and the
@@ -41,7 +41,7 @@
     <!-- Google Fonts for editorial headline accent, display typography, and handwritten working wall -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Caveat:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

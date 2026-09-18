@@ -1,16 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import SiteNavV3 from "./components/site/v3/SiteNavV3";
 import SiteFooterV3 from "./components/site/v3/SiteFooterV3";
 import HomePage from "./components/HomePage";
-import WorkPage from "./components/WorkPage";
-import CaseStudyDetailPage from "./components/CaseStudyDetailPage";
-import AboutPage from "./components/AboutPage";
-import ResumePage from "./components/ResumePage";
-import ContactPage from "./components/ContactPage";
-import ProductJuryPage from "./components/ProductJuryPage";
-import ContactModal from "./components/ContactModal";
-import ResumeModal from "./components/ResumeModal";
-import CopilotWidget from "./components/CopilotWidget";
 import { openCalendly } from "./utils/calendly";
 import { applyPageMeta } from "./utils/pageMeta";
 import {
@@ -18,6 +9,17 @@ import {
   RESHAMANDI_CASE_STUDY,
 } from "./data/caseStudies";
 import { CaseStudyDetail } from "./types";
+
+// Code-split all non-home routes and modals to ensure minimal initial bundle size
+const WorkPage = lazy(() => import("./components/WorkPage"));
+const CaseStudyDetailPage = lazy(() => import("./components/CaseStudyDetailPage"));
+const AboutPage = lazy(() => import("./components/AboutPage"));
+const ResumePage = lazy(() => import("./components/ResumePage"));
+const ContactPage = lazy(() => import("./components/ContactPage"));
+const ProductJuryPage = lazy(() => import("./components/ProductJuryPage"));
+const ContactModal = lazy(() => import("./components/ContactModal"));
+const ResumeModal = lazy(() => import("./components/ResumeModal"));
+const CopilotWidget = lazy(() => import("./components/CopilotWidget"));
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(() => {
@@ -216,7 +218,11 @@ export default function App() {
       )}
 
       {/* Main Page View */}
-      <main id="main" className="flex-1 w-full">{renderCurrentView()}</main>
+      <main id="main" className="flex-1 w-full">
+        <Suspense fallback={<div className="min-h-[50vh] bg-void-black" />}>
+          {renderCurrentView()}
+        </Suspense>
+      </main>
 
       {/* Persistent Footer */}
       {!isHome && (
@@ -224,26 +230,29 @@ export default function App() {
       )}
 
       {/* Interactive Modals */}
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
-
-      <ResumeModal
-        isOpen={isResumeModalOpen}
-        onClose={() => setIsResumeModalOpen(false)}
-        onOpenContact={() => {
-          setIsResumeModalOpen(false);
-          setIsContactModalOpen(true);
-        }}
-      />
+      <Suspense fallback={null}>
+        <ContactModal
+          isOpen={isContactModalOpen}
+          onClose={() => setIsContactModalOpen(false)}
+        />
+        <ResumeModal
+          isOpen={isResumeModalOpen}
+          onClose={() => setIsResumeModalOpen(false)}
+          onOpenContact={() => {
+            setIsResumeModalOpen(false);
+            setIsContactModalOpen(true);
+          }}
+        />
+      </Suspense>
 
       {/* RAG-based AI Copilot Widget */}
-      <CopilotWidget
-        onOpenBookChat={() => openCalendly()}
-        onNavigate={navigate}
-        currentPath={currentPath}
-      />
+      <Suspense fallback={null}>
+        <CopilotWidget
+          onOpenBookChat={() => openCalendly()}
+          onNavigate={navigate}
+          currentPath={currentPath}
+        />
+      </Suspense>
     </div>
   );
 }

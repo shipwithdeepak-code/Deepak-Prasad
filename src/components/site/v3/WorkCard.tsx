@@ -149,6 +149,8 @@ export default function WorkCard({ study, onSelect }: WorkCardProps) {
         <img
           src={cover}
           alt=""
+          width={1160}
+          height={725}
           loading="lazy"
           decoding="async"
           className="pointer-events-none absolute inset-0 size-full object-cover object-center opacity-40 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:opacity-55 motion-reduce:transform-none"

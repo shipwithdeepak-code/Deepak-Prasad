@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CornerDownLeft, Search } from "lucide-react";
-import HeroShader from "../visuals/HeroShader";
+
+// Lazy-load the heavy WebGL shader on desktop only after FCP
+const HeroShader = React.lazy(() => import("../visuals/HeroShader"));
 
 interface HeroConsoleProps {
   onNavigate: (path: string) => void;
@@ -28,7 +30,7 @@ const PROOF_ITEMS = [
  * - Near-black obsidian background: #0A0A0B
  * - Full-Screen Shader: Swirl -> ChromaFlow -> FlutedGlass -> FilmGrain (declarative pointer momentum)
  * - Oversized DEEPAK masthead in low-contrast warm ivory/graphite
- * - Real portrait asset (/deepak-hero-sharp.jpg) with multi-point seamless feathering
+ * - Real portrait asset (/deepak-hero-transparent.webp) with multi-point seamless feathering
  *   (28% visual width at 1024px; progressive atmospheric opacity on mobile: 428px -> 0.45, 375px -> 0.28, 320px -> 0.15)
  * - Availability signal: "AVAILABLE FOR SENIOR & LEAD ROLES" (compact "OPEN TO SENIOR ROLES" below 360px)
  * - Exact headline with "intelligent systems." highlighted in warm coral #F0977A
@@ -44,17 +46,26 @@ export default function HeroConsole({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isNarrowMobile, setIsNarrowMobile] = useState(false);
+  const [canLoadShader, setCanLoadShader] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = "/deepak-hero-transparent.png";
-    img.onload = () => setImageLoaded(true);
-    img.onerror = () => setImageError(true);
-    if (img.complete) {
-      setImageLoaded(true);
-    }
+    // Check if desktop and does not prefer reduced motion
+    const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    if (isDesktop && !prefersReduced) {
+      // Defer shader compilation slightly to guarantee instant FCP/LCP paint
+      const timer = setTimeout(() => {
+        setCanLoadShader(true);
+      }, 60);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  useEffect(() => {
     const checkWidth = () => {
       setIsNarrowMobile(window.innerWidth < 400);
     };
@@ -76,12 +87,20 @@ export default function HeroConsole({
   return (
     <header id="hero" className="relative isolate overflow-hidden bg-[#0A0A0B] w-full min-h-[100svh] flex flex-col justify-between">
       {/* 
-        LAYER 1: Full-Screen Edge-to-Edge Shader Background
-        Exact order: Swirl -> ChromaFlow -> FlutedGlass -> FilmGrain
-        Declarative cursor reactivity via ChromaFlow (no manual mouse listeners).
-        Obsidian base (#0A0A0B), warm charcoal, restrained coral (#F0977A).
+        LAYER 1: Ambient Background
+        - Static lightweight atmospheric CSS gradient vignette (instant mobile FCP & reduced-motion fallback)
+        - Full-Screen Shader: Swirl -> ChromaFlow -> FlutedGlass -> FilmGrain loaded deferred on desktop
       */}
-      <HeroShader className="z-0 opacity-80" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_65%_25%,rgba(240,151,122,0.06),transparent_60%),radial-gradient(circle_at_20%_80%,rgba(20,20,24,0.8),transparent_70%)]"
+      />
+
+      {canLoadShader && (
+        <React.Suspense fallback={null}>
+          <HeroShader className="z-0 opacity-80 transition-opacity duration-700" />
+        </React.Suspense>
+      )}
 
       {/* Atmospheric depth & text legibility vignettes */}
       <div
@@ -112,33 +131,43 @@ export default function HeroConsole({
       </div>
 
       {/* 
-        LAYER 3: Real Transparent Portrait Integration (/deepak-hero-transparent.png)
+        LAYER 3: Real Transparent Portrait Integration (/deepak-hero-transparent.webp with fallback)
         - Scaled up 10–15% for prominent, natural framing in the right third
         - Positioned slightly further toward the right edge with a small safe margin
         - Soft multi-directional CSS mask on <img> softly dissolves top hair, outer sides, and bottom hoodie
         - True alpha transparency over obsidian shader background; zero rectangular container or dark box
       */}
-      <img
-        src="/deepak-hero-transparent.png"
-        alt="Deepak Prasad"
-        aria-hidden="true"
-        onLoad={() => setImageLoaded(true)}
-        onError={() => setImageError(true)}
-        className={`pointer-events-none absolute right-0 sm:right-[0.5%] md:right-[0.5%] lg:right-[0.8%] xl:right-[1%] 2xl:right-[1.2%] top-[100px] sm:top-[90px] md:top-[82px] lg:top-[74px] xl:top-[68px] z-20 w-[70vw] sm:w-[54vw] md:w-[400px] md:max-w-[425px] lg:w-[490px] lg:max-w-[520px] xl:w-[clamp(480px,44vw,635px)] xl:max-w-[635px] h-auto object-contain object-bottom filter grayscale contrast-[1.08] brightness-[1.18] transition-opacity duration-700 bg-transparent select-none ${
-          imageLoaded && !imageError
-            ? "opacity-25 sm:opacity-35 md:opacity-100"
-            : "opacity-0"
-        }`}
-        style={{
-          maskImage:
-            "radial-gradient(ellipse 68% 72% at 52% 44%, black 50%, rgba(0, 0, 0, 0.9) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 66%, transparent 95%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 68% 72% at 52% 44%, black 50%, rgba(0, 0, 0, 0.9) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 66%, transparent 95%)",
-          maskComposite: "intersect",
-          WebkitMaskComposite: "destination-in",
-        }}
-        draggable={false}
-      />
+      <picture className="pointer-events-none absolute right-0 sm:right-[0.5%] md:right-[0.5%] lg:right-[0.8%] xl:right-[1%] 2xl:right-[1.2%] top-[100px] sm:top-[90px] md:top-[82px] lg:top-[74px] xl:top-[68px] z-20 w-[70vw] sm:w-[54vw] md:w-[400px] md:max-w-[425px] lg:w-[490px] lg:max-w-[520px] xl:w-[clamp(480px,44vw,635px)] xl:max-w-[635px] h-auto select-none">
+        <source srcSet="/deepak-hero-transparent.webp" type="image/webp" />
+        <img
+          src="/deepak-hero-transparent.png"
+          alt="Deepak Prasad"
+          aria-hidden="true"
+          width={500}
+          height={500}
+          fetchPriority="high"
+          decoding="async"
+          onLoad={() => setImageLoaded(true)}
+          onError={() => {
+            setImageError(true);
+            setImageLoaded(true);
+          }}
+          className={`w-full h-auto object-contain object-bottom filter grayscale contrast-[1.08] brightness-[1.18] transition-opacity duration-700 bg-transparent select-none ${
+            imageLoaded && !imageError
+              ? "opacity-25 sm:opacity-35 md:opacity-100"
+              : "opacity-0"
+          }`}
+          style={{
+            maskImage:
+              "radial-gradient(ellipse 68% 72% at 52% 44%, black 50%, rgba(0, 0, 0, 0.9) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 66%, transparent 95%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 68% 72% at 52% 44%, black 50%, rgba(0, 0, 0, 0.9) 66%, rgba(0, 0, 0, 0.45) 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 12%, black 66%, transparent 95%)",
+            maskComposite: "intersect",
+            WebkitMaskComposite: "destination-in",
+          }}
+          draggable={false}
+        />
+      </picture>
 
       {/* Main Foreground Container: Layers 5, 6 */}
       <div className="relative z-30 mx-auto w-full max-w-[1360px] flex-1 flex flex-col justify-end px-4 sm:px-8 lg:px-14 pt-20 sm:pt-24 lg:pt-28 pb-6 sm:pb-8 md:pb-10">

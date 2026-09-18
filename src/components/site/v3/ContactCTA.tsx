@@ -72,11 +72,18 @@ export default function ContactCTA({ onOpenContact }: ContactCTAProps) {
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
       >
         {isReducedMotion || videoError ? (
-          <img
-            src="/desert-cta-coral-poster.jpg"
-            alt=""
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-          />
+          <picture>
+            <source srcSet="/desert-cta-coral-poster.webp" type="image/webp" />
+            <img
+              src="/desert-cta-coral-poster.jpg"
+              alt=""
+              width={1920}
+              height={1080}
+              loading="lazy"
+              decoding="async"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+            />
+          </picture>
         ) : (
           <video
             ref={videoRef}
@@ -84,8 +91,8 @@ export default function ContactCTA({ onOpenContact }: ContactCTAProps) {
             muted
             loop
             playsInline
-            preload="auto"
-            poster="/desert-cta-coral-poster.jpg"
+            preload="metadata"
+            poster="/desert-cta-coral-poster.webp"
             onLoadedData={() => setVideoLoaded(true)}
             onError={() => setVideoError(true)}
             aria-hidden="true"

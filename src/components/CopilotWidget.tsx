@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useReducedMotion } from "framer-motion";
 import BreathingOrb from "./visuals/BreathingOrb";
 import PlasmaRing from "./visuals/PlasmaRing";
 import {
@@ -68,7 +67,17 @@ export default function CopilotWidget({
   onNavigate,
   currentPath = "/",
 }: CopilotWidgetProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setShouldReduceMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
 
   /* The hero carries the assistant search bar as its front door, so the floating

@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import { useEffect, useRef } from "react"
-import { animate, motionValue } from "motion/react"
+import { animate, motionValue } from "framer-motion"
 
 /**
  * framer-motion's `animate()` option bag. `AnimationOptions` is not exported by

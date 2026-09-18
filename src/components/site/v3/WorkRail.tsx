@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CaseStudyDetail } from "../../../types";
 import { RAIL_ENTRIES, WorkFamily } from "../../../data/homeV3";
 import WorkCard from "./WorkCard";
@@ -27,7 +26,16 @@ export default function WorkRail({
 }: WorkRailProps) {
   const [activeFamily, setActiveFamily] = useState<WorkFamily | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setShouldReduceMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   // Mouse drag state tracking (8px delta distinguishes intentional drags from clicks)
   const isMouseDown = useRef(false);
@@ -167,14 +175,9 @@ export default function WorkRail({
                     }`}
                   >
                     {isActive && (
-                      <motion.span
-                        layoutId="activeWorkFilterPill"
-                        className="absolute inset-0 -z-10 rounded-full bg-[#FAF7F0] shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
-                        transition={{
-                          type: "spring",
-                          stiffness: 450,
-                          damping: 35,
-                        }}
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 -z-10 rounded-full bg-[#FAF7F0] shadow-[0_2px_8px_rgba(0,0,0,0.35)] transition-all duration-200"
                       />
                     )}
                     <span className="relative z-10 whitespace-nowrap">
@@ -214,19 +217,11 @@ export default function WorkRail({
         className="flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto pb-8 pt-8 outline-none select-none scrollbar-none active:cursor-grabbing pl-6 sm:pl-[max(1.5rem,calc((100vw-1240px)/2+1.5rem))] pr-6 sm:pr-[max(1.5rem,calc((100vw-1240px)/2+1.5rem))]"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeFamily || "all"}
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -6 }}
-            transition={{
-              duration: 0.28,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="flex snap-x snap-mandatory gap-5"
-          >
-            {visibleStudies.map((study) => (
+        <div
+          key={activeFamily || "all"}
+          className="flex snap-x snap-mandatory gap-5 transition-opacity duration-300 animate-in fade-in motion-reduce:animate-none"
+        >
+          {visibleStudies.map((study) => (
               <WorkCard
                 key={study.slug}
                 study={study}
@@ -339,8 +334,7 @@ export default function WorkRail({
                 </div>
               </div>
             </button>
-          </motion.div>
-        </AnimatePresence>
+        </div>
       </div>
 
       {/* Bottom Carousel Controls & Navigation (aligned with max-w-[1240px]) */}

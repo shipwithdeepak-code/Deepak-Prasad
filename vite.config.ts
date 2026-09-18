@@ -102,6 +102,9 @@ export default defineConfig(() => {
             if (/[\\/]node_modules[\\/](framer-motion|motion-dom|motion-utils)[\\/]/.test(id)) {
               return 'motion-vendor';
             }
+            if (/[\\/]node_modules[\\/]shaders[\\/]/.test(id)) {
+              return 'shaders-vendor';
+            }
             if (/[\\/]node_modules[\\/]lucide-react[\\/]/.test(id)) {
               return 'icons-vendor';
             }

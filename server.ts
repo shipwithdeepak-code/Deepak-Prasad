@@ -86,6 +86,15 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Security Headers for production resilience
+  app.use((_req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "SAMEORIGIN");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    next();
+  });
+
   app.use(express.json());
 
   // -------------------------------------------------------------
@@ -277,8 +286,19 @@ CRITICAL GROUNDING RULES:
     }
   });
 
-  // Serve static assets from public folder
-  app.use(express.static(path.resolve("public")));
+  // Serve static assets from public folder with intelligent cache headers
+  app.use(
+    express.static(path.resolve("public"), {
+      maxAge: "1d",
+      setHeaders: (res, filePath) => {
+        if (/\.(woff2?|ttf|otf)$/i.test(filePath)) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        } else if (/\.(webp|png|jpg|jpeg|svg|mp4)$/i.test(filePath)) {
+          res.setHeader("Cache-Control", "public, max-age=604800, stale-while-revalidate=86400");
+        }
+      },
+    })
+  );
 
   // -------------------------------------------------------------
   // Vite Integration (Dev vs Prod)
@@ -295,12 +315,21 @@ CRITICAL GROUNDING RULES:
         `[Server] NODE_ENV is production but no build was found at ${distPath}. Run the build first.`
       );
     }
+    // Immutable caching for hashed Vite asset bundles
+    app.use(
+      "/assets",
+      express.static(path.join(distPath, "assets"), {
+        maxAge: "1y",
+        immutable: true,
+      })
+    );
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       // If request has a file extension for media/assets and was not found, return 404 instead of HTML
       if (/\.(mp4|webm|png|jpg|jpeg|gif|svg|ico|pdf|webp)$/i.test(req.path)) {
         return res.status(404).end();
       }
+      res.setHeader("Cache-Control", "no-cache");
       res.sendFile(path.join(distPath, "index.html"));
     });
   } else {
