@@ -75,7 +75,9 @@ export default function CopilotWidget({
      Plasma Ring launcher stands down while the hero is visible on screen and fades up
      once the reader is past it. On non-Hero pages and routes, it is always available. */
   const isHomePage = currentPath === "/";
-  const [launcherVisible, setLauncherVisible] = useState(!isHomePage);
+  const [launcherVisible, setLauncherVisible] = useState(
+    () => !isHomePage || (typeof window !== "undefined" && window.scrollY > 200)
+  );
 
   useEffect(() => {
     // If not on homepage, launcher is unconditionally visible everywhere
@@ -96,13 +98,11 @@ export default function CopilotWidget({
       }
 
       const rect = hero.getBoundingClientRect();
-      const heroHeight = rect.height || window.innerHeight;
-
-      // The hero is only "active" if its bottom is well below the top of the viewport
-      // and scrollY is small. As soon as the user scrolls past the hero into Work,
-      // rect.bottom drops below 160px or scrollY exceeds 35% of the hero height.
-      const isPastHero = rect.bottom <= 160 || window.scrollY > heroHeight * 0.35;
-      setLauncherVisible(isPastHero);
+      // Hero is considered active only while occupying the primary screen (bottom extends down).
+      // As soon as the user scrolls into Work (rect.bottom <= 120), the plasma launcher is visible.
+      // Scrolling back up to the Hero (rect.bottom > 120 && rect.top < window.innerHeight) hides it.
+      const isHeroActive = rect.bottom > 120 && rect.top < window.innerHeight;
+      setLauncherVisible(!isHeroActive);
     };
 
     // Run initial check immediately
@@ -125,7 +125,7 @@ export default function CopilotWidget({
     }
 
     // Re-check after brief timeouts to handle layout settles or image/font loads
-    timer = setTimeout(checkHeroVisibility, 150);
+    timer = setTimeout(checkHeroVisibility, 100);
 
     return () => {
       window.removeEventListener("scroll", checkHeroVisibility);
@@ -151,6 +151,8 @@ export default function CopilotWidget({
   const inputRef = useRef<HTMLInputElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartPosRef = useRef({ x: 0, y: 0 });
 
   /** The open handler below is registered once, so it cannot close over
    *  handleSend directly without freezing first-render state. */
@@ -378,7 +380,7 @@ export default function CopilotWidget({
       <div
         ref={drawerRef}
         id="copilot-window"
-        className={`fixed z-[70] right-5 bottom-[92px] sm:right-8 sm:bottom-[116px] max-sm:[bottom:max(92px,calc(env(safe-area-inset-bottom,20px)+72px))] max-sm:[right:max(20px,env(safe-area-inset-right,20px))] sm:[bottom:max(116px,calc(env(safe-area-inset-bottom,32px)+84px))] sm:[right:max(32px,env(safe-area-inset-right,32px))] w-[calc(100vw-32px)] sm:w-[460px] h-[600px] max-h-[calc(100vh-136px)] flex flex-col rounded-2xl bg-[#0D0D10]/95 backdrop-blur-2xl border border-white/[0.08] shadow-[0_24px_60px_rgba(0,0,0,0.85)] overflow-hidden text-[#F5F5F0] transition-[transform,opacity] duration-300 ease-[var(--ease-out-soft)] ${
+        className={`fixed z-[75] right-5 bottom-[84px] sm:right-6 sm:bottom-[96px] max-sm:[bottom:max(84px,calc(env(safe-area-inset-bottom,20px)+64px))] max-sm:[right:max(20px,env(safe-area-inset-right,20px))] sm:[bottom:max(96px,calc(env(safe-area-inset-bottom,24px)+72px))] sm:[right:max(24px,env(safe-area-inset-right,24px))] w-[calc(100vw-32px)] sm:w-[460px] h-[580px] max-h-[calc(100vh-120px)] flex flex-col rounded-2xl bg-[#0D0D10]/95 backdrop-blur-xl border border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.85)] overflow-hidden text-[#F5F5F0] transition-[transform,opacity] duration-300 ease-[var(--ease-out-soft)] ${
           isOpen
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-90 pointer-events-none"
@@ -739,29 +741,61 @@ export default function CopilotWidget({
 
       {/* Global Plasma Assistant Trigger */}
       <div
-        className={`fixed z-[60] right-5 bottom-5 sm:right-8 sm:bottom-8 max-sm:[bottom:max(20px,env(safe-area-inset-bottom,20px))] max-sm:[right:max(20px,env(safe-area-inset-right,20px))] sm:[bottom:max(32px,env(safe-area-inset-bottom,32px))] sm:[right:max(32px,env(safe-area-inset-right,32px))] transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        id="dipa-plasma-launcher"
+        className={`fixed z-[70] right-5 bottom-5 w-[56px] h-[56px] min-w-[56px] min-h-[56px] sm:right-6 sm:bottom-6 sm:w-[64px] sm:h-[64px] sm:min-w-[64px] sm:min-h-[64px] overflow-visible transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           launcherVisible
-            ? "opacity-100 scale-100 pointer-events-auto"
-            : "opacity-0 scale-75 pointer-events-none"
+            ? "opacity-100 scale-100 pointer-events-auto visible block"
+            : "opacity-0 scale-75 pointer-events-none invisible"
         }`}
+        style={{
+          position: "fixed",
+          zIndex: 70,
+          overflow: "visible",
+          display: "block",
+          visibility: launcherVisible ? "visible" : "hidden",
+          opacity: launcherVisible ? 1 : 0,
+          pointerEvents: launcherVisible ? "auto" : "none",
+        }}
       >
         <button
           ref={launcherRef}
           id="dipa-plasma-trigger"
           type="button"
           onClick={() => {
-            setIsOpen(true);
+            if (isDraggingRef.current) return;
+            setIsOpen((prev) => !prev);
             requestAnimationFrame(() => inputRef.current?.focus());
+          }}
+          onPointerDown={(e) => {
+            dragStartPosRef.current = { x: e.clientX, y: e.clientY };
+            isDraggingRef.current = false;
+          }}
+          onPointerMove={(e) => {
+            if (
+              Math.hypot(
+                e.clientX - dragStartPosRef.current.x,
+                e.clientY - dragStartPosRef.current.y
+              ) > 5
+            ) {
+              isDraggingRef.current = true;
+            }
           }}
           aria-label="Open Dipa assistant"
           aria-haspopup="dialog"
           aria-expanded={isOpen}
           title="Open Dipa assistant"
-          className="group relative flex items-center justify-center w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] p-0 m-0 bg-transparent border-0 outline-none shadow-none cursor-pointer hover:scale-[1.04] transition-transform duration-300 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0B] focus-visible:rounded-full"
+          className="group relative flex items-center justify-center w-full h-full min-w-full min-h-full p-0 m-0 bg-transparent border-0 outline-none shadow-none cursor-grab active:cursor-grabbing hover:scale-[1.03] transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0977A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0B] focus-visible:rounded-full pointer-events-auto select-none overflow-visible"
         >
-          {/* Fluid Plasma Orb Container (60px mobile, 72px desktop) — no circular frame or ring */}
-          <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
+          {/* Authentic PlasmaRing living plasma sphere — no artificial ring, border, outline, or glow flash */}
+          <div className="relative w-full h-full min-w-0 min-h-0 overflow-visible bg-transparent pointer-events-auto">
             <PlasmaRing
+              colors={["#FFAA88", "#F0977A", "#D96B3D", "#A94F35"]}
+              density={120}
+              speed={100}
+              waveHeight={20}
+              centerOpacity={35}
+              scale={55}
+              dragSensitivity={100}
               shouldReduceMotion={shouldReduceMotion}
               className="w-full h-full"
             />
