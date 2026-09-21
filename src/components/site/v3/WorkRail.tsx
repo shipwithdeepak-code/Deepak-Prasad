@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { CaseStudyDetail } from "../../../types";
 import { RAIL_ENTRIES, WorkFamily } from "../../../data/homeV3";
@@ -24,17 +24,6 @@ export default function WorkRail({
 }: WorkRailProps) {
   const [activeFamily, setActiveFamily] = useState<WorkFamily | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setShouldReduceMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
   // Mouse drag state tracking (8px delta distinguishes intentional drags from clicks)
   const isMouseDown = useRef(false);
   const startX = useRef(0);
