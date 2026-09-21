@@ -69,10 +69,8 @@ export default function App() {
       }
     };
     document.addEventListener("keydown", handleKeyDown, true);
-    window.addEventListener("keydown", handleKeyDown, true);
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
-      window.removeEventListener("keydown", handleKeyDown, true);
     };
   }, [isContactModalOpen, isResumeModalOpen]);
 
