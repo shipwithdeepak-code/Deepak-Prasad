@@ -681,7 +681,6 @@ function __OriginkitBase_PlasmaRing(props: Props) {
         host.addEventListener("pointermove",  onPointerMove)
         host.addEventListener("pointerleave", onPointerLeave)
         // Release on window: drag that exits component still releases (rule 6 gotcha)
-        window.addEventListener("pointermove", onPointerMove)
         window.addEventListener("pointerup",   onPointerUp)
 
         /* ---- hover ray-sphere intersection (CPU) ---- */
@@ -882,7 +881,6 @@ function __OriginkitBase_PlasmaRing(props: Props) {
             host.removeEventListener("pointerdown",  onPointerDown)
             host.removeEventListener("pointermove",  onPointerMove)
             host.removeEventListener("pointerleave", onPointerLeave)
-            window.removeEventListener("pointermove", onPointerMove)
             window.removeEventListener("pointerup",   onPointerUp)
             // No loseContext() — rule 6
         }
