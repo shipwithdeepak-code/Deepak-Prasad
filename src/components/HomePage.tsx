@@ -8,11 +8,9 @@ import ContactCTA from "./site/v3/ContactCTA";
 import SiteFooterV3 from "./site/v3/SiteFooterV3";
 import { openCopilot } from "./CopilotWidget";
 import { ALL_FLAGSHIP_CASE_STUDIES } from "../data/caseStudies";
-import { CaseStudyDetail } from "../types";
 
 interface HomePageProps {
   onNavigate: (path: string) => void;
-  onSelectCaseStudy: (caseStudy: CaseStudyDetail) => void;
   onOpenResumeModal?: () => void;
   onOpenContact?: () => void;
 }
@@ -46,7 +44,6 @@ export default function HomePage({
       />
       <WorkRail
         caseStudies={ALL_FLAGSHIP_CASE_STUDIES}
-        onSelectCaseStudy={onSelectCaseStudy}
         onNavigate={onNavigate}
       />
       <AIBuilds
