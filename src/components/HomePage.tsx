@@ -1,4 +1,3 @@
-import React from "react";
 import HeroConsole from "./site/HeroConsole";
 import SiteNavV3 from "./site/v3/SiteNavV3";
 import WorkRail from "./site/v3/WorkRail";
@@ -27,7 +26,6 @@ interface HomePageProps {
  */
 export default function HomePage({
   onNavigate,
-  onSelectCaseStudy,
   onOpenResumeModal,
   onOpenContact,
 }: HomePageProps) {
