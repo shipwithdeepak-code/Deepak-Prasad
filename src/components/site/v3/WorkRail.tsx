@@ -7,7 +7,6 @@ import { AllWorkLogo } from "./WorkLogos";
 
 interface WorkRailProps {
   caseStudies: CaseStudyDetail[];
-  onSelectCaseStudy: (caseStudy: CaseStudyDetail) => void;
   onNavigate: (path: string) => void;
 }
 
@@ -21,7 +20,6 @@ const FILTERS: { label: string; family: WorkFamily | null }[] = [
 
 export default function WorkRail({
   caseStudies,
-  onSelectCaseStudy,
   onNavigate,
 }: WorkRailProps) {
   const [activeFamily, setActiveFamily] = useState<WorkFamily | null>(null);
@@ -104,7 +102,6 @@ export default function WorkRail({
 
   const handleCardClick = (study: CaseStudyDetail) => {
     if (hasDragged.current) return;
-    onSelectCaseStudy(study);
     if (study.url && study.url.startsWith("http")) {
       window.open(study.url, "_blank", "noopener,noreferrer");
     } else {
