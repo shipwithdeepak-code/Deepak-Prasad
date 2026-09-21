@@ -4,11 +4,7 @@ import SiteFooterV3 from "./components/site/v3/SiteFooterV3";
 import HomePage from "./components/HomePage";
 import { openCalendly } from "./utils/calendly";
 import { applyPageMeta } from "./utils/pageMeta";
-import {
-  ALL_FLAGSHIP_CASE_STUDIES,
-  RESHAMANDI_CASE_STUDY,
-} from "./data/caseStudies";
-import { CaseStudyDetail } from "./types";
+import { ALL_FLAGSHIP_CASE_STUDIES } from "./data/caseStudies";
 
 // Code-split all non-home routes and modals to ensure minimal initial bundle size
 const WorkPage = lazy(() => import("./components/WorkPage"));
@@ -108,14 +104,10 @@ export default function App() {
         isSamePage ? 40 : 100
       );
     } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
   };
 
-  /* Selecting a case study used to fill a modal that nothing ever opened.
-     The rows navigate to the full page themselves, so this is now only the
-     hook the pages are passed. */
-  const handleSelectCaseStudy = (_caseStudy: CaseStudyDetail) => {};
 
   // Every route used to share the homepage title, so the tab, history and
   // bookmarks all read the same thing wherever you were.
@@ -137,22 +129,12 @@ export default function App() {
         );
       }
       // Fallback to ReshaMandi if slug not recognized
-      return (
-        <CaseStudyDetailPage
-          caseStudy={RESHAMANDI_CASE_STUDY}
-          onNavigate={navigate}
-        />
-      );
+      return <WorkPage onNavigate={navigate} />;
     }
 
     // 2. Work Index Page: /work
     if (currentPath === "/work") {
-      return (
-        <WorkPage
-          onNavigate={navigate}
-          onSelectCaseStudy={handleSelectCaseStudy}
-        />
-      );
+      return <WorkPage onNavigate={navigate} />;
     }
 
     // 3. About Page: /about
@@ -189,7 +171,6 @@ export default function App() {
     return (
       <HomePage
         onNavigate={navigate}
-        onSelectCaseStudy={handleSelectCaseStudy}
         onOpenResumeModal={() => setIsResumeModalOpen(true)}
         onOpenContact={() => openCalendly()}
       />
@@ -217,17 +198,24 @@ export default function App() {
         />
       )}
 
-      {/* Main Page View */}
-      <main id="main" className="flex-1 w-full">
-        <Suspense fallback={<div className="min-h-[50vh] bg-void-black" />}>
+      {/* Route content and its footer share one loading boundary. Keeping the
+          footer outside Suspense lets it paint while a lazy route chunk is still
+          loading, which makes deep-link transitions look like the footer arrived
+          before the page. The fallback reserves the full viewport instead. */}
+      <Suspense
+        fallback={
+          <div
+            className="min-h-[calc(100vh-4rem)] w-full bg-void-black"
+            aria-busy="true"
+            aria-label="Loading page"
+          />
+        }
+      >
+        <main id="main" className="flex-1 w-full">
           {renderCurrentView()}
-        </Suspense>
-      </main>
-
-      {/* Persistent Footer */}
-      {!isHome && (
-        <SiteFooterV3 onNavigate={navigate} />
-      )}
+        </main>
+        {!isHome && <SiteFooterV3 onNavigate={navigate} />}
+      </Suspense>
 
       {/* Interactive Modals */}
       <Suspense fallback={null}>
