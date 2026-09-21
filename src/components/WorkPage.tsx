@@ -4,14 +4,12 @@ import {
   ALL_FLAGSHIP_CASE_STUDIES,
   MORE_WORK_CATEGORIES,
 } from "../data/caseStudies";
-import { CaseStudyDetail } from "../types";
 import { coverFor } from "../utils/covers";
 import { PageHeader, Panel, SectionHeader, Tag } from "./site/v3/primitives";
 import { RAIL_ENTRIES, WORK_FAMILY_LABELS, WorkFamily } from "../data/homeV3";
 
 interface WorkPageProps {
   onNavigate: (path: string) => void;
-  onSelectCaseStudy: (caseStudy: CaseStudyDetail) => void;
 }
 
 const FILTERS: { label: string; family: WorkFamily | null }[] = [
@@ -32,7 +30,6 @@ const FILTERS: { label: string; family: WorkFamily | null }[] = [
  */
 export default function WorkPage({
   onNavigate,
-  onSelectCaseStudy,
 }: WorkPageProps) {
   const [family, setFamily] = useState<WorkFamily | null>(null);
 
@@ -41,7 +38,6 @@ export default function WorkPage({
   );
 
   const open = (study: CaseStudyDetail) => {
-    onSelectCaseStudy(study);
     onNavigate(`/work/${study.slug}`);
   };
 
