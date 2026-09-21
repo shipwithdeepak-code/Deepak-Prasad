@@ -128,7 +128,7 @@ export default function App() {
           <CaseStudyDetailPage caseStudy={matched} onNavigate={navigate} />
         );
       }
-      // Fallback to ReshaMandi if slug not recognized
+      // Never show a different project for a bad slug; return to the work index.
       return <WorkPage onNavigate={navigate} />;
     }
 
