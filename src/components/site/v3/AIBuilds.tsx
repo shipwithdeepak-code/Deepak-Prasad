@@ -5,7 +5,6 @@ import { PRODUCT_JURY_LIVE_URL } from "../../../utils/productJury";
 
 interface AIBuildsProps {
   onNavigate: (path: string) => void;
-  onAsk?: (question?: string) => void;
 }
 
 export default function AIBuilds({ onNavigate }: AIBuildsProps) {
