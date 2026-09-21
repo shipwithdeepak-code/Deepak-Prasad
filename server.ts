@@ -119,7 +119,6 @@ async function startServer() {
       embeddingModel: "gemini-embedding-2-preview (512-dim)",
       generationModel: "gemini-3.1-flash-lite",
       retrievalMethod: "Exact Cosine Similarity (In-Memory Array)",
-      retrievalLatency: "< 2ms",
       confidenceThreshold: 0.68,
       vectorDatabase: "None (Zero-dependency In-Memory JSON)",
       systemSafetyPattern: "Gemini-Primary with Confidence-Gated 'Book Chat' Fallback",
@@ -128,7 +127,7 @@ async function startServer() {
         { name: "Chunk", desc: "Semantic boundary splitting (1 chunk per bullet/sub-section)" },
         { name: "Embed", desc: "Build-time Gemini 512-dim dense vector embedding" },
         { name: "Retrieve", desc: "Query embedding + in-memory cosine similarity ranking (top 3-5)" },
-        { name: "Ground", desc: "Confidence threshold check (>=0.48) & contextual prompt assembly" },
+        { name: "Ground", desc: "Confidence threshold check (>=0.68) & contextual prompt assembly" },
         { name: "Generate", desc: "Constrained synthesis with gemini-3.1-flash-lite & source citations" },
       ],
     });
