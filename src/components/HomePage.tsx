@@ -44,10 +44,7 @@ export default function HomePage({
         caseStudies={ALL_FLAGSHIP_CASE_STUDIES}
         onNavigate={onNavigate}
       />
-      <AIBuilds
-        onNavigate={onNavigate}
-        onAsk={(question) => openCopilot(question)}
-      />
+      <AIBuilds onNavigate={onNavigate} />
       <HowIWork />
       <ContactCTA
         onOpenContact={onOpenContact}
